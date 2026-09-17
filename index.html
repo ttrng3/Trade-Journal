@@ -180,8 +180,6 @@ textarea,select.inp,input.inp{width:100%;border:1px solid var(--rule);border-rad
   .cal .day,.badge,.detail,.chip,.note,.kpi{background:#fff!important}
 }
 </style>
-</head>
-<body>
 
 <div class="shell">
 <aside class="rail">
@@ -329,9 +327,11 @@ const store={db:null,assets:null,mode:'local',mirror:null,
   async load(){
     const out={fills:{},notes:{},meta:{}};
     if(this.db){
-      const fs=await this.db.collection('fills').get();fs.docs.forEach(d=>{Object.assign(out.fills,(d.data()||{}).fills||{});});
-      const ns=await this.db.collection('notes').get();ns.docs.forEach(d=>{out.notes[d.id]=d.data();});
-      const m=await this.db.doc('meta/settings').get();out.meta=m.exists?m.data():{};
+      // documents come back frozen from the db bridge; hydrate() and the settings/notes editors mutate, so take mutable copies
+      const thaw=v=>v==null?v:JSON.parse(JSON.stringify(v));
+      const fs=await this.db.collection('fills').get();fs.docs.forEach(d=>{Object.assign(out.fills,thaw((d.data()||{}).fills)||{});});
+      const ns=await this.db.collection('notes').get();ns.docs.forEach(d=>{out.notes[d.id]=thaw(d.data());});
+      const m=await this.db.doc('meta/settings').get();out.meta=m.exists?thaw(m.data()):{};
     }else if(this.mirror){
       out.fills=this.mirror.fills||{};out.notes=this.mirror.notes||{};out.meta=this.mirror.meta||{};
     }else{
@@ -782,5 +782,7 @@ document.body.addEventListener('drop',e=>{if(e.target.closest('.drop'))return;co
   S.ym=null;rebuild();render();
 })();
 </script>
+
+
 </body>
 </html>
