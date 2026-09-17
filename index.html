@@ -180,6 +180,8 @@ textarea,select.inp,input.inp{width:100%;border:1px solid var(--rule);border-rad
   .cal .day,.badge,.detail,.chip,.note,.kpi{background:#fff!important}
 }
 </style>
+</head>
+<body>
 
 <div class="shell">
 <aside class="rail">
@@ -527,12 +529,12 @@ function renderDashboard(){
 function calendarCard(){
   const {y,m}=S.ym;const today=todayISO();
   const byDay=dayGroups(S.trades);
-  const first=new Date(Date.UTC(y,m-1,1)),lead=(first.getUTCDay()+6)%7,nDays=new Date(Date.UTC(y,m,0)).getUTCDate();
+  const first=new Date(Date.UTC(y,m-1,1)),lead=first.getUTCDay(),nDays=new Date(Date.UTC(y,m,0)).getUTCDate(); // week starts Sunday
   const cells=[];for(let i=0;i<lead;i++)cells.push(null);
   for(let d=1;d<=nDays;d++){const iso=`${y}-${pad2(m)}-${pad2(d)}`;const ts=byDay[iso]||[];cells.push({iso,d,ts,st:stats(ts),has:!!ts.length});}
   while(cells.length%7)cells.push(null);
   let month=0,mt=0,mg=0,mr=0;cells.forEach(c=>{if(c&&c.has){month+=c.st.net;mt+=c.st.n;if(c.st.net>0)mg++;if(c.st.net<0)mr++;}});
-  let cal=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d=>`<div class="dow">${d}</div>`).join('')+`<div class="dow wk">Week</div>`;
+  let cal=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d=>`<div class="dow">${d}</div>`).join('')+`<div class="dow wk">Week</div>`;
   for(let w=0;w<cells.length/7;w++){
     const wk=cells.slice(w*7,w*7+7);let wp=0,wt=0,wd=0;
     wk.forEach(c=>{if(!c)cal+=`<div class="day empty"></div>`;
@@ -782,7 +784,5 @@ document.body.addEventListener('drop',e=>{if(e.target.closest('.drop'))return;co
   S.ym=null;rebuild();render();
 })();
 </script>
-
-
 </body>
 </html>
