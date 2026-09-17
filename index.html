@@ -1,3 +1,8 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Webull Trade Journal</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
@@ -124,6 +129,9 @@ textarea:focus,input:focus,select:focus{outline:2px solid var(--accent);outline-
   .cal .day,.badge,.detail,.chip,.note,.kpi{background:#fff!important}
 }
 </style>
+</head>
+<body>
+
 
 <div class="wrap">
 <header class="top">
@@ -179,7 +187,7 @@ function parseWebull(text){
   const col=(...names)=>{for(const n of names){const i=hdr.indexOf(n);if(i>=0)return i;}return -1;};
   const cSym=col('symbol','name'),cSide=col('side','action'),cFilled=col('filled','filled qty','quantity'),
         cAvg=col('avg price','avg. price','average price'),cPrice=col('price'),cT=col('filled time','filled at','time'),
-        cTif=col('time-in-force','tif'),cStatus=col('status');
+        cTif=col('time-in-force','tif'),cStatus=col('status'),cP=col('placed time');
   if(cSym<0||cSide<0||cFilled<0||cT<0)throw new Error('Not a Webull orders export (columns found: '+rows[0].join(', ')+')');
   const fills=[];
   rows.slice(1).forEach((r,idx)=>{
@@ -189,19 +197,25 @@ function parseWebull(text){
     const sd=(r[cSide]||'').trim().toUpperCase();const side=sd.startsWith('BUY')?'BUY':(sd.startsWith('SELL')||sd.startsWith('SHORT'))?'SELL':null;if(!side)return;
     let price=cAvg>=0?parsePrice(r[cAvg]):null;if(price==null&&cPrice>=0)price=parsePrice(r[cPrice]);if(price==null)return;
     const t=parseTime(r[cT]);if(!t)return;
-    const symbol=(r[cSym]||'').trim().toUpperCase();const m=symbol.match(OCC);
-    const f={k:`${symbol}|${side}|${qty}|${price.toFixed(6)}|${t}`,sym:symbol,side,qty,price,t,tif:cTif>=0?(r[cTif]||'').trim():'',row:idx+2};
-    if(m){f.und=m[1];f.type='option';f.mult=100;f.exp=`20${m[2]}-${m[3]}-${m[4]}`;f.right=m[5];f.strike=parseInt(m[6],10)/1000;}
-    else{f.und=symbol;f.type='stock';f.mult=1;}
-    fills.push(f);
+    const symbol=(r[cSym]||'').trim().toUpperCase();const pt=cP>=0?(parseTime(r[cP])||''):'';
+    // two distinct orders can fill in the same second at the same price, so the placed time is part of the identity
+    fills.push(hydrate({k:`${symbol}|${side}|${qty}|${price.toFixed(6)}|${t}|${pt}`,sym:symbol,side,qty,price,t,p:pt,tif:cTif>=0?(r[cTif]||'').trim():'',row:idx+2}));
   });
   return fills;
 }
+function hydrate(f){ // derive contract fields from the symbol (not stored, to keep documents small)
+  if(f.und)return f;const m=f.sym.match(OCC);
+  if(m){f.und=m[1];f.type='option';f.mult=100;f.exp=`20${m[2]}-${m[3]}-${m[4]}`;f.right=m[5];f.strike=parseInt(m[6],10)/1000;}
+  else{f.und=f.sym;f.type='stock';f.mult=1;}
+  if(f.row==null)f.row=0;return f;
+}
+function compact(f){return {k:f.k,sym:f.sym,side:f.side,qty:f.qty,price:f.price,t:f.t,p:f.p||'',tif:f.tif||''};}
+function shardOf(t){const d=+t.slice(8,10);return t.slice(0,7)+(d<=10?'a':d<=20?'b':'c');} // ten-day documents stay well under the 256 KiB cap
 function hash(s){let h=0x811c9dc5;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,0x01000193)>>>0;}let h2=5381;for(let i=0;i<s.length;i++)h2=((h2*33)^s.charCodeAt(i))>>>0;return h.toString(16).padStart(8,'0')+h2.toString(16).padStart(8,'0');}
 function secs(a,b){return Math.round((Date.parse(b+'Z')-Date.parse(a+'Z'))/1000);}
 function buildTrades(fills,opts){
   const feeC=opts.feeC||0,feeS=opts.feeS||0,longOnly=opts.longOnly!==false;
-  const bySym={};[...fills].sort((a,b)=>a.t<b.t?-1:a.t>b.t?1:b.row-a.row).forEach(f=>(bySym[f.sym]=bySym[f.sym]||[]).push(f));
+  const bySym={};[...fills].sort((a,b)=>a.t<b.t?-1:a.t>b.t?1:(a.p||'')<(b.p||'')?-1:(a.p||'')>(b.p||'')?1:b.row-a.row).forEach(f=>(bySym[f.sym]=bySym[f.sym]||[]).push(f));
   const trades=[];
   const mk=(f,dir)=>({dir,fills:[],eq:0,ec:0,xq:0,xc:0,first:f,last:null,flags:[]});
   const fin=(o,unknown)=>{
@@ -237,10 +251,13 @@ function buildTrades(fills,opts){
 /* =====================================================================
    2. Storage: db capability (shared, persistent) with localStorage fallback
    ===================================================================== */
-const store={db:null,assets:null,mode:'local',
+const store={db:null,assets:null,mode:'local',mirror:null,
   async init(){
     try{ if(window.claude?.use){ this.db=await claude.use('db'); this.assets=await claude.use('assets'); } }catch(e){ this.db=null; }
     this.mode=this.db?'db':'local';
+    if(!this.db){ // a static mirror (GitHub Pages) ships a snapshot next to the page; read-only
+      try{const r=await fetch('./data/journal.json',{cache:'no-store'});if(r.ok){this.mirror=await r.json();this.mode='mirror';}}catch(e){}
+    }
   },
   lsGet(k){try{return JSON.parse(localStorage.getItem('tj:'+k)||'null');}catch(e){return null;}},
   lsSet(k,v){try{localStorage.setItem('tj:'+k,JSON.stringify(v));}catch(e){}},
@@ -250,16 +267,20 @@ const store={db:null,assets:null,mode:'local',
       const fs=await this.db.collection('fills').get();fs.docs.forEach(d=>{Object.assign(out.fills,(d.data()||{}).fills||{});});
       const ns=await this.db.collection('notes').get();ns.docs.forEach(d=>{out.notes[d.id]=d.data();});
       const m=await this.db.doc('meta/settings').get();out.meta=m.exists?m.data():{};
+    }else if(this.mirror){
+      out.fills=this.mirror.fills||{};out.notes=this.mirror.notes||{};out.meta=this.mirror.meta||{};
     }else{
       const months=this.lsGet('months')||[];months.forEach(m=>Object.assign(out.fills,(this.lsGet('fills/'+m)||{}).fills||{}));
       out.notes=this.lsGet('notes')||{};out.meta=this.lsGet('meta')||{};
     }
+    for(const k in out.fills)hydrate(out.fills[k]);
     return out;
   },
   async saveFills(byMonth){ // {'2026-09': {k:fill}} merged into existing month docs
     for(const m in byMonth){
-      if(this.db){const ref=this.db.doc('fills/'+m);const cur=await ref.get();const data=cur.exists?{...(cur.data().fills||{})}:{};Object.assign(data,byMonth[m]);await ref.set({fills:data,month:m});}
-      else{const cur=this.lsGet('fills/'+m)||{fills:{}};Object.assign(cur.fills,byMonth[m]);this.lsSet('fills/'+m,cur);const ms=new Set(this.lsGet('months')||[]);ms.add(m);this.lsSet('months',[...ms]);}
+      const add={};for(const k in byMonth[m])add[k]=compact(byMonth[m][k]);
+      if(this.db){const ref=this.db.doc('fills/'+m);const cur=await ref.get();const data=cur.exists?{...(cur.data().fills||{})}:{};Object.assign(data,add);await ref.set({fills:data,shard:m});}
+      else{const cur=this.lsGet('fills/'+m)||{fills:{}};Object.assign(cur.fills,add);this.lsSet('fills/'+m,cur);const ms=new Set(this.lsGet('months')||[]);ms.add(m);this.lsSet('months',[...ms]);}
     }
   },
   async saveNote(key,note){ if(this.db)await this.db.doc('notes/'+key).set(note); else{const n=this.lsGet('notes')||{};n[key]=note;this.lsSet('notes',n);} },
@@ -307,7 +328,7 @@ async function importFile(file){
   try{
     const text=await file.text();const fills=parseWebull(text);
     const byMonth={};let fresh=0;
-    fills.forEach(f=>{if(S.fills[f.k])return;fresh++;S.fills[f.k]=f;(byMonth[f.t.slice(0,7)]=byMonth[f.t.slice(0,7)]||{})[f.k]=f;});
+    fills.forEach(f=>{if(S.fills[f.k])return;fresh++;S.fills[f.k]=f;(byMonth[shardOf(f.t)]=byMonth[shardOf(f.t)]||{})[f.k]=f;});
     if(fresh)await store.saveFills(byMonth);
     const ts=fills.map(f=>f.t).sort();
     const log={name:file.name,at:new Date().toISOString(),seen:fills.length,fresh,dup:fills.length-fresh,first:ts[0]||null,last:ts[ts.length-1]||null};
@@ -320,7 +341,9 @@ async function importFile(file){
 /* =====================================================================
    5. Rendering
    ===================================================================== */
-function render(){renderKpis();renderBanner();renderTab();$('#status').textContent=store.mode==='db'?'saved to this page':'saved in this browser only';}
+function render(){renderKpis();renderBanner();renderTab();
+  const ro=store.mode==='mirror';$('#importBtn').hidden=ro;document.querySelectorAll('nav.tabs button[data-tab=settings]').forEach(b=>b.hidden=ro);
+  $('#status').textContent=store.mode==='db'?'saved to this page':ro?`read-only mirror · data as of ${(store.mirror.meta?.snapshotAt||'').slice(0,16).replace('T',' ')} UTC`:'saved in this browser only';}
 function renderKpis(){
   const s=stats(S.trades);const days={};closedOf(S.trades).forEach(t=>days[t.date]=(days[t.date]||0)+t.net);
   const dk=Object.keys(days),g=dk.filter(d=>days[d]>0).length,r=dk.filter(d=>days[d]<0).length;
@@ -376,7 +399,7 @@ function renderOverview(){
     <div class="grid3">
       <div class="card"><header><h3>Equity curve (closed trades)</h3></header><div class="body">${lineChart(eq)}</div></div>
       <div class="card"><header><h3>Imports</h3></header><div class="body imports"><ul>${imps.length?imps.map(i=>`<li><div style="font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(i.name)}</div><div class="sub" style="font-family:var(--mono)">${i.fresh} new · ${i.dup} dup · ${(i.first||'').slice(0,10)} → ${(i.last||'').slice(0,10)}</div></li>`).join(''):'<li class="sub">Nothing imported yet.</li>'}</ul>
-        <div class="drop no-print" id="drop" style="margin-top:12px">Drop a Webull CSV here</div></div></div>
+        ${store.mode==='mirror'?'':'<div class="drop no-print" id="drop" style="margin-top:12px">Drop a Webull CSV here</div>'}</div></div>
     </div>
   </div>`;
   $('#calPrev').onclick=()=>{S.ym.m--;if(S.ym.m<1){S.ym.m=12;S.ym.y--;}renderOverview();};
@@ -490,14 +513,14 @@ function detailHtml(t){
       <div class="lbl" style="margin-top:12px">Tags</div><div class="chips" data-chips>${t.tags.map(x=>`<span class="chip">${esc(x)}<button data-rm="${esc(x)}" title="remove">×</button></span>`).join('')}</div>
       <input class="inp" data-f="tagdraft" placeholder="Add tag, press Enter"><div class="sugg">${SUGG_TAGS.filter(s=>!t.tags.includes(s)).slice(0,8).map(s=>`<button data-add="${s}">+ ${s}</button>`).join('')}</div></div>
     <div><div class="lbl">Notes</div><textarea rows="5" data-f="notes" placeholder="What was the setup? What did you actually do? What would you change?">${esc(t.notes)}</textarea>
-      <div class="lbl" style="margin-top:12px">Chart screenshots</div><div class="shots">${t.shots.map(s=>`<div class="s"><a href="${esc(s.url)}" target="_blank" rel="noreferrer"><img src="${esc(s.url)}" alt=""></a><button class="x" data-rmshot="${esc(s.id)}">×</button></div>`).join('')}${store.assets?`<button class="add" data-addshot>+ attach</button><input type="file" accept="image/*" hidden data-shotfile>`:`<span class="sub">Screenshots need the published page (not available in this preview).</span>`}</div>
-      <div style="display:flex;justify-content:flex-end;margin-top:12px"><button class="btn primary" data-save disabled>Save</button></div></div>
+      <div class="lbl" style="margin-top:12px">Chart screenshots</div><div class="shots">${t.shots.map(s=>`<div class="s"><a href="${esc(s.url)}" target="_blank" rel="noreferrer"><img src="${esc(s.url)}" alt=""></a><button class="x" data-rmshot="${esc(s.id)}">×</button></div>`).join('')}${store.assets?`<button class="add" data-addshot>+ attach</button><input type="file" accept="image/*" hidden data-shotfile>`:store.mode==='mirror'?'':`<span class="sub">Screenshots need the published page (not available in this preview).</span>`}</div>
+      <div style="display:flex;justify-content:flex-end;margin-top:12px">${store.mode==='mirror'?'<span class="sub">Read-only mirror. Add notes and tags in the Claude page.</span>':'<button class="btn primary" data-save disabled>Save</button>'}</div></div>
   </div>`;
 }
 function bindDetail(box){
   const key=box.dataset.key;const t=S.trades.find(x=>x.key===key);if(!t)return;
   const draft={notes:t.notes,tags:[...t.tags],playbook:t.playbook,rating:t.rating,shots:[...t.shots]};
-  const saveBtn=box.querySelector('[data-save]');
+  const saveBtn=box.querySelector('[data-save]');if(!saveBtn)return;
   const dirty=()=>{saveBtn.disabled=!(draft.notes!==t.notes||JSON.stringify(draft.tags)!==JSON.stringify(t.tags)||draft.playbook!==t.playbook||draft.rating!==t.rating);};
   const redrawChips=()=>{box.querySelector('[data-chips]').innerHTML=draft.tags.map(x=>`<span class="chip">${esc(x)}<button data-rm="${esc(x)}">×</button></span>`).join('');box.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{draft.tags=draft.tags.filter(x=>x!==b.dataset.rm);redrawChips();dirty();});};
   const addTag=v=>{v=v.trim();if(v&&!draft.tags.includes(v)){draft.tags.push(v);redrawChips();dirty();}};
@@ -542,3 +565,6 @@ document.body.addEventListener('drop',e=>{if(e.target.closest('.drop'))return;co
   S.ym=null;rebuild();render();
 })();
 </script>
+
+</body>
+</html>
