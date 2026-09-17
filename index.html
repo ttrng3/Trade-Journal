@@ -76,7 +76,8 @@ main{padding-block:16px;display:grid;gap:16px}
 /* calendar */
 .calctl{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:13px}
 .calctl select{border:1px solid var(--rule);border-radius:6px;padding:4px 6px;background:var(--paper);font-size:13px}
-.calctl #calM{width:124px}.calctl #calY{width:76px}.calctl .btn{min-width:30px;text-align:center}
+.calctl{flex-wrap:nowrap;margin-left:auto}.calctl #calM{width:124px}.calctl #calY{width:76px}.calctl .btn{min-width:30px;text-align:center}
+.calsum{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;min-width:260px}
 .cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr)) 96px;gap:5px}
 .cal .dow{font-size:11px;text-transform:uppercase;letter-spacing:.06px;letter-spacing:.06em;color:var(--muted);text-align:center;padding-bottom:2px}
 .cal .day{height:80px;border:1px solid var(--rule);border-radius:7px;padding:6px 7px;background:var(--paper);text-align:left;overflow:hidden;position:relative}
@@ -544,13 +545,12 @@ function calendarCard(){
     cal+=`<div class="day wk"><div class="n">Week ${w+1}</div>${wd?`<div class="p ${cls(wp)}">${usd(wp)}</div><div class="t">${wd} day${wd===1?'':'s'} · ${wt} tr</div>`:''}</div>`;
   }
   const years=new Set(S.trades.map(t=>+t.date.slice(0,4)));years.add(+today.slice(0,4));years.add(y);const ys=[...years].sort();
-  return `<div class="card"><header><h3>Calendar</h3><div class="calctl no-print">
+  return `<div class="card"><header><div class="calsum"><h3>Calendar</h3><span class="${cls(month)}" style="font-family:var(--mono);font-weight:600">${usd(month)}</span><span class="sub">· ${mt} trades · ${mg}G / ${mr}R</span></div><div class="calctl no-print">
       <button class="btn sm" id="calPrev" aria-label="Previous month">‹</button>
       <select id="calM" aria-label="Month">${MONTHS.map((n,i)=>`<option value="${i+1}" ${i+1===m?'selected':''}>${n}</option>`).join('')}</select>
       <select id="calY" aria-label="Year">${ys.map(v=>`<option ${v===y?'selected':''}>${v}</option>`).join('')}</select>
       <button class="btn sm" id="calNext" aria-label="Next month">›</button>
-      <button class="btn sm ${y===+today.slice(0,4)&&m===+today.slice(5,7)?'on':''}" id="calToday">Today</button>
-      <span class="${cls(month)}" style="font-family:var(--mono);font-weight:600;margin-left:8px">${usd(month)}</span><span class="sub">· ${mt} trades · ${mg}G / ${mr}R</span></div></header>
+      <button class="btn sm ${y===+today.slice(0,4)&&m===+today.slice(5,7)?'on':''}" id="calToday">Today</button></div></header>
     <div class="body"><div class="cal">${cal}</div></div></div>`;
 }
 function bindCalendar(el){
