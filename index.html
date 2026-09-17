@@ -359,7 +359,7 @@ const store={db:null,assets:null,mode:'local',mirror:null,
    3. App state + helpers
    ===================================================================== */
 const MIRROR='https://ttrng3.github.io/Trade-Journal/';
-const S={fills:{},notes:{},meta:{},trades:[],view:'dashboard',ym:null,range:{preset:'all',from:'',to:''},filters:{q:'',result:'',und:'',tag:'',day:''},open:new Set(),sort:{k:'entry',d:-1},journalDay:'',journalLimit:40};
+const S={fills:{},notes:{},meta:{},trades:[],view:'dashboard',ym:null,range:{preset:'week',from:'',to:''},filters:{q:'',result:'',und:'',tag:'',day:''},open:new Set(),sort:{k:'entry',d:-1},journalDay:'',journalLimit:40};
 const DEFAULT_PB=['Opening Drive','Breakout','Pullback','Reversal','Scalp'];
 const SUGG_TAGS=['FOMO','Disciplined','Breakout','Chased','Revenge','Oversized','Early Exit','Held Too Long','Plan Followed','No Plan'];
 const DEF_STUDIES=['MAExp@tv-basic-studies','VWAP@tv-basic-studies'];
@@ -401,7 +401,7 @@ function rangeBounds(){
   const R=S.range,t=todayISO();
   switch(R.preset){
     case 'today':return {from:t,to:t};
-    case 'week':return {from:addDays(t,-weekdayOf(t)),to:t};
+    case 'week':return {from:addDays(t,-((weekdayOf(t)+1)%7)),to:t}; // Sunday-first week, matches the calendar
     case 'month':return {from:t.slice(0,8)+'01',to:t};
     case '30d':return {from:addDays(t,-29),to:t};
     case '90d':return {from:addDays(t,-89),to:t};
@@ -770,14 +770,14 @@ function bindDrop(el){if(!el)return;el.ondragover=e=>{e.preventDefault();el.clas
 document.querySelectorAll('nav.rail button').forEach(b=>b.onclick=()=>go(b.dataset.view));
 $('#importBtn').onclick=()=>$('#csvFile').click();
 $('#csvFile').onchange=e=>{const f=e.target.files[0];if(f)importFile(f);e.target.value='';};
-const saveRange=()=>{try{localStorage.setItem('tj:range',JSON.stringify(S.range));}catch(e){}};
+const saveRange=()=>{try{localStorage.setItem('tj:range2',JSON.stringify(S.range));}catch(e){}};
 $('#rangePreset').onchange=e=>{S.range.preset=e.target.value;saveRange();render();};
 $('#rangeFrom').onchange=e=>{S.range.from=e.target.value;saveRange();render();};
 $('#rangeTo').onchange=e=>{S.range.to=e.target.value;saveRange();render();};
 document.body.addEventListener('dragover',e=>{if(e.dataTransfer?.types?.includes('Files'))e.preventDefault();});
 document.body.addEventListener('drop',e=>{if(e.target.closest('.drop'))return;const f=e.dataTransfer?.files?.[0];if(f&&/\.csv$/i.test(f.name)){e.preventDefault();importFile(f);}});
 (async function boot(){
-  try{const r=JSON.parse(localStorage.getItem('tj:range')||'null');if(r&&r.preset)S.range=r;}catch(e){}
+  try{const r=JSON.parse(localStorage.getItem('tj:range2')||'null');if(r&&r.preset)S.range=r;}catch(e){}
   rebuild();render();$('#status').textContent='loading…';
   await store.init();
   try{const d=await store.load();S.fills=d.fills;S.notes=d.notes;S.meta=d.meta||{};}catch(e){console.error(e);toast('Could not load saved data');}
