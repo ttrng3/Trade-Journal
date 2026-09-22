@@ -321,7 +321,28 @@ const store={db:null,assets:null,mode:'local',mirror:null,
     try{ if(window.claude?.use){ this.db=await claude.use('db'); this.assets=await claude.use('assets'); } }catch(e){ this.db=null; }
     this.mode=this.db?'db':'local';
     if(!this.db){ // a static mirror (GitHub Pages) ships a snapshot next to the page; read-only
-      try{const r=await fetch('./data/journal.json',{cache:'no-store'});if(r.ok){this.mirror=await r.json();this.mode='mirror';}}catch(e){}
+      // The mirror ships the snapshot SHARDED by month. One 6.7 MB journal.json
+      // could only ever be written from a machine with a git remote: the GitHub
+      // contents API caps a single file at 1 MB, which is what pinned the nightly
+      // push to the laptop. Monthly shards are all well under that, so the cloud
+      // can write them, and a nightly sync rewrites only the current month.
+      // Falls back to a whole-file journal.json if a shard manifest is absent.
+      try{
+        const ri=await fetch('./data/index.json',{cache:'no-store'});
+        if(ri.ok){
+          const idx=await ri.json();
+          const parts=await Promise.all((idx.shards||[]).map(id=>
+            fetch('./data/fills/'+id+'.json',{cache:'no-store'})
+              .then(r=>r.ok?r.json():Promise.reject(new Error('shard '+id+' HTTP '+r.status)))));
+          const fills={};
+          for(const part of parts) Object.assign(fills,part);
+          this.mirror={fills:fills,notes:idx.notes||{},meta:idx.meta||{}};
+          this.mode='mirror';
+        }
+      }catch(e){}
+      if(!this.mirror){
+        try{const r=await fetch('./data/journal.json',{cache:'no-store'});if(r.ok){this.mirror=await r.json();this.mode='mirror';}}catch(e){}
+      }
     }
   },
   lsGet(k){try{return JSON.parse(localStorage.getItem('tj:'+k)||'null');}catch(e){return null;}},
