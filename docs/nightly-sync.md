@@ -37,6 +37,27 @@ loader still falls back to a whole-file `journal.json` if no manifest is
 present, which keeps other copies of the page working; the mirror does not use
 that path.
 
+## Two writers during the changeover
+
+The nightly routine is **device-bound**: editing its content requires a device
+attestation from the Mac it is bound to, which a cloud session cannot produce.
+So until Ty updates it from the laptop, the old sync still runs and still
+writes a whole `data/journal.json`, while this repo now carries shards.
+
+Preferring either one blindly would serve a stale page with fresh data sitting
+beside it — the exact failure this whole rebuild exists to remove. So the
+loader takes **whichever was published more recently**, comparing
+`Last-Modified` with a HEAD request on each so it never downloads 6.7 MB just
+to read a date.
+
+Verified both directions: with the whole file newer it is used and zero shards
+are fetched; with the shards newer all 49 are fetched and the only
+`journal.json` request is the HEAD. The page renders identically either way
+(1,913 chars, hash `69866e19`).
+
+Once the routine is updated to publish shards, delete `data/journal.json` and
+this paragraph.
+
 ## What remains Mac-bound, and why
 
 **Collection only.** The source is `.csv` exports Ty drops into

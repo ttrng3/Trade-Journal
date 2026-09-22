@@ -326,20 +326,33 @@ const store={db:null,assets:null,mode:'local',mirror:null,
       // contents API caps a single file at 1 MB, which is what pinned the nightly
       // push to the laptop. Monthly shards are all well under that, so the cloud
       // can write them, and a nightly sync rewrites only the current month.
-      // Falls back to a whole-file journal.json if a shard manifest is absent.
-      try{
-        const ri=await fetch('./data/index.json',{cache:'no-store'});
-        if(ri.ok){
-          const idx=await ri.json();
-          const parts=await Promise.all((idx.shards||[]).map(id=>
+      //
+      // Both writers may be live during the changeover: the cloud sync writes
+      // shards, the older Mac sync writes a whole journal.json. Preferring one
+      // blindly would serve a stale page while fresh data sat beside it, so we
+      // take whichever was published more recently. HEAD keeps the comparison
+      // cheap — we never download 6.7 MB just to read its date.
+      const when = async u => {
+        try{ const r = await fetch(u,{method:'HEAD',cache:'no-store'});
+             if(!r.ok) return null;
+             const d = r.headers.get('last-modified');
+             return d ? Date.parse(d) : 0;
+        }catch(e){ return null; }
+      };
+      const [tShard, tWhole] = await Promise.all([when('./data/index.json'), when('./data/journal.json')]);
+      const useShards = tShard !== null && (tWhole === null || tShard >= tWhole);
+      if (useShards) {
+        try{
+          const idx = await (await fetch('./data/index.json',{cache:'no-store'})).json();
+          const parts = await Promise.all((idx.shards||[]).map(id=>
             fetch('./data/fills/'+id+'.json',{cache:'no-store'})
               .then(r=>r.ok?r.json():Promise.reject(new Error('shard '+id+' HTTP '+r.status)))));
           const fills={};
           for(const part of parts) Object.assign(fills,part);
           this.mirror={fills:fills,notes:idx.notes||{},meta:idx.meta||{}};
           this.mode='mirror';
-        }
-      }catch(e){}
+        }catch(e){}
+      }
       if(!this.mirror){
         try{const r=await fetch('./data/journal.json',{cache:'no-store'});if(r.ok){this.mirror=await r.json();this.mode='mirror';}}catch(e){}
       }
