@@ -4,11 +4,18 @@ Canonical. Where the routine prompt and this file disagree, this file wins.
 
 ## The chain
 
-    Webull CSV (Mac) → artifact DB → shards → GitHub → Pages
+    Webull CSV (Google Drive) → cloud routine → GitHub → Pages
 
-This repo is a **read-only mirror** of a private Webull options journal. The
-authoring surface is the Claude artifact, which holds the database; the page
-here is the same engine running against a static snapshot.
+**This repo is the source of truth.** `data/fills/<YYYY-MM>.json` holds the
+fills and `data/index.json` is the manifest; the page is the same engine
+running against them.
+
+Until 2026-09-23 the chain ran the other way — `Webull CSV (Mac) → artifact DB
+→ shards → GitHub → Pages` — with a claude.ai artifact database as the source
+and this repo as a read-only mirror. Ty ruled that day that the repo URL is
+what gets used internally and that the same information must not sit in two
+places. The artifact was deleted, the flow was inverted, and the Mac dropped
+out of it entirely.
 
 ## Why the snapshot is sharded
 
@@ -37,38 +44,48 @@ loader still falls back to a whole-file `journal.json` if no manifest is
 present, which keeps other copies of the page working; the mirror does not use
 that path.
 
-## Two writers during the changeover
+## Why it is no longer Mac-bound
 
-The nightly routine is **device-bound**: editing its content requires a device
-attestation from the Mac it is bound to, which a cloud session cannot produce.
-So until Ty updates it from the laptop, the old sync still runs and still
-writes a whole `data/journal.json`, while this repo now carries shards.
+The old runbook said, of the CSV folder: *"Nothing in the cloud can reach that
+folder, so a run that must ingest a new export needs the Mac. That is a real
+constraint, not a false assumption."* **It was a false assumption.**
+`09 Trading/Trade Journal/Raw Records/` is on **Google Drive**, and the routine
+has the Drive connector. The laptop was never required to read the source; it
+was required only because the pipeline had grown around it.
 
-Preferring either one blindly would serve a stale page with fresh data sitting
-beside it — the exact failure this whole rebuild exists to remove. So the
-loader takes **whichever was published more recently**, comparing
-`Last-Modified` with a HEAD request on each so it never downloads 6.7 MB just
-to read a date.
+Two other things were dragging the Mac in, and both are fixed:
 
-Verified both directions: with the whole file newer it is used and zero shards
-are fetched; with the shards newer all 49 are fetched and the only
-`journal.json` request is the HEAD. The page renders identically either way
-(1,913 chars, hash `69866e19`).
+- **The parser** was scraped out of `260917_TRD_System_Webull-Trade-Journal_v1.html`
+  on Drive, lines 158–242, on every single run. It now lives here as
+  `tools/parse-webull.js`, lifted verbatim.
+- **The push** used a fine-grained PAT from `_secrets/` on Drive, via
+  token-in-URL. The routine now writes with the GitHub MCP file tools, which
+  need no token in this tree.
 
-Once the routine is updated to publish shards, delete `data/journal.json` and
-this paragraph.
+Check the claim before accepting the next "this has to run on the Mac".
 
-## What remains Mac-bound, and why
+## The tools
 
-**Collection only.** The source is `.csv` exports Ty drops into
-`09 Trading/Trade Journal/Raw Records/` on the laptop. Nothing in the cloud can
-reach that folder, so a run that must ingest a *new* export needs the Mac. That
-is a real constraint, not a false assumption — unlike the push, which was only
-ever blocked by the 1 MB limit.
+    node tools/sync.js --csv-dir <dir> [--data-dir data] [--check]
 
-A run with no new CSV is fully cloud-capable: rebuild the shards from the
-artifact DB and publish. So the page keeps updating whether or not the laptop
-is awake; only new fills wait for it.
+`--check` parses, merges and reports what *would* change without writing.
+**With no new fills it must report `"changedFiles": []`.** That is the
+regression test for the serialization, and it is not cosmetic: month files are
+minified with keys sorted ascending and fill fields in alphabetical order
+(`k,p,price,qty,side,sym,t,tif`), and the manifest is pretty-printed with a
+**one-space** indent. Change either and all 49 months rewrite, burying the real
+change in noise.
+
+`sync.js` refuses to run if `index.json`'s `totalFills` disagrees with what the
+month files actually hold, rather than papering over a corrupt tree.
+
+## Dedup on content, never on filename
+
+Fills are keyed and **existing keys win**, so re-importing a CSV is always
+safe. This is not a nicety. Webull re-exports to the same generic filename
+`Webull_Orders_Records_Options.csv`, and on 2026-09-23 that file came back
+holding 100 genuinely new fills under a name already in the import ledger. A
+filename-only dedup would have silently dropped them.
 
 ## The heartbeat
 
@@ -108,5 +125,7 @@ https://ttrng3.github.io/Trade-Journal/ — capital T and J. Lowercase 404s.
 
 ## Credentials
 
-No PAT in this tree. Once the sync publishes from the cloud, the token file on
-the Mac is no longer read by anything and should be revoked on GitHub.
+**None.** The sync publishes from the cloud with the GitHub MCP file tools. The
+PAT at `09 Trading/Trade Journal/_secrets/github_token_trade-journal.txt` is no
+longer read by anything; it was revoked on GitHub on 2026-09-23. Do not
+reintroduce a token-in-URL push.
