@@ -11,6 +11,9 @@ engine that runs inside Claude, reading the static snapshot.
 stored memory. `tools/sync.js` is the whole pipeline; run it with `--check` to
 see what a sync would change without writing.
 
+A full backup of `data/` is attached to a release on the 1st of each month;
+`docs/backup.md` covers where it lands and how `tools/restore.js` feeds it back.
+
 ## One surface, on purpose
 
     schedule → cloud routine → source → GitHub → Pages

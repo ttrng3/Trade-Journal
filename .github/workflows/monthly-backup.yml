@@ -1,0 +1,54 @@
+name: Monthly backup
+
+# On the 1st, pack everything under data/ into one file and attach it to a
+# GitHub Release. Feed that file to tools/restore.js and the journal is back
+# exactly as it was. No model and no token beyond the job's own: this is
+# deterministic, so it runs as an Action, not a Claude routine.
+#
+# 02:30 UTC sits after the nightly sync (01:07 UTC), so the snapshot includes
+# that night's fills. See docs/backup.md.
+on:
+  schedule:
+    - cron: "30 2 1 * *"   # 09:30 Asia/Ho_Chi_Minh on the 1st
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build backup
+        id: b
+        run: |
+          set -euo pipefail
+          day=$(date -u +%F)
+          out="trade-journal-backup-${day}.json.gz"
+          node tools/backup.js --out "$out" | tee summary.json
+          # Prove the file restores before publishing it.
+          mkdir restored
+          node tools/restore.js "$out" --data-dir restored > /dev/null
+          diff -r data restored
+          echo "day=$day" >> "$GITHUB_OUTPUT"
+          echo "out=$out" >> "$GITHUB_OUTPUT"
+          echo "fills=$(node -p 'require("./summary.json").totalFills')" >> "$GITHUB_OUTPUT"
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tag="backup-${{ steps.b.outputs.day }}"
+          notes=$(printf '%s\n' \
+            "${{ steps.b.outputs.fills }} fills, data/ as of commit ${GITHUB_SHA::7}." \
+            "" \
+            "Restore: \`node tools/restore.js ${{ steps.b.outputs.out }}\` from the repo root, then commit data/." \
+            "See docs/backup.md.")
+          if gh release view "$tag" > /dev/null 2>&1; then
+            gh release upload "$tag" "${{ steps.b.outputs.out }}" --clobber
+          else
+            gh release create "$tag" "${{ steps.b.outputs.out }}" --title "Backup ${{ steps.b.outputs.day }}" --notes "$notes"
+          fi
