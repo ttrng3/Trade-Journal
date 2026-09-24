@@ -1,16 +1,19 @@
 <title>Webull Trade Journal</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 :root{
-  --paper:#FFFFFF;--surface:#FAFAF8;--sunk:#F3F3EF;--ink:#1C1C1A;--ink-soft:#44443F;--muted:#6B6B64;--rule:#E4E4DF;
-  --accent:#0F6E52;--accent-bg:#EAF3EF;--critical:#B02418;--critical-bg:#F8ECEA;--warning:#9A6B00;--warning-bg:#F6F0DF;
-  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  /* Apple HIG light set (ty-artifact-standard §1), mapped onto this page's token names */
+  --bg:#F2F2F7;--paper:#FFFFFF;--surface:#F7F7FA;--sunk:#F2F2F7;--ink:#1C1C1E;--ink-soft:#3C3C43;--muted:#8E8E93;--rule:#E5E5EA;
+  /* --accent is the POSITIVE colour (green ink); UI chrome uses --blue (apple layer) */
+  --accent:#1E7F3C;--accent-bg:#E6F7EB;--accent-line:#BFE9CC;--critical:#C4271D;--critical-bg:#FFEBE9;--critical-line:#F7D2CE;--warning:#8A5200;--warning-bg:#FFF4E5;--warning-line:#F6DFBC;
+  --blue:#007AFF;--blue-bg:#E8F1FE;--blue-ink:#0060DF;--blue-line:#CFE3FD;
+  --on-ink:#FFFFFF;--header:#FFFFFF;
+  --sans:-apple-system,BlinkMacSystemFont,"San Francisco","Helvetica Neue",Helvetica,Ubuntu,Roboto,sans-serif;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   --rail:212px;
-  color-scheme:light;
+  color-scheme:light dark;
 }
-html{color-scheme:light;height:100%}
+html{color-scheme:light dark;height:100%}
 *{box-sizing:border-box}
-body{margin:0;background:#FFFFFF;color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.45;padding:0;font-variant-numeric:tabular-nums;min-height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.45;padding:0;font-variant-numeric:tabular-nums;min-height:100%}
 h1,h2,h3{margin:0;font-weight:600;text-wrap:balance}
 button,select,input,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
@@ -30,7 +33,7 @@ nav.rail button[aria-selected=true]{background:var(--accent-bg);color:var(--acce
 .rail .foot{margin-top:auto;padding:10px 8px 0;font-size:11px;color:var(--muted);line-height:1.5}
 .rail .foot a{word-break:break-all}
 .content{min-width:0;padding-inline:20px;padding-block:0 28px}
-header.top{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding-block:14px;border-bottom:1px solid var(--rule);position:sticky;top:env(safe-area-inset-top,0px);background:#FFFFFF;z-index:5}
+header.top{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding-block:14px;border-bottom:1px solid var(--rule);position:sticky;top:env(safe-area-inset-top,0px);background:var(--header);z-index:5}
 header.top h2{font-size:18px;letter-spacing:-.01em}
 .spacer{flex:1}
 .range{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
@@ -51,9 +54,9 @@ main{padding-block:16px;display:grid;gap:16px}
 .kpi .viz{grid-row:2;grid-column:2}
 .pos{color:var(--accent)}.neg{color:var(--critical)}.flat{color:var(--muted)}.warn{color:var(--warning)}
 .note{font-size:13px;border-radius:6px;padding:8px 12px;border:1px solid}
-.note.warn{background:var(--warning-bg);border-color:#e3d2a3;color:var(--warning)}
-.note.info{background:var(--accent-bg);border-color:#bfd9cd;color:var(--accent)}
-.note.err{background:var(--critical-bg);border-color:#e6b9b4;color:var(--critical)}
+.note.warn{background:var(--warning-bg);border-color:var(--warning-line);color:var(--warning)}
+.note.info{background:var(--accent-bg);border-color:var(--accent-line);color:var(--accent)}
+.note.err{background:var(--critical-bg);border-color:var(--critical-line);color:var(--critical)}
 .card{border:1px solid var(--rule);border-radius:10px;background:var(--paper);break-inside:avoid;min-width:0}
 .card>header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;padding:10px 14px;border-bottom:1px solid var(--rule)}
 .card>header h3{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
@@ -77,13 +80,13 @@ main{padding-block:16px;display:grid;gap:16px}
 .cal .dow{font-size:11px;text-transform:uppercase;letter-spacing:.06px;letter-spacing:.06em;color:var(--muted);text-align:center;padding-bottom:2px}
 .cal .day{height:80px;border:1px solid var(--rule);border-radius:7px;padding:6px 7px;background:var(--paper);text-align:left;overflow:hidden;position:relative}
 .cal .day.empty{background:transparent;border-color:transparent}
-.cal .day.g{background:var(--accent-bg);border-color:#bfd9cd}
-.cal .day.r{background:var(--critical-bg);border-color:#e6b9b4}
+.cal .day.g{background:var(--accent-bg);border-color:var(--accent-line)}
+.cal .day.r{background:var(--critical-bg);border-color:var(--critical-line)}
 .cal .day.z{background:var(--sunk)}
 .cal .day.wk{background:var(--surface)}
 .cal .day.has:hover{outline:2px solid var(--accent);outline-offset:-1px}
 .cal .day.sel{outline:2px solid var(--accent);outline-offset:-1px}
-.cal .day.today .n{background:var(--ink);color:#fff;border-radius:10px;padding:0 5px;display:inline-block}
+.cal .day.today .n{background:var(--ink);color:var(--on-ink);border-radius:10px;padding:0 5px;display:inline-block}
 .cal .day .n{font-size:11px;color:var(--muted)}
 .cal .day .p{font-family:var(--mono);font-weight:600;font-size:13px;margin-top:2px}
 .cal .day .t{font-size:11px;color:var(--ink-soft)}
@@ -141,7 +144,7 @@ textarea,select.inp,input.inp{width:100%;border:1px solid var(--rule);border-rad
 .imports ul{list-style:none;margin:0;padding:0}
 .settings{display:grid;grid-template-columns:auto 1fr;gap:8px 12px;align-items:center;font-size:13px}
 .settings input,.settings select{width:140px;border:1px solid var(--rule);border-radius:6px;padding:4px 8px;background:var(--paper)}
-.toast{position:fixed;bottom:16px;right:16px;background:var(--ink);color:#fff;padding:8px 14px;border-radius:6px;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:20}
+.toast{position:fixed;bottom:16px;right:16px;background:var(--ink);color:var(--on-ink);padding:8px 14px;border-radius:6px;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:20}
 .toast.show{opacity:1}
 .list2{display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:13px;margin-top:10px}
 .list2 .row2{display:flex;justify-content:space-between;border-bottom:1px solid var(--rule);padding:3px 0}
@@ -174,6 +177,80 @@ textarea,select.inp,input.inp{width:100%;border:1px solid var(--rule);border-rad
   .muted,.sub,.kpi .l,.kpi .s,.lbl,.cal .day .n,.cal .day .t,.dayhead .m{color:#222!important}
   .cal .day,.badge,.detail,.chip,.note,.kpi{background:#fff!important}
 }
+</style>
+<style id="apple-layer">
+/* ============================================================
+   APPLE LAYER — apple-design skill, 2026-09-24 (modelled on Omni-TMDV).
+   Additive: sits after the base sheet and only overrides.
+   Dark mode is SCREEN-only — print always gets the light sheet.
+   --accent stays the POSITIVE (green) colour; UI chrome is blue.
+   ============================================================ */
+:root{color-scheme:light dark;
+  --shadow-card:0 1px 2px rgba(0,0,0,.04),0 2px 8px rgba(0,0,0,.04);
+  --shadow-float:0 1px 3px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.08);
+  --chrome:rgba(242,242,247,.72);
+}
+@media screen and (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#000000; --paper:#1C1C1E; --surface:#242426; --sunk:#2C2C2E; --rule:#38383A;
+  --ink:#FFFFFF; --ink-soft:#D1D1D6; --muted:#98989F; --on-ink:#1C1C1E; --header:#1C1C1E;
+  --accent:#4ADE80; --accent-bg:rgba(48,209,88,.15); --accent-line:rgba(48,209,88,.35);
+  --critical:#FF6961; --critical-bg:rgba(255,69,58,.15); --critical-line:rgba(255,69,58,.38);
+  --warning:#FFB340; --warning-bg:rgba(255,159,10,.15); --warning-line:rgba(255,159,10,.38);
+  --blue:#0A84FF; --blue-bg:rgba(10,132,255,.16); --blue-ink:#64B5FF; --blue-line:rgba(10,132,255,.38);
+  --shadow-card:none; --shadow-float:0 8px 24px rgba(0,0,0,.5);
+  --chrome:rgba(28,28,30,.72);
+}}
+@media screen{:root[data-theme="dark"]{
+  --bg:#000000; --paper:#1C1C1E; --surface:#242426; --sunk:#2C2C2E; --rule:#38383A;
+  --ink:#FFFFFF; --ink-soft:#D1D1D6; --muted:#98989F; --on-ink:#1C1C1E; --header:#1C1C1E;
+  --accent:#4ADE80; --accent-bg:rgba(48,209,88,.15); --accent-line:rgba(48,209,88,.35);
+  --critical:#FF6961; --critical-bg:rgba(255,69,58,.15); --critical-line:rgba(255,69,58,.38);
+  --warning:#FFB340; --warning-bg:rgba(255,159,10,.15); --warning-line:rgba(255,159,10,.38);
+  --blue:#0A84FF; --blue-bg:rgba(10,132,255,.16); --blue-ink:#64B5FF; --blue-line:rgba(10,132,255,.38);
+  --shadow-card:none; --shadow-float:0 8px 24px rgba(0,0,0,.5);
+  --chrome:rgba(28,28,30,.72);
+}}
+@media screen{:root[data-theme="light"]{color-scheme:light}:root[data-theme="dark"]{color-scheme:dark}}
+
+/* Semantic colour — blue is active / informational / links; green stays P&L-positive */
+a,.btn.link{color:var(--blue-ink)}
+:focus-visible{outline-color:var(--blue)}
+.brand .mark{background:var(--blue)}
+nav.rail button[aria-selected=true]{background:var(--blue-bg);color:var(--blue-ink)}
+.btn.primary,.stars button.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn.on{border-color:var(--blue-line);color:var(--blue-ink);background:var(--blue-bg)}
+.note.info{background:var(--blue-bg);border-color:var(--blue-line);color:var(--blue-ink)}
+.chip{background:var(--blue-bg);color:var(--blue-ink)}
+.cal .day.has:hover,.cal .day.sel{outline-color:var(--blue)}
+.drop.over{border-color:var(--blue);background:var(--blue-bg)}
+
+/* Typography — optical sizing; small text gets a hair of positive tracking */
+body{font-optical-sizing:auto;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
+.sub,.note,.rail .foot,.tvmeta,.cal .day .t,.dayhead .m,.kpi .s,.radar-wrap .legend{letter-spacing:.01em}
+
+/* Materials — cards float; the toast floats higher */
+.card,.kpi{box-shadow:var(--shadow-card)}
+.toast{box-shadow:var(--shadow-float)}
+
+/* Translucent chrome — the sticky header floats over content with a scroll-edge blur */
+header.top{background:var(--chrome);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);backdrop-filter:blur(20px) saturate(180%)}
+
+/* Response — feedback on press, instant */
+button,.btn{transition:transform 100ms ease-out,background-color .15s,color .15s}
+button:active,.btn:active{transform:scale(.97)}
+button:disabled:active,.btn:disabled:active{transform:none}
+
+/* Accessibility — the three independent signals */
+@media (prefers-reduced-transparency:reduce){header.top{background:var(--header);-webkit-backdrop-filter:none;backdrop-filter:none}}
+@media (prefers-contrast:more){:root{--rule:#8E8E93;--muted:#3C3C43;--ink-soft:#1C1C1E}
+  header.top{background:var(--header);-webkit-backdrop-filter:none;backdrop-filter:none}}
+@media (prefers-contrast:more) and (prefers-color-scheme:dark){:root:not([data-theme="light"]){--rule:#8E8E93;--muted:#D1D1D6;--ink-soft:#FFFFFF}}
+@media (prefers-reduced-motion:reduce){button:active,.btn:active{transform:none}}
+
+@media print{:root{color-scheme:light}
+  header.top{position:static;background:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+  .card,.kpi,.toast{box-shadow:none!important}}
 </style>
 
 <div class="shell">
@@ -446,7 +523,9 @@ const TV_MAP={SPXW:'SP:SPX',SPX:'SP:SPX',NDX:'NASDAQ:NDX',NDXP:'NASDAQ:NDX',RUT:
 function tvCfg(){const t=S.meta.tv||{};return {interval:t.interval||'5',studies:t.studies&&t.studies.length?t.studies:DEF_STUDIES,embed:t.embed!==false};}
 function tvSymbol(und){return TV_MAP[und]||und;}
 function tvLink(t){return `https://www.tradingview.com/chart/?symbol=${encodeURIComponent(tvSymbol(t.und))}&interval=${encodeURIComponent(tvCfg().interval)}`;}
-function tvEmbed(t){const c=tvCfg();return `https://s.tradingview.com/widgetembed/?symbol=${encodeURIComponent(tvSymbol(t.und))}&interval=${encodeURIComponent(c.interval)}&hidesidetoolbar=0&symboledit=1&saveimage=0&toolbarbg=FFFFFF&studies=${encodeURIComponent(JSON.stringify(c.studies))}&theme=light&style=1&timezone=America%2FNew_York&withdateranges=1&hideideas=1&locale=en`;}
+// The embed follows the page theme: an explicit data-theme wins, else the OS setting.
+const isDark=()=>{const t=document.documentElement.dataset.theme;return t?t==='dark':matchMedia('(prefers-color-scheme: dark)').matches;};
+function tvEmbed(t){const c=tvCfg();const dk=isDark();return `https://s.tradingview.com/widgetembed/?symbol=${encodeURIComponent(tvSymbol(t.und))}&interval=${encodeURIComponent(c.interval)}&hidesidetoolbar=0&symboledit=1&saveimage=0&toolbarbg=${dk?'1C1C1E':'FFFFFF'}&studies=${encodeURIComponent(JSON.stringify(c.studies))}&theme=${dk?'dark':'light'}&style=1&timezone=America%2FNew_York&withdateranges=1&hideideas=1&locale=en`;}
 const canEmbedTV=()=>store.mode!=='db'&&tvCfg().embed;
 
 /* =====================================================================

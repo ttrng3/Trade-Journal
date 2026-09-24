@@ -23,3 +23,13 @@ A mirror artifact existed for a few hours that day and was deleted. Do not
 recreate one, and do not add an artifact URL to this repo. `tools/build-fragment.py`
 is kept only because it is the one thing that can derive a standalone fragment
 of this page if it is ever needed; nothing in the refresh calls it.
+
+## Look
+
+`index.html` is hand-maintained — `tools/sync.js` and the nightly routine write
+`data/` only and never touch it. Its visual system is Apple HIG with **light and
+dark mode** (ruled 2026-09-24): base tokens in the first `<style>`, then
+`<style id="apple-layer">` with the dark values (screen only; print stays
+light), materials, translucent header and accessibility fallbacks. `--accent`
+means *positive P&L* (green); interactive chrome is `--blue`. Any new colour must
+be a token with a dark value — no raw hex on screen.
