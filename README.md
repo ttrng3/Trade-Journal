@@ -27,9 +27,8 @@ of this page if it is ever needed; nothing in the refresh calls it.
 ## Look
 
 `index.html` is hand-maintained — `tools/sync.js` and the nightly routine write
-`data/` only and never touch it. Its visual system is Apple HIG with **light and
-dark mode** (ruled 2026-09-24): base tokens in the first `<style>`, then
-`<style id="apple-layer">` with the dark values (screen only; print stays
-light), materials, translucent header and accessibility fallbacks. `--accent`
+`data/` only and never touch it. Its visual system is Apple HIG. **Light only — Ty ruled 2026-09-24** (dark mode ran for one morning and was withdrawn): the page stays light whatever the viewer's system setting, and there is no dark theme. Do not add one back. Base tokens sit in the first `<style>`, then
+`<style id="apple-layer">` adds materials, translucent header and accessibility
+fallbacks; the TradingView embed is pinned to its light theme. `--accent`
 means *positive P&L* (green); interactive chrome is `--blue`. Any new colour must
-be a token with a dark value — no raw hex on screen.
+be a token — no raw hex on screen.
