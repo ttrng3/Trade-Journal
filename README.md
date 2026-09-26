@@ -22,8 +22,13 @@ A full backup of `data/` is attached to a release on the 1st of each month;
 wants control over what exists of his work, so there is no claude.ai artifact
 copy of this dashboard: the Pages URL above is the address, full stop.
 
-A mirror artifact existed for a few hours that day and was deleted. Do not
-recreate one, and do not add an artifact URL to this repo. `tools/build-fragment.py`
+**The rule, as Ty set it on 2026-09-26:** where a GitHub Pages link already
+exists, Pages is the only surface and no claude.ai artifact may exist for the
+same content. An artifact is the fallback only for work that has no Pages link.
+A mirror artifact existed for a few hours on 2026-09-23 and was deleted; a
+second one was recreated on 2026-09-24 and deleted on 2026-09-26, and the
+routine no longer has the Artifact tool at all. Do not recreate one, and do not
+add an artifact URL to this repo. `tools/build-fragment.py`
 is kept only because it is the one thing that can derive a standalone fragment
 of this page if it is ever needed; nothing in the refresh calls it.
 
