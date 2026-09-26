@@ -14,23 +14,20 @@ see what a sync would change without writing.
 A full backup of `data/` is attached to a release on the 1st of each month;
 `docs/backup.md` covers where it lands and how `tools/restore.js` feeds it back.
 
-## One surface, on purpose
+## One address, one preview
 
-    schedule → cloud routine → source → GitHub → Pages
+    schedule → cloud routine → source → GitHub → Pages (the address) → artifact (Cowork preview)
 
-**GitHub Pages is the only published surface.** Ty ruled on 2026-09-23 that he
-wants control over what exists of his work, so there is no claude.ai artifact
-copy of this dashboard: the Pages URL above is the address, full stop.
-
-**The rule, as Ty set it on 2026-09-26:** where a GitHub Pages link already
-exists, Pages is the only surface and no claude.ai artifact may exist for the
-same content. An artifact is the fallback only for work that has no Pages link.
-A mirror artifact existed for a few hours on 2026-09-23 and was deleted; a
-second one was recreated on 2026-09-24 and deleted on 2026-09-26, and the
-routine no longer has the Artifact tool at all. Do not recreate one, and do not
-add an artifact URL to this repo. `tools/build-fragment.py`
-is kept only because it is the one thing that can derive a standalone fragment
-of this page if it is ever needed; nothing in the refresh calls it.
+**https://ttrng3.github.io/Trade-Journal/ is the only link.** A claude.ai
+artifact exists as the Cowork preview of this page, refreshed by the routine as
+the last step of every run, but its URL is never written here, in a Drive doc,
+or in a run report — Ty ruled on 2026-09-24 and again on 2026-09-26 that content
+with a Pages address gets no second link. The preview must exist: "no artifact
+link" means the URL stays out of sight, never that the artifact goes. It was
+wrongly deleted on 2026-09-23 and again on 2026-09-26 by reading the rule as
+"no artifact"; do not make that a third time. Only the routine prompt carries
+the URL, because the job needs a publish target. `tools/build-fragment.py`
+derives the fragment the artifact needs from `index.html`.
 
 ## What the page itself can save
 
