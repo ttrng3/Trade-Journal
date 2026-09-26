@@ -27,6 +27,18 @@ recreate one, and do not add an artifact URL to this repo. `tools/build-fragment
 is kept only because it is the one thing that can derive a standalone fragment
 of this page if it is ever needed; nothing in the refresh calls it.
 
+## What the page itself can save
+
+Nothing in the browser can write to this repo, so the Pages build is a
+**nightly snapshot plus a per-browser overlay**. A Webull CSV dropped on the
+page (or picked with *Import Webull CSV*) is parsed and merged at once, and the
+new fills, together with notes and settings saved on the page, live in that
+browser's `localStorage` on top of the snapshot. They survive reloads. They do
+not reach other devices until the same export is put in `Raw Records/` on
+Drive and the nightly sync commits it; at the next load the overlay prunes any
+fill the snapshot now carries, so it never disagrees with the repo and never
+grows. The status line in the header says how many fills are overlay-only.
+
 ## Look
 
 `index.html` is hand-maintained — `tools/sync.js` and the nightly routine write

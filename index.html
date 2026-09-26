@@ -31,6 +31,7 @@ aside.rail{background:var(--surface);border-right:1px solid var(--rule);padding:
 .brand .mark{width:30px;height:30px;border-radius:8px;background:var(--accent);color:#fff;display:grid;place-items:center;font-family:var(--mono);font-weight:600;font-size:13px}
 .brand h1{font-size:15px;line-height:1.1}
 .brand h1 small{display:block;font-weight:400;font-size:11px;color:var(--muted);margin-top:2px}
+nav.rail button[hidden]{display:none}
 nav.rail button{display:flex;align-items:center;gap:10px;width:100%;border:0;background:none;text-align:left;padding:8px 10px;border-radius:7px;color:var(--ink-soft);font-size:13.5px}
 nav.rail button svg{width:17px;height:17px;flex:none;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 nav.rail button:hover{background:var(--sunk)}
@@ -371,7 +372,12 @@ function buildTrades(fills,opts){
 /* =====================================================================
    2. Storage: db capability (shared, persistent) with localStorage fallback
    ===================================================================== */
-const store={db:null,assets:null,mode:'local',mirror:null,
+const store={db:null,assets:null,mode:'local',mirror:null,localFills:0,
+  // Nothing writes to the repo from the browser, so on the Pages build every import, note and setting made
+  // here lands in localStorage as an OVERLAY on the nightly snapshot. It is never read-only: the overlay is
+  // merged over the snapshot at load, and fills the snapshot has since picked up (nightly sync from Drive)
+  // are pruned from the overlay so it stays small and never disagrees with the repo.
+  get readOnly(){return false;},
   async init(){
     try{ if(window.claude?.use){ this.db=await claude.use('db'); this.assets=await claude.use('assets'); } }catch(e){ this.db=null; }
     this.mode=this.db?'db':'local';
@@ -424,7 +430,24 @@ const store={db:null,assets:null,mode:'local',mirror:null,
       const ns=await this.db.collection('notes').get();ns.docs.forEach(d=>{out.notes[d.id]=thaw(d.data());});
       const m=await this.db.doc('meta/settings').get();out.meta=m.exists?thaw(m.data()):{};
     }else if(this.mirror){
-      out.fills=this.mirror.fills||{};out.notes=this.mirror.notes||{};out.meta=this.mirror.meta||{};
+      Object.assign(out.fills,this.mirror.fills||{});Object.assign(out.notes,this.mirror.notes||{});
+      // overlay: fills imported on this browser, minus any the snapshot now carries
+      const months=this.lsGet('months')||[],kept=[];let added=0;
+      months.forEach(m=>{
+        const doc=this.lsGet('fills/'+m)||{fills:{}};let pruned=false;
+        for(const k in doc.fills){if(out.fills[k]){delete doc.fills[k];pruned=true;}else{out.fills[k]=doc.fills[k];added++;}}
+        if(Object.keys(doc.fills).length){kept.push(m);if(pruned)this.lsSet('fills/'+m,doc);}
+        else{try{localStorage.removeItem('tj:fills/'+m);}catch(e){}}
+      });
+      if(kept.length!==months.length)this.lsSet('months',kept);
+      this.localFills=added;
+      // overlay: notes and settings saved on this browser win over the snapshot's copy
+      const ln=this.lsGet('notes')||{};for(const k in ln)out.notes[k]=ln[k];
+      const mm=this.mirror.meta||{},lm=this.lsGet('meta')||{};
+      const seen=new Set();const imports=[...(lm.imports||[]),...(mm.imports||[])]
+        .filter(i=>{const id=(i.name||'')+'|'+(i.at||'');if(seen.has(id))return false;seen.add(id);return true;})
+        .sort((a,b)=>(b.at||'').localeCompare(a.at||'')).slice(0,50);
+      out.meta={...mm,...lm,imports};
     }else{
       const months=this.lsGet('months')||[];months.forEach(m=>Object.assign(out.fills,(this.lsGet('fills/'+m)||{}).fills||{}));
       out.notes=this.lsGet('notes')||{};out.meta=this.lsGet('meta')||{};
@@ -536,10 +559,10 @@ async function importFile(file){
 const VIEWS={dashboard:['Dashboard',renderDashboard],journal:['Daily journal',renderJournal],trades:['Trades',renderTrades],reports:['Reports',renderReports],settings:['Settings',renderSettings]};
 function render(){renderChrome();renderBanner();renderView();}
 function renderChrome(){
-  const ro=store.mode==='mirror';$('#importBtn').hidden=ro;document.querySelectorAll('nav.rail button[data-view=settings]').forEach(b=>b.hidden=ro);
-  $('#status').textContent=store.mode==='db'?'saved to this page':ro?`read-only mirror · data as of ${(store.mirror.meta?.snapshotAt||'').slice(0,16).replace('T',' ')} UTC`:'saved in this browser only';
+  const mir=store.mode==='mirror';$('#importBtn').hidden=false;document.querySelectorAll('nav.rail button[data-view=settings]').forEach(b=>b.hidden=false);
+  $('#status').textContent=store.mode==='db'?'saved to this page':mir?`snapshot ${(store.mirror.meta?.snapshotAt||'').slice(0,16).replace('T',' ')} UTC${store.localFills?` · +${store.localFills} fills in this browser`:''}`:'saved in this browser only';
   $('#rangePreset').value=S.range.preset;const cu=S.range.preset==='custom';$('#rangeFrom').hidden=!cu;$('#rangeTo').hidden=!cu;$('#rangeFrom').value=S.range.from||'';$('#rangeTo').value=S.range.to||'';
-  $('#railFoot').innerHTML=store.mode==='db'?`Read-only mirror for phones and sharing:<br><a href="${MIRROR}" target="_blank" rel="noreferrer">ttrng3.github.io/Trade-Journal</a>`:store.mode==='mirror'?'Notes, tags and imports live on the Claude page; this mirror refreshes nightly.':'';
+  $('#railFoot').innerHTML=store.mode==='db'?`Read-only mirror for phones and sharing:<br><a href="${MIRROR}" target="_blank" rel="noreferrer">ttrng3.github.io/Trade-Journal</a>`:store.mode==='mirror'?'Nightly snapshot from GitHub. A CSV dropped here, and notes or settings saved here, stay in this browser. Put the export in Raw Records on Drive and the nightly sync makes it permanent everywhere.':'';
 }
 function renderBanner(){
   const u=S.trades.filter(t=>t.result==='UNKNOWN').length;let h='';
@@ -698,7 +721,7 @@ function statTable(rows,labelKey,labelName){
 }
 /* ---- daily journal ---- */
 function renderJournal(){
-  const el=$('#view-journal');const ro=store.mode==='mirror';
+  const el=$('#view-journal');const ro=store.readOnly;
   const groups=dayGroups(T());let days=Object.keys(groups).sort().reverse();
   if(S.journalDay&&!groups[S.journalDay]){const all=dayGroups(S.trades);if(all[S.journalDay]){groups[S.journalDay]=all[S.journalDay];days=Object.keys(groups).sort().reverse();}}
   const shown=days.slice(0,S.journalLimit);
@@ -794,7 +817,7 @@ function rowHtml(t){
     <td class="sub">${t.notes?'✎':''}${t.shots.length?` ${t.shots.length}📎`:''}</td></tr>`+(open?`<tr><td colspan="12" style="padding:0"><div class="detail" data-key="${t.key}">${detailHtml(t)}</div></td></tr>`:'');
 }
 function detailHtml(t){
-  const unknown=t.result==='UNKNOWN';const ro=store.mode==='mirror';
+  const unknown=t.result==='UNKNOWN';const ro=store.readOnly;
   return `${unknown?`<div class="note warn" style="margin-bottom:12px">These ${t.xq} contracts were sold in the export window but bought before it, so the entry price and P&L are unknown. Import an older Webull export that covers the entry and this row resolves itself.</div>`:''}
   <div class="cols">
     <div><div class="lbl">Fills</div><table class="tbl" style="font-size:12px"><tbody>${t.fills.map(f=>`<tr><td style="font-family:var(--mono)">${tm(f.t)}</td><td class="${f.side==='BUY'?'pos':'neg'}" style="font-weight:500">${f.side}</td><td class="r">${f.qty}</td><td class="r">@ ${f.price.toFixed(2)}</td><td class="sub" style="text-align:right">${esc(f.tif)}</td></tr>`).join('')}</tbody></table>
@@ -847,8 +870,8 @@ function renderSettings(){
     <p class="sub" style="margin:6px 0 0">TradingView study ids, e.g. <code>MAExp@tv-basic-studies</code> (EMA), <code>VWAP@tv-basic-studies</code>, <code>RSI@tv-basic-studies</code>, <code>MACD@tv-basic-studies</code>, <code>BB@tv-basic-studies</code>. The "Open in TradingView" button always uses your own logged-in account, layouts and indicators; only the inline embed is limited to built-ins.</p>
     <button class="btn primary" id="saveTv" style="margin-top:12px">Save TradingView settings</button></div></div>
     <div class="card"><header><h3>Playbooks</h3></header><div class="body"><textarea id="pbs" rows="6">${esc(playbooks().join('\n'))}</textarea><p class="sub" style="margin:6px 0 0">One per line. Assign them to trades in the trade log.</p><button class="btn primary" id="savePbs" style="margin-top:12px">Save playbooks</button></div></div>
-    <div class="card"><header><h3>Data</h3></header><div class="body"><p style="margin:0 0 8px">${Object.keys(S.fills).length} fills · ${S.trades.length} trades · ${Object.keys(S.notes).length} annotated. Storage: ${store.mode==='db'?'this page (shared across your devices)':'this browser only'}.</p>
-    <p class="sub" style="margin:0 0 10px">Duplicate fills are skipped on import, so re-importing an overlapping export is safe. Trades are rebuilt from the fills every time; notes and tags stay attached by a stable trade key.</p>
+    <div class="card"><header><h3>Data</h3></header><div class="body"><p style="margin:0 0 8px">${Object.keys(S.fills).length} fills · ${S.trades.length} trades · ${Object.keys(S.notes).length} annotated. Storage: ${store.mode==='db'?'this page (shared across your devices)':store.mode==='mirror'?`nightly snapshot from GitHub${store.localFills?` + ${store.localFills} fills imported in this browser`:''}`:'this browser only'}.</p>
+    <p class="sub" style="margin:0 0 10px">Duplicate fills are skipped on import, so re-importing an overlapping export is safe. Trades are rebuilt from the fills every time; notes and tags stay attached by a stable trade key.${store.mode==='mirror'?' A CSV dropped here updates this browser at once and survives reloads. To make it permanent on every device, also put the export in <code>Raw Records</code> on Drive: the nightly sync (11:00 Hanoi, Tue–Sat) commits it and this overlay prunes itself.':''}</p>
     <div class="drop no-print" id="drop">Drop a Webull CSV here</div>
     <div class="lbl" style="margin-top:12px">Recent imports</div><div class="imports"><ul>${imps.length?imps.map(i=>`<li><div style="font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(i.name)}</div><div class="sub" style="font-family:var(--mono)">${i.fresh} new · ${i.dup} dup · ${(i.first||'').slice(0,10)} → ${(i.last||'').slice(0,10)} · ${(i.at||'').slice(0,10)}</div></li>`).join(''):'<li class="sub">Nothing imported yet.</li>'}</ul></div></div></div></div>`;
   $('#saveSettings').onclick=async()=>{S.meta.feeC=+$('#feeC').value||0;S.meta.feeS=+$('#feeS').value||0;S.meta.longOnly=$('#longOnly').checked;await store.saveMeta(S.meta);rebuild();render();toast('Recalculated');};
