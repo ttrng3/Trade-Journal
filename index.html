@@ -143,7 +143,9 @@ textarea,select.inp,input.inp{width:100%;border:1px solid var(--rule);border-rad
 .chart .grid{stroke:var(--rule)}
 .filters{display:flex;flex-wrap:wrap;gap:6px}
 .filters select,.filters input{border:1px solid var(--rule);border-radius:6px;padding:4px 8px;background:var(--paper);font-size:13px}
-.drop{border:2px dashed var(--rule);border-radius:8px;padding:28px;text-align:center;color:var(--muted)}
+.drop{border:2px dashed var(--rule);border-radius:8px;padding:28px;text-align:center;color:var(--muted);cursor:pointer;user-select:none;-webkit-user-select:none}
+.drop:hover,.drop:focus-visible{border-color:var(--blue);color:var(--ink);outline:none}
+.drop b{font-weight:500;color:var(--blue)}
 .drop.over{border-color:var(--accent);background:var(--accent-bg)}
 .imports li{border-bottom:1px solid var(--rule);padding:5px 0;font-size:12px}
 .imports li:last-child{border:0}
@@ -872,7 +874,7 @@ function renderSettings(){
     <div class="card"><header><h3>Playbooks</h3></header><div class="body"><textarea id="pbs" rows="6">${esc(playbooks().join('\n'))}</textarea><p class="sub" style="margin:6px 0 0">One per line. Assign them to trades in the trade log.</p><button class="btn primary" id="savePbs" style="margin-top:12px">Save playbooks</button></div></div>
     <div class="card"><header><h3>Data</h3></header><div class="body"><p style="margin:0 0 8px">${Object.keys(S.fills).length} fills · ${S.trades.length} trades · ${Object.keys(S.notes).length} annotated. Storage: ${store.mode==='db'?'this page (shared across your devices)':store.mode==='mirror'?`nightly snapshot from GitHub${store.localFills?` + ${store.localFills} fills imported in this browser`:''}`:'this browser only'}.</p>
     <p class="sub" style="margin:0 0 10px">Duplicate fills are skipped on import, so re-importing an overlapping export is safe. Trades are rebuilt from the fills every time; notes and tags stay attached by a stable trade key.${store.mode==='mirror'?' A CSV dropped here updates this browser at once and survives reloads. To make it permanent on every device, also put the export in <code>Raw Records</code> on Drive: the nightly sync (11:00 Hanoi, Tue–Sat) commits it and this overlay prunes itself.':''}</p>
-    <div class="drop no-print" id="drop">Drop a Webull CSV here</div>
+    <div class="drop no-print" id="drop" role="button" tabindex="0" aria-label="Import a Webull CSV">Drop a Webull CSV here, or <b>click to choose a file</b></div>
     <div class="lbl" style="margin-top:12px">Recent imports</div><div class="imports"><ul>${imps.length?imps.map(i=>`<li><div style="font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(i.name)}</div><div class="sub" style="font-family:var(--mono)">${i.fresh} new · ${i.dup} dup · ${(i.first||'').slice(0,10)} → ${(i.last||'').slice(0,10)} · ${(i.at||'').slice(0,10)}</div></li>`).join(''):'<li class="sub">Nothing imported yet.</li>'}</ul></div></div></div></div>`;
   $('#saveSettings').onclick=async()=>{S.meta.feeC=+$('#feeC').value||0;S.meta.feeS=+$('#feeS').value||0;S.meta.longOnly=$('#longOnly').checked;await store.saveMeta(S.meta);rebuild();render();toast('Recalculated');};
   $('#savePbs').onclick=async()=>{S.meta.playbooks=$('#pbs').value.split('\n').map(s=>s.trim()).filter(Boolean);await store.saveMeta(S.meta);toast('Playbooks saved');};
@@ -880,7 +882,14 @@ function renderSettings(){
   bindDrop($('#drop'));
 }
 /* ---- wiring ---- */
-function bindDrop(el){if(!el)return;el.ondragover=e=>{e.preventDefault();el.classList.add('over');};el.ondragleave=()=>el.classList.remove('over');el.ondrop=e=>{e.preventDefault();el.classList.remove('over');const f=e.dataTransfer.files[0];if(f)importFile(f);};}
+function droppedFile(e){const dt=e.dataTransfer;if(!dt)return null;if(dt.files&&dt.files[0])return dt.files[0];if(dt.items)for(const it of dt.items){if(it.kind==='file'){const f=it.getAsFile();if(f)return f;}}return null;}
+function bindDrop(el){if(!el)return;
+  el.ondragenter=e=>{e.preventDefault();el.classList.add('over');};
+  el.ondragover=e=>{e.preventDefault();e.dataTransfer&&(e.dataTransfer.dropEffect='copy');el.classList.add('over');};
+  el.ondragleave=e=>{if(!el.contains(e.relatedTarget))el.classList.remove('over');};
+  el.ondrop=e=>{e.preventDefault();e.stopPropagation();el.classList.remove('over');const f=droppedFile(e);if(f)importFile(f);else toast('Nothing droppable was received — use click to choose a file');};
+  el.onclick=()=>$('#csvFile').click();
+  el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();$('#csvFile').click();}};}
 document.querySelectorAll('nav.rail button').forEach(b=>b.onclick=()=>go(b.dataset.view));
 $('#importBtn').onclick=()=>$('#csvFile').click();
 $('#csvFile').onchange=e=>{const f=e.target.files[0];if(f)importFile(f);e.target.value='';};
@@ -889,7 +898,7 @@ $('#rangePreset').onchange=e=>{S.range.preset=e.target.value;saveRange();render(
 $('#rangeFrom').onchange=e=>{S.range.from=e.target.value;saveRange();render();};
 $('#rangeTo').onchange=e=>{S.range.to=e.target.value;saveRange();render();};
 document.body.addEventListener('dragover',e=>{if(e.dataTransfer?.types?.includes('Files'))e.preventDefault();});
-document.body.addEventListener('drop',e=>{if(e.target.closest('.drop'))return;const f=e.dataTransfer?.files?.[0];if(f&&/\.csv$/i.test(f.name)){e.preventDefault();importFile(f);}});
+document.body.addEventListener('drop',e=>{if(e.target.closest('.drop'))return;const f=droppedFile(e);if(f&&/\.csv$/i.test(f.name)){e.preventDefault();importFile(f);}});
 (async function boot(){
   try{const r=JSON.parse(localStorage.getItem('tj:range2')||'null');if(r&&r.preset)S.range=r;}catch(e){}
   rebuild();render();$('#status').textContent='loading…';
