@@ -51,6 +51,6 @@ Rules specific to Trade-Journal. **Every standing ruling in the README and in `d
 - **Never fetch the live site from a routine** (runbook, "Verifying a run"). Such an instruction is High.
 - **Backup and restore.** `tools/restore.js` checks every file's SHA-256 and the fill count before writing (docs/backup.md). Weakening that check is High.
 - **Light only, ruled 2026-09-24 by Ty.** No dark theme; any new colour is a token. `--accent` means positive P&L and interactive chrome is `--blue` (README, "Look").
-- **One address, one preview.** `https://ttrng3.github.io/Trade-Journal/` is the only link. A Cowork preview URL or artifact id anywhere in the repo is **Critical** (the repo is public).
+- **One address, one preview.** `https://ttrng3.github.io/Trade-Journal/` is the only link. A Cowork preview URL or artifact id anywhere in the repo is **Critical** (the repo is public). The preview must also exist: a change that removes the routine's refresh step, or deletes the artifact, is High. It was wrongly deleted on 2026-09-23 and again on 2026-09-26 (README, "One address, one preview").
 - **Don't widen what is published.** A new path in `.pages-allow`, or a new kind of data in `data/`, is High and needs Ty. (Carried from Omni-TMDV's REVIEW.md; not stated in this repo's own files.)
 - **Entity separation.** This is Ty's personal trading journal. Any OMNI or ECOPM data is **Critical**.
