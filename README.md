@@ -1,6 +1,6 @@
 # Trade Journal
 
-A private Webull options journal. **This repo is the source of truth** —
+A personal Webull options journal, **public on purpose (Ty, 2026-09-29)**: the repo and the Pages site are public, and only Ty knows the address. **This repo is the source of truth** —
 `data/fills/<YYYY-MM>.json` holds the fills, `data/index.json` is the manifest,
 and https://ttrng3.github.io/Trade-Journal/ renders them. The page is the same
 engine that runs inside Claude, reading the static snapshot.
