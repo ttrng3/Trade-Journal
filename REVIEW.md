@@ -37,7 +37,7 @@ When unsure between two levels, pick the higher one and say why.
 - [ ] **Verify before you assert:** every number in a doc or page has a source named beside it or in its section.
 
 ## Repo-specific rules
-Rules specific to Trade-Journal. **Every standing ruling in the README and in `docs/nightly-sync.md` (the runbook, which outranks the routine prompt) applies as well; a PR that breaks one is High.** The lines below are the ones most often at risk.
+Rules specific to Trade-Journal. **Every standing ruling in the README and in `docs/nightly-sync.md` (the runbook, which outranks the routine prompt) applies as well; a PR that breaks one is at least High, and Critical where a line below says so.** The lines below are the ones most often at risk.
 
 - **`index.html` is hand-maintained.** `tools/sync.js` and the nightly routine write `data/` only (README, "Look"). A sync-side change that touches `index.html` is High.
 - **Serialization is fixed.** Month files are minified with keys sorted and fill fields in alphabetical order (`k,p,price,qty,side,sym,t,tif`); the manifest uses a one-space indent. With no new fills, `node tools/sync.js --check` must report `"changedFiles": []` (runbook, "The tools"). A diff that breaks either is High: every month file would rewrite, burying the real change.
