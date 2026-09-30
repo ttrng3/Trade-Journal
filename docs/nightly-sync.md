@@ -100,7 +100,7 @@ history shows why that matters: several commits read `0 new fills`, which is
 indistinguishable from a broken sync unless the run leaves its own mark.
 
 The line is status only, because the repo is public: `<UTC stamp>
-newest-source=<YYYY-MM-DD of the newest fill> new fills`, or `<UTC stamp>
+newest-source=<YYYY-MM-DD of the newest fill this run added> new fills`, or `<UTC stamp>
 newest-source=no new fills`. No CSV names and no fill counts; those belong in
 the run's report. Readers (`freshness.py`, the wiring page's collector) use
 only the first token, the stamp. This keeps names and counts out of the
