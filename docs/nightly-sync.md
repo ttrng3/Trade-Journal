@@ -112,7 +112,7 @@ a fractional-second stamp so a future producer cannot break it.
 ## Pushing
 
 **Shell `git push` is the path for any run that changes a month shard.** Commit
-the changed files together (`journal: <YYYY-MM-DD> — <n> new fills`) and push
+the changed files together (`journal: <YYYY-MM-DD> — <n> new fills`, the UTC date of the run) and push
 to `main`. The cloud session already has a proxied git credential, so no token
 is read or written. Every fill run since 2026-09-24 went this way: those commits
 are authored by the Claude bot account and change the month shard,
@@ -123,22 +123,24 @@ file inline, one call per file, so a 351 KB shard would pass through the model
 character by character, with a real chance of silent corruption and three
 commits instead of one.
 
-**The GitHub MCP file tools are the fallback for small files only** — the
-heartbeat-only runs (`.last-check`, a few bytes) have used them; those commits
-carry the author `ttrng3`.
+**The GitHub MCP file tools are for small files only.** A run with no new fills
+writes `.last-check` (a few bytes) with them; those commits carry the author
+`ttrng3`.
 
 **If the push is refused**, do not re-send the shard through the file tools.
-Still write the heartbeat: push `data/.last-check` alone with the file tools
-(the small-file fallback), so the run leaves its mark. Skip the preview refresh
-— the repo did not move, so there is nothing new to show. Report the run as
-**BLOCKED** with the refusal. Nothing is lost: the next run re-reads every CSV
+Still write the heartbeat, alone, with the file tools, and make its source
+field say so: `<UTC stamp> newest-source=BLOCKED: push refused`. The preview
+step runs as on every run (it will find nothing new). Report the run as
+**BLOCKED** with the refusal. The watchdog reads only the stamp, so a
+push that keeps being refused raises no automatic alarm until
+`MAX_DATA_AGE_DAYS` (14) — the BLOCKED report and that line are the signal. Nothing is lost: the next run re-reads every CSV
 in `Raw Records/`, dedups by fill key, and pushes the same fills.
 
 ## Verifying a run — never fetch the live site
 
-Confirm `main` moved — after a shell push, `git rev-parse HEAD` equals the
-fetched `origin/main`; after a file-tools write, the sha it returned — and read
-the file back. Do
+Confirm `main` moved — after a shell push, `git fetch origin` then
+`git merge-base --is-ancestor HEAD origin/main`; after a file-tools write, the
+sha it returned — and read the file back. Do
 not `curl` or `WebFetch` https://ttrng3.github.io/ from a routine: cloud egress
 rejects it with `CONNECT 403`, and WebFetch then raises a permission prompt
 nobody is there to answer, parking the run with its work already committed.
