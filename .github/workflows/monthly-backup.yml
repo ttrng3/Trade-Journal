@@ -5,11 +5,13 @@ name: Monthly backup
 # exactly as it was. No model and no token beyond the job's own: this is
 # deterministic, so it runs as an Action, not a Claude routine.
 #
-# 02:30 UTC sits after the nightly sync (01:07 UTC), so the snapshot includes
-# that night's fills. See docs/backup.md.
+# 06:17 UTC sits after the sync (the routine's cron is `0 4 * * 2-6`: 04:00 UTC,
+# Tue-Sat, since 2026-09-26), so on a sync day the snapshot includes that
+# morning's fills. Minute 17, not 0: GitHub can delay or drop scheduled runs at
+# the top of the hour. See docs/backup.md.
 on:
   schedule:
-    - cron: "30 2 1 * *"   # 09:30 Asia/Ho_Chi_Minh on the 1st
+    - cron: "17 6 1 * *"   # 13:17 Asia/Ho_Chi_Minh on the 1st
   workflow_dispatch:
 
 permissions:

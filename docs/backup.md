@@ -2,7 +2,7 @@
 
 ## What runs
 
-On the 1st of every month at 02:30 UTC (09:30 Vietnam),
+On the 1st of every month at 06:17 UTC (13:17 Vietnam), after that day's 04:00 UTC sync when the 1st is a sync day (Tue–Sat; the routine's cron is `0 4 * * 2-6`),
 `.github/workflows/monthly-backup.yml` packs everything under `data/` into one
 file, `trade-journal-backup-YYYY-MM-DD.json.gz` (~0.7 MB), proves it restores
 byte-identical, and attaches it to a release tagged `backup-YYYY-MM-DD`:
@@ -39,7 +39,7 @@ truncated file is refused whole. It replaces `data/` with the snapshot and
 removes month files the snapshot does not know about.
 
 Fills that arrived after the backup was taken are not lost: they are still in
-the Webull CSVs on Drive, and the next nightly sync adds them back (existing
+the Webull CSVs on Drive, and the next sync adds them back (existing
 keys win, so nothing duplicates).
 
 ## The file
