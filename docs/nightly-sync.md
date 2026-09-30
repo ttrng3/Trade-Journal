@@ -33,7 +33,7 @@ The snapshot is now split by month:
 Largest shard is **710 KB**, under the limit, so no run needs the laptop or a
 token. A nightly sync touches only the **current month's** shard instead of
 re-uploading 6.66 MB every night — but by late in a busy month that one shard
-is hundreds of KB (2026-09 was 351 KB on 2026-09-30), so it is pushed with
+is hundreds of KB (2026-09 was 351 KB at commit `2663407`, 2026-09-30), so it is pushed with
 shell git, not the file tools (see *Pushing* below).
 
 Verified at both levels when the split was made: the rendered page was
@@ -115,7 +115,7 @@ a fractional-second stamp so a future producer cannot break it.
 the changed files together (`journal: <YYYY-MM-DD> — <n> new fills`) and push
 to `main`. The cloud session already has a proxied git credential, so no token
 is read or written. Every fill run since 2026-09-24 went this way: those commits
-carry the author `Claude <noreply@anthropic.com>` and change the month shard,
+are authored by the Claude bot account and change the month shard,
 `index.json` and `.last-check` in one commit (e.g. `2663407`, 2026-09-30).
 
 Why not the file tools for the shard: `create_or_update_file` takes the whole
@@ -128,13 +128,17 @@ heartbeat-only runs (`.last-check`, a few bytes) have used them; those commits
 carry the author `ttrng3`.
 
 **If the push is refused**, do not re-send the shard through the file tools.
-Report the run as **BLOCKED** with the refusal, and stop. Nothing is lost: the
-next run re-reads every CSV in `Raw Records/`, dedups by fill key, and pushes
-the same fills.
+Still write the heartbeat: push `data/.last-check` alone with the file tools
+(the small-file fallback), so the run leaves its mark. Skip the preview refresh
+— the repo did not move, so there is nothing new to show. Report the run as
+**BLOCKED** with the refusal. Nothing is lost: the next run re-reads every CSV
+in `Raw Records/`, dedups by fill key, and pushes the same fills.
 
 ## Verifying a run — never fetch the live site
 
-Confirm `main` moved by the sha each write returned and read the file back. Do
+Confirm `main` moved — after a shell push, `git rev-parse HEAD` equals the
+fetched `origin/main`; after a file-tools write, the sha it returned — and read
+the file back. Do
 not `curl` or `WebFetch` https://ttrng3.github.io/ from a routine: cloud egress
 rejects it with `CONNECT 403`, and WebFetch then raises a permission prompt
 nobody is there to answer, parking the run with its work already committed.
@@ -149,7 +153,7 @@ https://ttrng3.github.io/Trade-Journal/ — capital T and J. Lowercase 404s.
 
 ## Credentials
 
-**None in this repo or on Drive.** The sync pushes through the cloud session's
+**No live credential in this repo or on Drive.** The sync pushes through the cloud session's
 git credential proxy (small files: the GitHub MCP file tools). The
 PAT at `09 Trading/Trade Journal/_secrets/github_token_trade-journal.txt` is no
 longer read by anything; it was revoked on GitHub on 2026-09-23. Do not
