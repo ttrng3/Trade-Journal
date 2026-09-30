@@ -2,7 +2,7 @@
 
 Status: approved by Ty 30/09 ("approve for all four", in chat).
 
-- `tools/sync.js`: on a run that writes files, the heartbeat line becomes `<generatedUtc> newest-source=<YYYY-MM-DD of the newest fresh fill, tracked as fills are added, not the CSV's `last`> new fills`, or `<generatedUtc> newest-source=no new fills`. No CSV names, no counts. The first token stays the stamp.
+- `tools/sync.js`: on a run that writes files, the heartbeat line becomes `<generatedUtc> newest-source=<YYYY-MM-DD of the newest fill this run added> new fills`, or `<generatedUtc> newest-source=no new fills`. No CSV names, no counts. The first token stays the stamp. The date is tracked as fills are added, not taken from each import's last field.
 - `docs/nightly-sync.md`, "The heartbeat": one paragraph documenting that format and that readers use only the stamp.
 - Not covered: `data/index.json` `meta.imports` (served) still holds CSV names and counts; changing it is Ty's call in its own work folder.
 - Unchanged: the run's stdout summary (not committed), the BLOCKED heartbeat line the runbook already defines, quiet nights (the routine writes those), commit messages (the routine prompt writes them).
