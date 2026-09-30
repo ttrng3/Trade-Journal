@@ -30,9 +30,9 @@ The snapshot is now split by month:
     data/index.json          manifest: shards[], notes, meta, generatedUtc
     data/fills/<YYYY-MM>.json   one file per month, 49 of them
 
-Largest shard is **710 KB**. The 1 MB cap now binds only the file-tools
-fallback; the laptop and the token are no longer needed because the cloud
-session pushes through its own git proxy (see *Pushing*). A nightly sync touches only the **current month's** shard instead of
+Largest shard is **710 KB**. The laptop and the token went away with the
+split; since 2026-09-24 the cloud session pushes through its own git proxy
+(see *Pushing*), and the 1 MB cap binds only the file-tools fallback. A nightly sync touches only the **current month's** shard instead of
 re-uploading 6.66 MB every night — but by late in a busy month that one shard
 is hundreds of KB (2026-09 was 351 KB at commit `2663407`, 2026-09-30), so it is pushed with
 shell git, not the file tools (see *Pushing* below).
@@ -128,8 +128,9 @@ writes `.last-check` (a few bytes) with them; those commits carry the author
 `ttrng3`.
 
 **If the push is refused as non-fast-forward** (something reached `main` after
-the clone), run `git pull --rebase origin main` once and push again. Data
-files and page edits do not overlap, so the rebase is clean.
+the clone), run `git pull --rebase origin main` once and push again. If the
+rebase stops on a conflict (another data commit got there first), run
+`git rebase --abort` and treat it as a second refusal.
 
 **If the push is refused again, or for any other reason** (auth, proxy), do
 not re-send the shard through the file tools.
