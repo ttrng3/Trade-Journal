@@ -32,10 +32,12 @@ The snapshot is now split by month:
 
 Largest shard is **710 KB**. The laptop and the token went away with the
 split; since 2026-09-24 the cloud session pushes through its own git proxy
-(see *Pushing*), and the 1 MB cap binds only the file-tools fallback. A nightly sync touches only the **current month's** shard instead of
-re-uploading 6.66 MB every night — but by late in a busy month that one shard
-is hundreds of KB (2026-09 was 351 KB at commit `2663407`, 2026-09-30), so it is pushed with
-shell git, not the file tools (see *Pushing* below).
+(see *Pushing*). The 1 MB cap no longer blocks the push, but no file may
+approach it: the file-tools fallback must stay usable. A nightly sync touches
+only the **current month's** shard instead of re-uploading 6.66 MB every night
+— but by late in a busy month that one shard is hundreds of KB (2026-09 was
+351 KB at commit `2663407`, 2026-09-30), so it is pushed with shell git, not
+the file tools (see *Pushing* below).
 
 Verified at both levels when the split was made: the rendered page was
 byte-identical (1,913 chars, hash `69866e19`), and the reassembled data was
@@ -112,11 +114,12 @@ a fractional-second stamp so a future producer cannot break it.
 
 ## Pushing
 
-**Shell `git push` is the path for any run that changes a month shard.** Commit
-the changed files together and push to `main`. The cloud session already has a proxied git credential, so no token
-is read or written. Every fill run since 2026-09-24 went this way: those commits
-are authored by the Claude bot account and change the month shard,
-`index.json` and `.last-check` in one commit (e.g. `2663407`, 2026-09-30).
+**Shell `git push` is the path for any run that changes a month shard.**
+Commit the changed files together and push to `main`. The cloud session
+already has a proxied git credential, so no token is read or written. Every
+fill run since 2026-09-24 went this way: those commits are authored by the
+Claude bot account and change the month shard, `index.json` and `.last-check`
+in one commit (e.g. `2663407`, 2026-09-30).
 
 Why not the file tools for the shard: `create_or_update_file` takes the whole
 file inline, one call per file, so a 351 KB shard would pass through the model
@@ -133,22 +136,23 @@ rebase stops on a conflict (another data commit got there first), run
 `git rebase --abort` and treat it as a second refusal.
 
 **If the push is refused again, or for any other reason** (auth, proxy), do
-not re-send the shard through the file tools.
-Still write the heartbeat, alone, with the file tools, and make its source
-field say so: `<UTC stamp> newest-source=BLOCKED: push refused`. The preview
-step runs as on every run (it will find nothing new). Report the run as
-**BLOCKED** with the refusal. The watchdog reads only the stamp, so a
-push that keeps being refused raises no automatic alarm until
-`MAX_DATA_AGE_DAYS` (14) — the BLOCKED report and the `newest-source=BLOCKED` heartbeat
-line are the signal. Nothing is lost: the next run re-reads every CSV
-in `Raw Records/`, dedups by fill key, and pushes the same fills.
+not re-send the shard through the file tools. Still write the heartbeat,
+alone, with the file tools, and make its source field say so: `<UTC stamp>
+newest-source=BLOCKED: push refused`. The preview step runs as on every run
+(it will find nothing new). Report the run as **BLOCKED** with the refusal,
+and name the CSV files the run read: Ty must not overwrite them until a run
+succeeds. The watchdog reads only the stamp, so a push that keeps being
+refused raises no automatic alarm until `MAX_DATA_AGE_DAYS` (14) — the BLOCKED
+report and the `newest-source=BLOCKED` heartbeat line are the signal. Nothing
+is lost, provided those CSVs are still in `Raw Records/` unchanged: the next
+run re-reads every CSV there, dedups by fill key, and pushes the same fills.
 
 ## Verifying a run — never fetch the live site
 
-Confirm `main` moved — after a shell push, `git fetch origin` then
-`git merge-base --is-ancestor HEAD origin/main` (it prints nothing: exit
-status 0 means `main` has the commit, 1 means it does not); after a file-tools write, the
-sha it returned — and read the file back. Do
+Confirm `main` moved — after a shell push, `git fetch origin` then `git
+merge-base --is-ancestor HEAD origin/main` (it prints nothing: exit status 0
+means `main` has the commit, 1 means it does not); after a file-tools write,
+the sha it returned — and read the file back. Do
 not `curl` or `WebFetch` https://ttrng3.github.io/ from a routine: cloud egress
 rejects it with `CONNECT 403`, and WebFetch then raises a permission prompt
 nobody is there to answer, parking the run with its work already committed.
@@ -163,8 +167,9 @@ https://ttrng3.github.io/Trade-Journal/ — capital T and J. Lowercase 404s.
 
 ## Credentials
 
-**No live credential in this repo or on Drive.** The sync pushes through the cloud session's
-git credential proxy (small files: the GitHub MCP file tools). The
+**No live credential in this repo or on Drive.** The sync pushes through the
+cloud session's git credential proxy (small files: the GitHub MCP file tools).
+The
 PAT at `09 Trading/Trade Journal/_secrets/github_token_trade-journal.txt` is no
 longer read by anything; it was revoked on GitHub on 2026-09-23. Do not
 reintroduce a token-in-URL push.
