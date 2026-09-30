@@ -127,7 +127,12 @@ commits instead of one.
 writes `.last-check` (a few bytes) with them; those commits carry the author
 `ttrng3`.
 
-**If the push is refused**, do not re-send the shard through the file tools.
+**If the push is refused as non-fast-forward** (something reached `main` after
+the clone), run `git pull --rebase origin main` once and push again. Data
+files and page edits do not overlap, so the rebase is clean.
+
+**If the push is refused again, or for any other reason** (auth, proxy), do
+not re-send the shard through the file tools.
 Still write the heartbeat, alone, with the file tools, and make its source
 field say so: `<UTC stamp> newest-source=BLOCKED: push refused`. The preview
 step runs as on every run (it will find nothing new). Report the run as
