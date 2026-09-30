@@ -141,7 +141,7 @@ function main() {
   if (!changed.length) { console.log(JSON.stringify({ mode: 'write', wrote: [], ...summary }, null, 2)); return; }
   for (const p of changed) fs.writeFileSync(p, files[p]);
   fs.writeFileSync(path.join(DATA_DIR, '.last-check'),
-    `${generatedUtc} newest-source=${summary.freshFills ? imports.filter(i => i.fresh).map(i => i.name).join(',') + ` (${summary.freshFills} new fills, last ${imports.filter(i => i.fresh).map(i => i.last).sort().pop()})` : 'no new fills'}\n`);
+    `${generatedUtc} newest-source=${summary.freshFills ? `${imports.filter(i => i.fresh).map(i => i.last).sort().pop().slice(0, 10)} new fills` : 'no new fills'}\n`);
   console.log(JSON.stringify({ mode: 'write', wrote: changed.map(p => path.relative('.', p)), ...summary }, null, 2));
 }
 
