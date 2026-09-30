@@ -30,8 +30,9 @@ The snapshot is now split by month:
     data/index.json          manifest: shards[], notes, meta, generatedUtc
     data/fills/<YYYY-MM>.json   one file per month, 49 of them
 
-Largest shard is **710 KB**, under the limit, so no run needs the laptop or a
-token. A nightly sync touches only the **current month's** shard instead of
+Largest shard is **710 KB**. The 1 MB cap now binds only the file-tools
+fallback; the laptop and the token are no longer needed because the cloud
+session pushes through its own git proxy (see *Pushing*). A nightly sync touches only the **current month's** shard instead of
 re-uploading 6.66 MB every night — but by late in a busy month that one shard
 is hundreds of KB (2026-09 was 351 KB at commit `2663407`, 2026-09-30), so it is pushed with
 shell git, not the file tools (see *Pushing* below).
@@ -112,8 +113,7 @@ a fractional-second stamp so a future producer cannot break it.
 ## Pushing
 
 **Shell `git push` is the path for any run that changes a month shard.** Commit
-the changed files together (`journal: <YYYY-MM-DD> — <n> new fills`, the UTC date of the run) and push
-to `main`. The cloud session already has a proxied git credential, so no token
+the changed files together and push to `main`. The cloud session already has a proxied git credential, so no token
 is read or written. Every fill run since 2026-09-24 went this way: those commits
 are authored by the Claude bot account and change the month shard,
 `index.json` and `.last-check` in one commit (e.g. `2663407`, 2026-09-30).
@@ -133,13 +133,15 @@ field say so: `<UTC stamp> newest-source=BLOCKED: push refused`. The preview
 step runs as on every run (it will find nothing new). Report the run as
 **BLOCKED** with the refusal. The watchdog reads only the stamp, so a
 push that keeps being refused raises no automatic alarm until
-`MAX_DATA_AGE_DAYS` (14) — the BLOCKED report and that line are the signal. Nothing is lost: the next run re-reads every CSV
+`MAX_DATA_AGE_DAYS` (14) — the BLOCKED report and the `newest-source=BLOCKED` heartbeat
+line are the signal. Nothing is lost: the next run re-reads every CSV
 in `Raw Records/`, dedups by fill key, and pushes the same fills.
 
 ## Verifying a run — never fetch the live site
 
 Confirm `main` moved — after a shell push, `git fetch origin` then
-`git merge-base --is-ancestor HEAD origin/main`; after a file-tools write, the
+`git merge-base --is-ancestor HEAD origin/main` (it prints nothing: exit
+status 0 means `main` has the commit, 1 means it does not); after a file-tools write, the
 sha it returned — and read the file back. Do
 not `curl` or `WebFetch` https://ttrng3.github.io/ from a routine: cloud egress
 rejects it with `CONNECT 403`, and WebFetch then raises a permission prompt

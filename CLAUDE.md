@@ -25,7 +25,7 @@ Ty's personal Webull options journal, entity **personal**. Live: https://ttrng3.
 - `data/journal.json` stays removed: one source of truth, and no file near the 1 MB contents-API cap (runbook, "Why the snapshot is sharded").
 - Light only; any new colour is a token (README, "Look").
 - Public on purpose; do not re-litigate it, and do not widen what is served.
-- Never write a Cowork preview URL or artifact id, a token, or personal data by value into this public repo. No credentials: the push uses the cloud session's git credential proxy (docs/nightly-sync.md, Pushing).
+- Never write a Cowork preview URL or artifact id, a token, or personal data by value into this public repo. No stored credentials: the push uses the cloud session's git credential proxy (docs/nightly-sync.md, Pushing).
 - Entity separation: this is a personal journal. Nothing from any work entity belongs here.
 
 ## Known mistakes
