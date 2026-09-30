@@ -15,7 +15,7 @@ Ty's personal Webull options journal, entity **personal**. Live: https://ttrng3.
 - Data: `data/index.json` (manifest: `shards`, `shardInfo`, `totalFills`, `notes`, `meta`, `generatedUtc`), `data/fills/<YYYY-MM>.json` (one per month), `data/.last-check` (heartbeat, written every run, not published).
 - `tools/parse-webull.js` is the parser; `tools/sync.js` is the whole pipeline and refuses to run if `totalFills` disagrees with the month files.
 - `.github/workflows/monthly-backup.yml` attaches a backup of `data/` to a release on the 1st; `freshness-check.yml` opens an issue when the sync goes quiet.
-- `.pages-allow` lists what Pages publishes; `.github/workflows/pages.yml` deploys only that. A new kind of file under `data/` needs Ty's say-so and its own `.pages-allow` line in its own PR first.
+- `.pages-allow` lists what Pages publishes; `.github/workflows/pages.yml` deploys only that. `@data/` is a watched area: every tracked file under `data/` needs a `.pages-allow` line (published, or `!` for known but not published). A new kind of file needs Ty's say-so and that line in its own PR first.
 - `README.md` explains the page and the overlay; `REVIEW.md` holds the reviewer's rules.
 
 ## Rules
@@ -35,5 +35,5 @@ Ty's personal Webull options journal, entity **personal**. Live: https://ttrng3.
 - Never `curl`/`WebFetch` the live site from a routine: egress returns `CONNECT 403` and the run parks. Read back the pushed file instead (2026-09-23).
 - The repo is `Trade-Journal`, capital T and J; lowercase 404s (2026-09-23).
 - "No artifact link" means the preview URL stays out of sight, never that the preview goes. It was wrongly deleted twice (2026-09-23, 2026-09-26).
-- "The page is not updating": compare the CSV's time on Drive with the run's time first. A run that fires before Ty files the export finds nothing; the sync itself was right (2026-09-26).
+- "The page is not updating": compare the CSV's time on Drive (shown in Hanoi time, UTC+7) with the run's time (logged in UTC) first. A run that fires before Ty files the export finds nothing; the sync itself was right (2026-09-26).
 - A CSV dropped on the page updates that browser only; the Drive CSV plus the next sync makes it permanent (2026-09-26).
