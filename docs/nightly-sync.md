@@ -30,10 +30,11 @@ The snapshot is now split by month:
     data/index.json          manifest: shards[], notes, meta, generatedUtc
     data/fills/<YYYY-MM>.json   one file per month, 49 of them
 
-Largest shard is **710 KB**, comfortably under the limit, so the cloud can
-write them with the GitHub MCP tools and no token. Better still, a nightly sync
-touches only the **current month's** shard — a few KB — instead of re-uploading
-6.66 MB every night.
+Largest shard is **710 KB**, under the limit, so no run needs the laptop or a
+token. A nightly sync touches only the **current month's** shard instead of
+re-uploading 6.66 MB every night — but by late in a busy month that one shard
+is hundreds of KB (2026-09 was 351 KB on 2026-09-30), so it is pushed with
+shell git, not the file tools (see *Pushing* below).
 
 Verified at both levels when the split was made: the rendered page was
 byte-identical (1,913 chars, hash `69866e19`), and the reassembled data was
@@ -59,8 +60,8 @@ Two other things were dragging the Mac in, and both are fixed:
   on Drive, lines 158–242, on every single run. It now lives here as
   `tools/parse-webull.js`, lifted verbatim.
 - **The push** used a fine-grained PAT from `_secrets/` on Drive, via
-  token-in-URL. The routine now writes with the GitHub MCP file tools, which
-  need no token in this tree.
+  token-in-URL. The routine now pushes through the cloud session's own git
+  credential proxy, which needs no token in this tree (see *Pushing*).
 
 Check the claim before accepting the next "this has to run on the Mac".
 
@@ -108,6 +109,29 @@ page displays it, so it is stored verbatim. `generatedUtc` is the same instant
 rounded to seconds and is what the watchdog parses; the watchdog also tolerates
 a fractional-second stamp so a future producer cannot break it.
 
+## Pushing
+
+**Shell `git push` is the path for any run that changes a month shard.** Commit
+the changed files together (`journal: <YYYY-MM-DD> — <n> new fills`) and push
+to `main`. The cloud session already has a proxied git credential, so no token
+is read or written. Every fill run since 2026-09-24 went this way: those commits
+carry the author `Claude <noreply@anthropic.com>` and change the month shard,
+`index.json` and `.last-check` in one commit (e.g. `2663407`, 2026-09-30).
+
+Why not the file tools for the shard: `create_or_update_file` takes the whole
+file inline, one call per file, so a 351 KB shard would pass through the model
+character by character, with a real chance of silent corruption and three
+commits instead of one.
+
+**The GitHub MCP file tools are the fallback for small files only** — the
+heartbeat-only runs (`.last-check`, a few bytes) have used them; those commits
+carry the author `ttrng3`.
+
+**If the push is refused**, do not re-send the shard through the file tools.
+Report the run as **BLOCKED** with the refusal, and stop. Nothing is lost: the
+next run re-reads every CSV in `Raw Records/`, dedups by fill key, and pushes
+the same fills.
+
 ## Verifying a run — never fetch the live site
 
 Confirm `main` moved by the sha each write returned and read the file back. Do
@@ -125,7 +149,8 @@ https://ttrng3.github.io/Trade-Journal/ — capital T and J. Lowercase 404s.
 
 ## Credentials
 
-**None.** The sync publishes from the cloud with the GitHub MCP file tools. The
+**None in this repo or on Drive.** The sync pushes through the cloud session's
+git credential proxy (small files: the GitHub MCP file tools). The
 PAT at `09 Trading/Trade Journal/_secrets/github_token_trade-journal.txt` is no
 longer read by anything; it was revoked on GitHub on 2026-09-23. Do not
 reintroduce a token-in-URL push.
