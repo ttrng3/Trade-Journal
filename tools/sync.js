@@ -71,6 +71,7 @@ function main() {
 
   const csvs = fs.readdirSync(CSV_DIR).filter(f => f.toLowerCase().endsWith('.csv')).sort();
   const imports = [];
+  let newestFresh = null;
   for (const name of csvs) {
     // latin1: Webull exports are not UTF-8 and a wrong decode corrupts symbols.
     const text = fs.readFileSync(path.join(CSV_DIR, name), 'latin1');
@@ -87,6 +88,7 @@ function main() {
       if (months[m][f.k]) { dup++; continue; }   // existing key wins
       months[m][f.k] = compact(f);
       fresh++;
+      if (!newestFresh || f.t > newestFresh) newestFresh = f.t;
     }
     imports.push({ at: new Date().toISOString(), dup, first, fresh, last, name, seen });
   }
@@ -141,7 +143,7 @@ function main() {
   if (!changed.length) { console.log(JSON.stringify({ mode: 'write', wrote: [], ...summary }, null, 2)); return; }
   for (const p of changed) fs.writeFileSync(p, files[p]);
   fs.writeFileSync(path.join(DATA_DIR, '.last-check'),
-    `${generatedUtc} newest-source=${summary.freshFills ? `${imports.filter(i => i.fresh).map(i => i.last).sort().pop().slice(0, 10)} new fills` : 'no new fills'}\n`);
+    `${generatedUtc} newest-source=${summary.freshFills ? `${newestFresh.slice(0, 10)} new fills` : 'no new fills'}\n`);
   console.log(JSON.stringify({ mode: 'write', wrote: changed.map(p => path.relative('.', p)), ...summary }, null, 2));
 }
 
