@@ -19,7 +19,7 @@ Ty's personal Webull options journal, entity **personal**. Live: https://ttrng3.
 - `README.md` explains the page and the overlay; `REVIEW.md` holds the reviewer's rules.
 
 ## Rules
-- Changes reach `main` through a PR and Ty's ship. The routine's data writes are the only direct writes.
+- Changes reach `main` through a PR and Ty's ship. The only direct writes are the ones a routine's prompt and runbook allow.
 - The runbook and README win over this file and any memory note.
 - Serialization is fixed: month files minified with sorted keys, fill fields `k,p,price,qty,side,sym,t,tif`; manifest indented one space (runbook, "The tools").
 - `data/journal.json` stays removed: one source of truth, and no file near the 1 MB contents-API cap (runbook, "Why the snapshot is sharded").
