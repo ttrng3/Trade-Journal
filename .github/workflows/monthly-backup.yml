@@ -5,11 +5,11 @@ name: Monthly backup
 # exactly as it was. No model and no token beyond the job's own: this is
 # deterministic, so it runs as an Action, not a Claude routine.
 #
-# 02:30 UTC sits after the nightly sync (01:07 UTC), so the snapshot includes
-# that night's fills. See docs/backup.md.
+# 06:00 UTC sits after the sync (04:00 UTC, Tue-Sat since 2026-09-26), so on
+# a sync day the snapshot includes that morning's fills. See docs/backup.md.
 on:
   schedule:
-    - cron: "30 2 1 * *"   # 09:30 Asia/Ho_Chi_Minh on the 1st
+    - cron: "0 6 1 * *"    # 13:00 Asia/Ho_Chi_Minh on the 1st
   workflow_dispatch:
 
 permissions:

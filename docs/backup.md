@@ -2,7 +2,7 @@
 
 ## What runs
 
-On the 1st of every month at 02:30 UTC (09:30 Vietnam),
+On the 1st of every month at 06:00 UTC (13:00 Vietnam), after the 04:00 UTC sync,
 `.github/workflows/monthly-backup.yml` packs everything under `data/` into one
 file, `trade-journal-backup-YYYY-MM-DD.json.gz` (~0.7 MB), proves it restores
 byte-identical, and attaches it to a release tagged `backup-YYYY-MM-DD`:
