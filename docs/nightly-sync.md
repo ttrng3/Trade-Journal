@@ -99,6 +99,15 @@ fills. It separates "ran, nothing new" from "stopped running". The repo's own
 history shows why that matters: several commits read `0 new fills`, which is
 indistinguishable from a broken sync unless the run leaves its own mark.
 
+The line is status only, because the repo is public: `<UTC stamp>
+newest-source=<YYYY-MM-DD of the newest fill this run added> new fills`, or `<UTC stamp>
+newest-source=no new fills` (a refused push writes the BLOCKED form under
+"Pushing"). No CSV names and no fill counts; those belong in
+the run's report. Readers (`freshness.py`, the wiring page's collector) use
+only the first token, the stamp. This keeps names and counts out of the
+heartbeat only: `data/index.json`, which Pages serves, still records each
+import's CSV name and counts in `meta.imports`.
+
 Thresholds are tighter here than the weekly dashboards — the sync runs
 Tue–Sat, so `MAX_RUN_AGE_DAYS=4` and `MAX_DATA_AGE_DAYS=14`.
 
