@@ -30,7 +30,7 @@ Ty's personal Webull options journal, entity **personal**. Live: https://ttrng3.
 
 ## Known mistakes
 - "This has to run on the Mac" was false: `Raw Records/` is on Google Drive, which the routine reads. Test the claim before accepting the next one (2026-09-23).
-- Dedup on content, never on filename. Webull re-exports under the same generic name, and a filename dedup would have dropped real fills (runbook, 23/09).
+- Dedup on content, never on filename. Webull re-exports under the same generic name, and a filename dedup would have dropped real fills (runbook, 2026-09-23).
 - Changing the serialization rewrites every month file and buries the real diff; `--check` with no new fills is the test (2026-09-23).
 - Never `curl`/`WebFetch` the live site from a routine: egress returns `CONNECT 403` and the run parks. Read back the pushed file instead (2026-09-23).
 - The repo is `Trade-Journal`, capital T and J; lowercase 404s (2026-09-23).
