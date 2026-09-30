@@ -1,6 +1,6 @@
 # Spec
 
-Status: awaiting Ty's approval.
+Status: approved by Ty 30/09 ("approve for all eight specs", in chat).
 
 - `monthly-backup.yml`: cron `30 2 1 * *` becomes `17 6 1 * *` (13:17 Hanoi), after the 04:00 UTC sync (routine cron `0 4 * * 2-6`), off the top of the hour; the header comment says why.
 - `docs/backup.md`: the schedule sentence matches.
