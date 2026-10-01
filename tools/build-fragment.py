@@ -8,7 +8,7 @@ nests one inside another. The browser discards the inner <head>, every <style>
 and <link> in it stops applying, and the page renders BLANK with no console
 error — which gives you nothing to debug from.
 
-Unlike Omni-TMDV, this renderer keeps its <title> inside <head>, so the
+Unlike renderers that put <title> first, this one keeps its <title> inside <head>, so the
 fragment cannot be cut at <title>. Instead the document wrappers are removed
 and everything else is kept in source order.
 
