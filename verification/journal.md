@@ -29,14 +29,14 @@ const idx=await fetch('data/index.json').then(r=>r.json());
 const shown=(document.body.innerText.match(/snapshot ([0-9-]+ [0-9:]+) UTC/)||[])[1]||'';
 JSON.stringify({snapshot_matches:shown===idx.snapshotAt.slice(0,16).replace('T',' '),
   charts_render:document.querySelectorAll('svg,canvas').length>0,
-  no_overlay:Object.keys(localStorage).every(k=>!/csv|fill|import/i.test(k)),
+  no_overlay:Object.keys(localStorage).filter(k=>k.startsWith('tj:')&&k!=='tj:range2').length===0,
   no_load_error:!/failed|error|không nạp/i.test(document.querySelector('main, body').innerText.slice(0,600))})
 ```
 All of them must be true.
 
 ## Adversary
 
-- **A stranger on the public journal** (public on purpose, Ty 29/09). `private_not_served`: the README, CLAUDE.md, REVIEW.md, both runbooks, the heartbeat, the six `tools/` scripts, this protocol, one `work/` file found at run time, `freshness.py` and `.pages-allow` all exist on `main` and answer 404 live, and so does the removed `data/journal.json`. `no_personal_traces`, `no_drive_ids_tracked` and `no_preview_tags_tracked` read every served file live and on `main` and every other tracked text file, by count and file, never by value.
+- **A stranger on the public journal** (public on purpose, Ty 29/09). `private_not_served`: the README, CLAUDE.md, REVIEW.md, both runbooks, the heartbeat, the seven `tools/` scripts, this protocol, one `work/` file found at run time, `freshness.py` and `.pages-allow` all exist on `main` and answer 404 live, and so does the removed `data/journal.json`. `no_personal_traces`, `no_drive_ids_tracked` and `no_preview_tags_tracked` read every served file live and on `main` and every other tracked text file, by count and file, never by value.
 - **A work entity named in a personal repo** (30/09, again 01/10: #10). `no_forbidden_words` reads every tracked file with the names supplied at run time.
 - **A sync that loses, doubles or misfiles fills.** `total_fills_match`, `no_duplicate_fills` (dedup on content, never on file name), `shards_sound` (own month only).
 - **A serialization change that rewrites every month and buries the real diff** (23/09). `shards_sound` (serialization) and `sync_check_clean`.
@@ -48,6 +48,7 @@ All of them must be true.
 
 - The forbidden word list is passed on the command line, so this repo never spells the names. It cannot catch a name nobody listed.
 - The preview cannot be fetched by a script, so step 4 is done by the runner with `Artifact list` and `Artifact read`.
+- `shards_sound` re-serializes with Python and compares text with what `sync.js` wrote; the two differ only for numbers below 1e-4 or at 1e16 and above (exponent form), which option prices and quantities never reach. `sync_check_clean` is the sync's own test of the same thing.
 - The sync's dry run uses an empty CSV folder, so it proves stable serialization, not that the parser reads a new Webull export: that is the runbook's job each night.
 
 ## Evidence
@@ -65,7 +66,7 @@ All of them must be true.
 ## Traps
 
 - The script adds a cache-busting query to every request, so a `served_equals_main` failure straight after a merge means the Pages run has not finished: wait for it to go green, then re-run. Each request retries once on a network error or a 5xx.
-- The page keeps a per-browser overlay: a CSV dropped on it, notes and settings live in `localStorage`. Step 2 must run where there is none, or the page shows that browser's data, not the snapshot. Do not clear it to get there: on 01/10 the first run of this step cleared `localStorage` in Ty's own Chrome (2 keys before, 2 unrelated keys after; nothing of the journal's was seen, but that could not be proven).
+- The page keeps a per-browser overlay: a CSV dropped on it, notes and settings live in `localStorage`. Step 2 must run where there is none, or the page shows that browser's data, not the snapshot. The page's keys all start `tj:` (`tj:range2` is only the selected date range). Do not clear them to get there: on 01/10 the first run of this step cleared `localStorage` in Ty's own Chrome and erased at least his saved date range.
 - The CSV's time on Drive is shown in Hanoi time (UTC+7); the run's time is logged in UTC. Compare the two before calling a sync late (CLAUDE.md, 26/09).
 - The browser tool refuses fetches with a query string, so step 2 fetches plain paths (01/10).
 - The repo is `Trade-Journal`, capital T and J; lowercase 404s.
