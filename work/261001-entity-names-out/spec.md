@@ -1,6 +1,6 @@
-# Spec (awaiting Ty)
+# Spec
 
-Status: awaits Ty's "approve" with the intent.
+Status: approved by Ty 02/10 ("approve 10", in chat).
 
 - `index.html`: the stylesheet comment drops its "modelled on …" note. No visible change; the page's code is otherwise untouched.
 - `REVIEW.md`: both entity-separation rules say "no work entity's data, names or numbers" instead of naming them.
