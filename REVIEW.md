@@ -30,7 +30,7 @@ When unsure between two levels, pick the higher one and say why.
 ## Pass 3: House rules
 - [ ] **Never by value:** a sensitive value is referenced, not quoted, in any file of a public repo, including `work/` docs.
 - [ ] **Artifact mirror contract:** no Cowork preview URL and no artifact id in anything public or anything Ty is shown. (A registry row that records an id on the private Drive mount is the exception.)
-- [ ] **Entity separation:** OMNI and ECOPM data, names and numbers never cross into each other's repo or page.
+- [ ] **Entity separation:** no work entity's data, names or numbers enter this repo or page.
 - [ ] **One change per `work/` folder:** the PR names its `work/<yymmdd>-<slug>/`; `intent.md` says accepted; `spec.md` says approved; the diff matches the spec's promise, with nothing extra.
 - [ ] **`gate/` untouched** while it is frozen (until 2026-10-05).
 - [ ] **One PR per merge command:** nothing in the diff merges or batches PRs (`gh pr merge` in a loop, the merge API).
@@ -52,5 +52,5 @@ Rules specific to Trade-Journal. **Every standing ruling in the README and in `d
 - **Backup and restore.** `tools/restore.js` checks every file's SHA-256 and the fill count before writing (docs/backup.md). Weakening that check is High.
 - **Light only, ruled 2026-09-24 by Ty.** No dark theme; any new colour is a token. `--accent` means positive P&L and interactive chrome is `--blue` (README, "Look").
 - **One address, one preview.** `https://ttrng3.github.io/Trade-Journal/` is the only link. A Cowork preview URL or artifact id anywhere in the repo is **Critical** (the repo is public). The preview must also exist: a change that removes the routine's refresh step, or deletes the artifact, is High. It was wrongly deleted on 2026-09-23 and again on 2026-09-26 (README, "One address, one preview").
-- **Entity separation.** This is Ty's personal trading journal. Any OMNI or ECOPM data is **Critical**.
+- **Entity separation.** This is Ty's personal trading journal. Any work entity's data, name or number is **Critical**.
 - **Public on purpose, ruled 2026-09-29 by Ty.** The repo and the Pages site are public, and `data/fills/*.json` is served. The address is in the repo's README, so anyone who finds the repo can read the fills; Ty accepts that, and the address isn't circulated. Don't re-litigate it: a finding that says "this should be private" is out of scope. Don't widen it either: a new path in `.pages-allow`, or a new kind of data in `data/`, is at least High and needs Ty; Critical if it serves something that shouldn't be.
