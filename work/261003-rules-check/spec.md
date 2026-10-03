@@ -24,7 +24,7 @@ Ty's answers, 2026-10-03, in chat:
 4. The trade log gets one toggle, "Rule breaks only", which keeps trades breaking at least one rule, the cap included (Ty's answer 5).
 5. Reports gets one card, "Rules", for the current date range. *(Wording aligned with the build after review #12, 2026-10-03.)* It shows:
    - one row per rule: trades that broke it, their net, win rate and profit factor, using the page's existing `stats()`;
-   - a "No rule broken" row, over closed option trades only;
+   - a "No rule broken" row, over closed option trades that break no rule and aren't on an over-cap day;
    - with R set, an "Over-cap days" row (trades on those days, their net, win rate and profit factor), plus a line under the table with the number of over-cap days and their net. With R unset, no row, and the line reads "Daily cap: set R in Settings to check it." (intent, Outcome).
 6. Settings, Calculation card: one field, "R: dollars risked per trade". It's saved with the existing Save button into `S.meta.R` through `store.saveMeta`, the same path as the fee fields (Ty's answer 1).
 
@@ -44,6 +44,8 @@ Ty's answers, 2026-10-03, in chat:
 - On Pages: `store.saveMeta` writes to this browser's `localStorage`. That's the overlay; the nightly sync never reads or writes it.
 - In the Cowork preview: the same call writes the preview's private artifact database, which is never the repo.
 - Neither place is the repo, so R is never published.
+
+**New files `work/261003-rules-check/analysis.md` and `analysis.js`:** the intent's source, added after review #12. Not served.
 
 **New file `verification/rules-check.md`** (Stage 4): the protocol below. It isn't served, because `.pages-allow` lists only `index.html` and `data/`.
 
@@ -69,9 +71,10 @@ Policy loaded:
 | Entity separation | — | None: the rules and data are personal. |
 | "Simplicity first" (`~/.claude/CLAUDE.md`) | — | One page file and one protocol. No settings beyond R, and no filters beyond the one toggle. |
 
-**Two differences from the 03/10 analysis (by design, not conflicts):**
+**Three differences from the 03/10 analysis (by design, not conflicts):**
 - The page counts only closed trades. The analysis also counted 3 trades held to expiry as worthless, and the page keeps those as OPEN.
 - The page groups days by exit date; the analysis used entry date.
+- The page flags an add-down at ≤ 97% of the first fill; the analysis used strictly below 97%.
 
 So the page's counts won't equal the analysis figures exactly. The Promise compares the page against an independent recount that uses the same definitions, not against 323.
 
@@ -95,7 +98,7 @@ Run on the Mac on the branch (served locally), then again on Pages after the mer
    **Pass:** both true.
 3. **Data untouched.** `node tools/sync.js --csv-dir <empty> --check`.
    **Pass:** `"changedFiles": []`.
-4. **R never published.** `git grep` over the whole tree for an `"R":` key, and a check of `data/index.json` meta.
+4. **R never published.** `git grep -nE '"R"[[:space:]]*:[[:space:]]*[0-9]'` over the whole tree (an R key holding a number), and a check of `data/index.json` meta.
    **Pass:** 0 hits. The live page after the merge shows "Daily cap: set R in Settings to check it." in a fresh profile.
 5. **Existing protocol.** `verification/journal.md` step 1.
    **Pass:** `"pass": true`.

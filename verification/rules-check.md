@@ -51,7 +51,7 @@ for(const s of idx.shards)fills.push(...Object.values(JSON.parse(fs.readFileSync
 const all=P.buildTrades(fills,{feeC:0,feeS:0,longOnly:true});
 const closed=all.filter(t=>t.net!=null&&t.result!=='OPEN'&&t.result!=='UNKNOWN');
 const rules=t=>{if(t.type!=='option')return[];const r=[],b=t.fills.filter(f=>f.side==='BUY'),hm=t.entry.slice(11,16),z=t.exp===t.entry.slice(0,10);
- if(t.dir==='LONG'&&b.slice(1).some(f=>Math.round(f.price*100)*100<=Math.round(b[0].price*100)*97))r.push('add-down');if(z&&hm<'10:00')r.push('early 0DTE');if(z&&hm>='14:00'&&hm<'15:00')r.push('late 0DTE');if(z&&t.hold>600)r.push('long hold');if(t.und==='SPXW')r.push('SPXW');return r;};
+ if(t.dir==='LONG'&&b.slice(1).some(f=>Math.round(f.price*1e6)*100<=Math.round(b[0].price*1e6)*97))r.push('add-down');if(z&&hm<'10:00')r.push('early 0DTE');if(z&&hm>='14:00'&&hm<'15:00')r.push('late 0DTE');if(z&&t.hold>600)r.push('long hold');if(t.und==='SPXW')r.push('SPXW');return r;};
 const day={};closed.forEach(t=>day[t.date]=(day[t.date]||0)+t.net);const cap=new Set(Object.keys(day).filter(d=>day[d]<-3*riskR));
 const inR=closed.filter(t=>t.date>=from&&t.date<=to);const sum=a=>Math.round(a.reduce((x,t)=>x+t.net,0));
 const out={};['add-down','early 0DTE','late 0DTE','long hold','SPXW'].forEach(k=>{const a=inR.filter(t=>rules(t).includes(k));out[k]={n:a.length,net:sum(a)}});
@@ -92,7 +92,7 @@ const {chromium}=require('playwright');
 
 ## Adversary
 
-- **The page and the recount share a bug.** They don't share code: the recount re-implements the five rules and the cap from the spec's words, and writes the add-down threshold in integer cents where the page uses a float with a tolerance. Review #12 found the first version used the same float expression on both sides, which missed fills at exactly 97%. The boundary fixture now tests both. The only shared code is `buildTrades`, which `verification/journal.md` already covers.
+- **The page and the recount share a bug.** They don't share code: the recount re-implements the five rules and the cap from the spec's words, and writes the add-down threshold in integer millionths of a dollar (147 fills carry sub-cent prices) where the page uses a float with a tolerance. Review #12 found the first version used the same float expression on both sides, which missed fills at exactly 97%. The boundary fixture now tests both. The only shared code is `buildTrades`, which `verification/journal.md` already covers.
 - **R leaks into the public repo.** Step 4. R is saved by `store.saveMeta`, which on Pages writes to `localStorage` and in the preview writes to the preview's private database. The nightly sync writes `data/` only.
 - **A rule badge without the rule.** Step 2 checks one known add-down trade. The filtered count catches any rule or cap mismatch, because the filter's set equals the recount's.
 
