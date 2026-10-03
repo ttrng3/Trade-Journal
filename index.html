@@ -473,7 +473,7 @@ const store={db:null,assets:null,mode:'local',mirror:null,localFills:0,
    3. App state + helpers
    ===================================================================== */
 const MIRROR='https://ttrng3.github.io/Trade-Journal/';
-const S={fills:{},notes:{},meta:{},trades:[],view:'dashboard',ym:null,range:{preset:'week',from:'',to:''},filters:{q:'',result:'',und:'',tag:'',day:''},open:new Set(),sort:{k:'entry',d:-1},journalDay:'',journalLimit:40};
+const S={fills:{},notes:{},meta:{},trades:[],view:'dashboard',ym:null,range:{preset:'week',from:'',to:''},filters:{q:'',result:'',und:'',tag:'',day:'',rules:false},open:new Set(),sort:{k:'entry',d:-1},journalDay:'',journalLimit:40};
 const DEFAULT_PB=['Opening Drive','Breakout','Pullback','Reversal','Scalp'];
 const SUGG_TAGS=['FOMO','Disciplined','Breakout','Chased','Revenge','Oversized','Early Exit','Held Too Long','Plan Followed','No Plan'];
 const DEF_STUDIES=['MAExp@tv-basic-studies','VWAP@tv-basic-studies'];
@@ -506,9 +506,25 @@ function stats(ts){
 }
 function rebuild(){
   S.trades=buildTrades(Object.values(S.fills),{feeC:+S.meta.feeC||0,feeS:+S.meta.feeS||0,longOnly:S.meta.longOnly!==false});
-  S.trades.forEach(t=>{const n=S.notes[t.key]||{};t.notes=n.notes||'';t.tags=n.tags||[];t.playbook=n.playbook||'';t.rating=n.rating||0;t.shots=n.shots||[];});
+  S.trades.forEach(t=>{const n=S.notes[t.key]||{};t.notes=n.notes||'';t.tags=n.tags||[];t.playbook=n.playbook||'';t.rating=n.rating||0;t.shots=n.shots||[];t.rules=ruleFlags(t);});
+  S.capDays=overCapDays(S.trades);
   if(!S.ym){const days=S.trades.map(t=>t.date).sort();const last=days[days.length-1]||todayISO();S.ym={y:+last.slice(0,4),m:+last.slice(5,7)};}
 }
+/* rules check (work/261003-rules-check): five trade rules plus the -3R daily cap */
+const RULES=[['adddown','add-down'],['early0','early 0DTE'],['late0','late 0DTE'],['longhold','long hold'],['spxw','SPXW']];
+const RULE_LBL=Object.fromEntries(RULES);
+function ruleFlags(t){
+  if(t.type!=='option'||t.net==null||t.result==='OPEN'||t.result==='UNKNOWN')return [];
+  const r=[],buys=t.fills.filter(f=>f.side==='BUY'),hm=t.entry.slice(11,16),zero=t.exp===t.entry.slice(0,10);
+  if(t.dir==='LONG'&&buys.slice(1).some(f=>f.price*100<=buys[0].price*97+1e-6))r.push('adddown');
+  if(zero&&hm<'10:00')r.push('early0');
+  if(zero&&hm>='14:00'&&hm<'15:00')r.push('late0');
+  if(zero&&t.hold>600)r.push('longhold');
+  if(t.und==='SPXW')r.push('spxw');
+  return r;
+}
+function overCapDays(ts){const R=+S.meta.R||0;if(!(R>0))return null;const d={};closedOf(ts).forEach(t=>d[t.date]=(d[t.date]||0)+t.net);return new Set(Object.keys(d).filter(k=>d[k]<-3*R));}
+function onCapDay(t){return !!(S.capDays&&S.capDays.has(t.date)&&closedOf([t]).length);}
 function playbooks(){return S.meta.playbooks&&S.meta.playbooks.length?S.meta.playbooks:DEFAULT_PB;}
 /* date range (applies to every number except the calendar) */
 function rangeBounds(){
@@ -763,9 +779,12 @@ function renderReports(){
   const gtag={};all.forEach(t=>t.tags.forEach(g=>(gtag[g]=gtag[g]||[]).push(t)));const tags=Object.keys(gtag).map(k=>({label:k,...stats(gtag[k])})).sort((a,b)=>b.net-a.net);
   const gpb=grp(all.filter(t=>t.playbook),t=>t.playbook);const pbs=Object.keys(gpb).map(k=>({label:k,...stats(gpb[k])})).sort((a,b)=>b.net-a.net);
   const gm=grp(c,t=>t.date.slice(0,7));const months=Object.keys(gm).sort().map(k=>({label:k,...stats(gm[k])}));
+  const rl=RULES.map(([k,l])=>({label:l,...stats(c.filter(t=>t.rules.includes(k)))}));rl.push({label:'No rule broken',...stats(c.filter(t=>t.type==='option'&&!t.rules.length&&!onCapDay(t)))});if(S.capDays)rl.push({label:'Over-cap days',...stats(c.filter(onCapDay))});
+  const capR=+S.meta.R||0,capD=S.capDays?[...new Set(c.filter(onCapDay).map(t=>t.date))]:[],capNet=c.filter(onCapDay).reduce((a,t)=>a+t.net,0);
   const best=inst.slice(0,5),worst=inst.slice(-5).reverse().filter(w=>!best.includes(w));
   const seg=(key,opts,cur)=>opts.map(([v,l])=>`<button class="btn sm ${cur===v?'on':''}" data-seg="${key}" data-v="${v}">${l}</button>`).join(' ');
   el.innerHTML=`<div class="note info no-print" style="margin-bottom:16px">Range: ${esc(rangeLabel())} · ${c.length} closed trades. Change it at the top.</div><div class="grid2">
+    <div class="card"><header><h3>Rules</h3></header><div class="body">${statTable(rl,'label','Rule')}<div class="sub" id="capLine" style="margin-top:10px">${S.capDays?`Over-cap days (net below −3R = ${usd(-3*capR)}): ${capD.length} days, net ${usd(capNet)}`:'Daily cap: set R in Settings to check it.'}</div></div></div>
     <div class="card"><header><h3>By month</h3></header><div class="body">${barChart(months,'label')}${statTable(months,'label','Month')}</div></div>
     <div class="card"><header><h3>Day of week</h3></header><div class="body">${barChart(dow,'label')}${statTable(dow,'label','Day')}</div></div>
     <div class="card"><header><h3>Time of day (ET)</h3><div>${seg('todBy',[['entry','by entry'],['exit','by exit']],todBy)}</div></header><div class="body">${barChart(tod,'label')}${statTable(tod.filter(r=>r.n),'label','Bucket')}</div></div>
@@ -786,7 +805,7 @@ function renderTrades(){
   let rows=base.slice();
   if(F.day)rows=S.trades.filter(t=>t.date===F.day);
   if(F.q){const q=F.q.toLowerCase();rows=rows.filter(t=>t.sym.toLowerCase().includes(q)||t.notes.toLowerCase().includes(q)||t.tags.some(x=>x.toLowerCase().includes(q))||(t.playbook||'').toLowerCase().includes(q));}
-  if(F.result)rows=rows.filter(t=>t.result===F.result);if(F.und)rows=rows.filter(t=>t.und===F.und);if(F.tag)rows=rows.filter(t=>t.tags.includes(F.tag));
+  if(F.result)rows=rows.filter(t=>t.result===F.result);if(F.und)rows=rows.filter(t=>t.und===F.und);if(F.tag)rows=rows.filter(t=>t.tags.includes(F.tag));if(F.rules)rows=rows.filter(t=>t.rules.length||onCapDay(t));
   const k=S.sort.k,d=S.sort.d;rows.sort((a,b)=>{const x=a[k]??-Infinity,y=b[k]??-Infinity;return (x>y?1:x<y?-1:0)*d;});
   const th=(key,label,r)=>`<th class="${r?'r':''}" data-sort="${key}" style="cursor:pointer">${label}${k===key?(d<0?' ↓':' ↑'):''}</th>`;
   el.innerHTML=`<div class="card"><header><h3>Trade log · ${rows.length} of ${base.length}</h3>
@@ -794,11 +813,13 @@ function renderTrades(){
       <select id="fund"><option value="">All tickers</option>${unds.map(u=>`<option ${F.und===u?'selected':''}>${u}</option>`).join('')}</select>
       <select id="fres"><option value="">All results</option>${['WIN','LOSS','SCRATCH','OPEN','UNKNOWN'].map(r=>`<option ${F.result===r?'selected':''}>${r}</option>`).join('')}</select>
       <select id="ftag"><option value="">All tags</option>${tagsUsed.map(t=>`<option ${F.tag===t?'selected':''}>${esc(t)}</option>`).join('')}</select>
+      <button class="btn sm ${F.rules?'on':''}" id="frules" aria-pressed="${!!F.rules}">Rule breaks only</button>
       ${F.day?`<button class="btn sm on" id="fday">day: ${F.day} ×</button>`:''}</div></header>
     <div class="scroll"><table class="tbl" id="tt"><thead><tr><th style="width:20px"></th>${th('entry','Date / time')}${th('sym','Contract')}<th>Dir</th>${th('eq','Qty',1)}${th('avgIn','Avg in',1)}${th('avgOut','Avg out',1)}${th('net','Net P&L',1)}${th('hold','Hold',1)}<th>Result</th><th>Playbook / tags</th><th style="width:40px"></th></tr></thead>
     <tbody>${rows.map(rowHtml).join('')||`<tr><td colspan="12" class="sub" style="text-align:center;padding:24px">No trades match.</td></tr>`}</tbody></table></div></div>`;
   $('#fq').oninput=e=>{F.q=e.target.value;renderTrades();$('#fq').focus();$('#fq').setSelectionRange(F.q.length,F.q.length);};
   $('#fund').onchange=e=>{F.und=e.target.value;renderTrades();};$('#fres').onchange=e=>{F.result=e.target.value;renderTrades();};$('#ftag').onchange=e=>{F.tag=e.target.value;renderTrades();};
+  $('#frules').onclick=()=>{F.rules=!F.rules;renderTrades();};
   if($('#fday'))$('#fday').onclick=()=>{F.day='';renderTrades();};
   el.querySelectorAll('th[data-sort]').forEach(h=>h.onclick=()=>{const key=h.dataset.sort;S.sort=S.sort.k===key?{k:key,d:-S.sort.d}:{k:key,d:-1};renderTrades();});
   el.querySelectorAll('tr.row').forEach(r=>r.onclick=e=>{if(e.target.closest('a'))return;const key=r.dataset.key;S.open.has(key)?S.open.delete(key):S.open.add(key);renderTrades();});
@@ -814,7 +835,7 @@ function rowHtml(t){
     <td><span class="badge ${t.dir==='LONG'?'g':'r'}">${t.dir}</span></td>
     <td class="r">${t.eq||t.xq}</td><td class="r">${unknown?'?':num(t.avgIn)}</td><td class="r">${num(t.avgOut)}</td>
     <td class="r ${unknown?'warn':cls(t.net)}" style="font-weight:600">${unknown?'n/a':usd(t.net,{dp:2})}</td><td class="r" style="color:var(--ink-soft)">${hold(t.hold)}</td>
-    <td><span class="badge ${tone}">${t.result}</span>${t.flags.includes('PRE_WINDOW_ENTRY')?' <span class="badge w">pre-window</span>':''}</td>
+    <td><span class="badge ${tone}">${t.result}</span>${t.flags.includes('PRE_WINDOW_ENTRY')?' <span class="badge w">pre-window</span>':''}${t.rules.map(k=>` <span class="badge r">${RULE_LBL[k]}</span>`).join('')}${onCapDay(t)?' <span class="badge r">over cap</span>':''}</td>
     <td style="font-size:12px">${t.playbook?`<span class="pos">${esc(t.playbook)}</span>`:''}<div class="chips" style="margin:2px 0 0">${t.tags.map(x=>`<span class="badge">${esc(x)}</span>`).join(' ')}</div></td>
     <td class="sub">${t.notes?'✎':''}${t.shots.length?` ${t.shots.length}📎`:''}</td></tr>`+(open?`<tr><td colspan="12" style="padding:0"><div class="detail" data-key="${t.key}">${detailHtml(t)}</div></td></tr>`:'');
 }
@@ -862,6 +883,7 @@ function renderSettings(){
   el.innerHTML=`<div class="grid2"><div class="card"><header><h3>Calculation</h3></header><div class="body"><div class="settings">
     <label for="feeC">Fee per option contract ($)</label><input id="feeC" type="number" step="0.01" value="${m.feeC??0}">
     <label for="feeS">Fee per share ($)</label><input id="feeS" type="number" step="0.0001" value="${m.feeS??0}">
+    <label for="riskR">R: dollars risked per trade</label><input id="riskR" type="number" step="1" min="0" value="${m.R||''}" placeholder="not set">
     <label for="longOnly">Options are long-only</label><input id="longOnly" type="checkbox" ${m.longOnly!==false?'checked':''} style="width:auto">
     </div><p class="sub" style="margin:10px 0 0">The Webull export carries no commission column, so fees default to zero. With long-only on, a sell with no matching buy is treated as a position bought before the export window (unknown cost) rather than a short trade. Turn it off only if you really sell options to open.</p>
     <button class="btn primary" id="saveSettings" style="margin-top:12px">Save and recalculate</button></div></div>
@@ -876,7 +898,7 @@ function renderSettings(){
     <p class="sub" style="margin:0 0 10px">Duplicate fills are skipped on import, so re-importing an overlapping export is safe. Trades are rebuilt from the fills every time; notes and tags stay attached by a stable trade key.${store.mode==='mirror'?' A CSV dropped here updates this browser at once and survives reloads. To make it permanent on every device, also put the export in <code>Raw Records</code> on Drive: the nightly sync (11:00 Hanoi, Tue–Sat) commits it and this overlay prunes itself.':''}</p>
     <div class="drop no-print" id="drop" role="button" tabindex="0" aria-label="Import a Webull CSV">Drop a Webull CSV here, or <b>click to choose a file</b></div>
     <div class="lbl" style="margin-top:12px">Recent imports</div><div class="imports"><ul>${imps.length?imps.map(i=>`<li><div style="font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(i.name)}</div><div class="sub" style="font-family:var(--mono)">${i.fresh} new · ${i.dup} dup · ${(i.first||'').slice(0,10)} → ${(i.last||'').slice(0,10)} · ${(i.at||'').slice(0,10)}</div></li>`).join(''):'<li class="sub">Nothing imported yet.</li>'}</ul></div></div></div></div>`;
-  $('#saveSettings').onclick=async()=>{S.meta.feeC=+$('#feeC').value||0;S.meta.feeS=+$('#feeS').value||0;S.meta.longOnly=$('#longOnly').checked;await store.saveMeta(S.meta);rebuild();render();toast('Recalculated');};
+  $('#saveSettings').onclick=async()=>{S.meta.feeC=+$('#feeC').value||0;S.meta.feeS=+$('#feeS').value||0;S.meta.longOnly=$('#longOnly').checked;S.meta.R=+$('#riskR').value||0;await store.saveMeta(S.meta);rebuild();render();toast('Recalculated');};
   $('#savePbs').onclick=async()=>{S.meta.playbooks=$('#pbs').value.split('\n').map(s=>s.trim()).filter(Boolean);await store.saveMeta(S.meta);toast('Playbooks saved');};
   $('#saveTv').onclick=async()=>{S.meta.tv={interval:$('#tvInt').value,embed:$('#tvEmbed').checked,studies:$('#tvStudies').value.split('\n').map(s=>s.trim()).filter(Boolean)};await store.saveMeta(S.meta);toast('TradingView settings saved');};
   bindDrop($('#drop'));
