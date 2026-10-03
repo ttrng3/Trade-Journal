@@ -20,9 +20,39 @@ gzipped, ~0.95 MB base64), which is far past what a routine can emit. The
 Action needs no model and no credential beyond its own job token.
 
 **The catch:** a release lives inside the repo. If the repo itself were
-deleted, its releases would go with it. So download each month's file and keep
-it off GitHub — Drive `09 Trading/Trade Journal/Backups/` is the natural place.
-Missing a month is harmless: each file is a full snapshot, not an increment.
+deleted, its releases would go with it. So each month's file is also copied to
+Drive, by a job on Ty's Mac (added 2026-10-03, `work/261003-monthly-drive-backup/`).
+
+## The Drive copy (Mac job)
+
+`tools/monthly-drive-backup.sh` runs every day at 14:00 Hanoi from a launchd job,
+or at the next wake if the Mac was asleep. It acts once a month: when this
+month's `trade-journal-backup-YYYY-MM-01.json.gz` isn't in Drive
+`09 Trading/Trade Journal/Backups/` yet. In that run it
+
+1. downloads the master from the release, checks it with `restore.js --check`
+   against a fresh clone of `main`, copies it into `Backups/` and confirms the
+   SHA-256;
+2. moves every CSV in `Raw Records/` that parses to at least one fill, all of
+   them already in the journal (`sync.js --check` on that file alone), into
+   `Backups/CSVs to <date>/`: copy, check size and SHA-256, then remove. A CSV
+   that hasn't synced yet, or can't be read, stays for next month;
+3. saves the master last, so a run that fails part-way is picked up the next
+   day.
+
+It never deletes a copy and never writes to the repo. On any failure it stops,
+shows a Mac notification and adds a line to `Backups/backup-log.md` saying how
+many CSVs had already moved (each verified before its original was removed).
+No release by the 3rd of the month is reported as a failure.
+Ty authorized these monthly moves on 2026-10-03 (the spec's Conflicts table).
+
+The job is `~/Library/LaunchAgents/com.tytr3.trade-journal-backup.plist`, local
+only. It sets `TJ_DRIVE_DIR` to the Trade Journal folder on Drive, which is a
+personal path and so is never written into this repo. Its output goes to
+`~/Library/Logs/trade-journal-backup.log`. Turn it off with
+`launchctl bootout gui/$UID ~/Library/LaunchAgents/com.tytr3.trade-journal-backup.plist`.
+Missing a month is harmless: each master is a full snapshot, not an increment,
+and the job catches up the next time the Mac is awake.
 
 ## Restore
 
@@ -38,8 +68,11 @@ the fill count against the manifest **before writing anything**; a corrupt or
 truncated file is refused whole. It replaces `data/` with the snapshot and
 removes month files the snapshot does not know about.
 
-Fills that arrived after the backup was taken are not lost: they are still in
-the Webull CSVs on Drive, and the next sync adds them back (existing
+Fills that arrived after the backup was taken are not lost: they are in the
+Webull CSVs on Drive, either still in `Raw Records/` or moved to
+`Backups/CSVs to <date>/` by the monthly job. The sync reads only `Raw Records/`,
+so first copy back into it the CSVs from every `Backups/CSVs to <date>/` folder
+dated on or after the master's date. The next sync then adds them back (existing
 keys win, so nothing duplicates).
 
 ## The file
