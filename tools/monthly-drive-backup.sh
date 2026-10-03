@@ -30,7 +30,7 @@ fail() {
 trap 'rm -rf "$TMP"' EXIT
 trap 'fail "unexpected error at line $LINENO"' ERR
 # SHA-256 of a file; an unreadable file is a failure, never an empty string.
-sha() { local h; h=$(shasum -a 256 < "$1" | cut -c1-64); [ ${#h} -eq 64 ] || fail "could not read $(basename "$1")"; echo "$h"; }
+sha() { local h; h=$(shasum -a 256 < "$1" 2>/dev/null | cut -c1-64) || return 1; [ ${#h} -eq 64 ] || return 1; echo "$h"; }
 
 [ -d "$RAW" ] || fail "Raw Records folder not found"
 [ -f "$BK/$FILE" ] && exit 0   # this month is done
@@ -40,7 +40,11 @@ if [ "$code" = "404" ]; then
   [ "$(date -u +%d)" -le 03 ] && exit 0      # not published yet; try again tomorrow
   fail "no $FILE release by day 3 (the backup Action may have failed or run on another date)"
 fi
-[ "$code" = "200" ] || { [ "$code" = "000" ] && exit 0; fail "download returned HTTP $code"; }   # 000 = offline; tomorrow
+if [ "$code" = "000" ]; then
+  [ "$(date -u +%d)" -le 03 ] && exit 0      # offline; try again tomorrow
+  fail "could not reach GitHub since the 1st"
+fi
+[ "$code" = "200" ] || fail "download returned HTTP $code"
 
 git clone -q --depth 1 https://github.com/ttrng3/Trade-Journal.git "$TMP/repo"
 node "$TMP/repo/tools/restore.js" "$TMP/$FILE" --data-dir "$TMP/repo/data" --check >/dev/null || fail "$FILE did not pass restore --check"
@@ -56,7 +60,7 @@ for f in "$RAW"/*.csv; do
   mkdir -p "$DEST"
   [ -e "$DEST/$name" ] && fail "$name already exists in $(basename "$DEST")"
   cp "$f" "$DEST/$name"
-  s1=$(stat -f%z "$f"); s2=$(stat -f%z "$DEST/$name"); h1=$(sha "$f"); h2=$(sha "$DEST/$name")
+  s1=$(stat -f%z "$f"); s2=$(stat -f%z "$DEST/$name"); h1=$(sha "$f") || fail "could not read $name"; h2=$(sha "$DEST/$name") || fail "could not read the copy of $name"
   if [ "$s1" -gt 0 ] && [ "$s1" = "$s2" ] && [ "$h1" = "$h2" ]; then
     rm "$f"; moved=$((moved+1))
   else
@@ -66,7 +70,7 @@ done
 
 mkdir -p "$BK"
 cp "$TMP/$FILE" "$BK/$FILE.part"
-m1=$(sha "$TMP/$FILE"); m2=$(sha "$BK/$FILE.part")
+m1=$(sha "$TMP/$FILE") || fail "could not read the downloaded master"; m2=$(sha "$BK/$FILE.part") || fail "could not read the master copy"
 [ "$m1" = "$m2" ] || { rm -f "$BK/$FILE.part"; fail "master copy did not match"; }
 mv "$BK/$FILE.part" "$BK/$FILE"   # one file, same folder, after its hash matched
 

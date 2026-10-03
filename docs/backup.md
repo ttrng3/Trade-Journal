@@ -72,7 +72,7 @@ Fills that arrived after the backup was taken are not lost: they are in the
 Webull CSVs on Drive, either still in `Raw Records/` or moved to
 `Backups/CSVs to <date>/` by the monthly job. The sync reads only `Raw Records/`,
 so first copy back into it the CSVs from every `Backups/CSVs to <date>/` folder
-dated after the master you restore. The next sync then adds them back (existing
+dated on or after the master's date. The next sync then adds them back (existing
 keys win, so nothing duplicates).
 
 ## The file

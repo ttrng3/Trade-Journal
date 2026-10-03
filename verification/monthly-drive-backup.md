@@ -48,7 +48,7 @@ Steps 1–6 are run on the branch before the PR is shipped.
 - **An empty or unreadable CSV moved because it reports "no changes".** It must parse to at least one fill, all already in the journal. `empty.csv` in step 1.
 - **A month left half-done and never retried.** The master is saved last, so its absence means "not finished". Steps 3–4.
 - **A month whose release never appears.** After the 3rd, a missing release is a failure with a notification, not a silent skip. This is code-reviewed, not drilled: forcing it needs a fake date.
-- **The Drive path, which holds the account email, leaks into the public repo.** It lives only in the local plist. Step 5.
+- **The Drive path, which holds the account email, leaks into the public repo.** It lives only in the local plist. Step 6.
 
 ## Not covered
 
