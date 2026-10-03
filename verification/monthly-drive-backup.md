@@ -24,7 +24,7 @@ Put one CSV that is already synced in `$D/Raw Records/` (any file from `Backups/
 2. Run step 1's command again. **Expected:** exit 0; the hash list of every file under `$D` is identical before and after; the log has no new line.
 3. Remove the master from `Backups/`, put the synced CSV back, and create `Backups/CSVs to <today>/` with mode 555. Run again. **Expected:** exit 1, a "FAILED … Nothing was removed." log line, and both CSVs still in `Raw Records/`.
 4. Make `Backups/` mode 555 and run again. **Expected:** exit 1, and `Raw Records/` unchanged.
-5. `git grep -n -i -E 'gmail|GoogleDrive-'`. **Expected:** no output.
+5. `git grep -n -i -E 'gmail\.com|GoogleDrive-[a-z]'`. **Expected:** no output. The pattern is written so this line can't match itself.
 6. Live check: `launchctl print gui/$UID/com.tytr3.trade-journal-backup | grep -E 'state|last exit'`, then `launchctl kickstart gui/$UID/com.tytr3.trade-journal-backup`. **Expected:**
    - the job is loaded;
    - the kicked run exits 0;
