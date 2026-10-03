@@ -1,6 +1,6 @@
 # Spec: rules-check
 
-**Approved:** 2026-10-03
+**Approved:** 2026-10-03 · Requirements 3 and 5 reworded after review #12, awaiting Ty's confirmation
 
 **Intent:** accepted 2026-10-03 · **Status:** approved
 
@@ -22,10 +22,10 @@ Ty's answers, 2026-10-03, in chat:
 2. Every day is checked against the cap: its closed-trade net is below −3 × R (intent, Outcome 6). A day is the page's own day, `t.date` (the exit date). With no R set, the cap is not checked and the page says so.
 3. In the trade log, each rule a trade breaks shows as a badge in the Result cell. Every closed trade on an over-cap day also shows an "over cap" badge (intent, Outcome); open and unknown-cost trades have no net, so they carry no rule or cap badge. *(Clarified 2026-10-03 after review #12.)*
 4. The trade log gets one toggle, "Rule breaks only", which keeps trades breaking at least one rule, the cap included (Ty's answer 5).
-5. Reports gets one card, "Rules", for the current date range. It shows:
+5. Reports gets one card, "Rules", for the current date range. *(Wording aligned with the build after review #12, 2026-10-03.)* It shows:
    - one row per rule: trades that broke it, their net, win rate and profit factor, using the page's existing `stats()`;
-   - a "No rule broken" row;
-   - an "Over-cap days" row: number of days and their net, or "Set R in Settings" (intent, Outcome).
+   - a "No rule broken" row, over closed option trades only;
+   - with R set, an "Over-cap days" row (trades on those days, their net, win rate and profit factor), plus a line under the table with the number of over-cap days and their net. With R unset, no row, and the line reads "Daily cap: set R in Settings to check it." (intent, Outcome).
 6. Settings, Calculation card: one field, "R: dollars risked per trade". It's saved with the existing Save button into `S.meta.R` through `store.saveMeta`, the same path as the fee fields (Ty's answer 1).
 
 ## Design
@@ -95,7 +95,7 @@ Run on the Mac on the branch (served locally), then again on Pages after the mer
    **Pass:** both true.
 3. **Data untouched.** `node tools/sync.js --csv-dir <empty> --check`.
    **Pass:** `"changedFiles": []`.
-4. **R never published.** `git grep -n "\"R\"\s*:"` and a search of `data/` for the R key.
+4. **R never published.** `git grep` over the whole tree for an `"R":` key, and a check of `data/index.json` meta.
    **Pass:** 0 hits. The live page after the merge shows "Daily cap: set R in Settings to check it." in a fresh profile.
 5. **Existing protocol.** `verification/journal.md` step 1.
    **Pass:** `"pass": true`.

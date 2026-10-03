@@ -516,7 +516,7 @@ const RULE_LBL=Object.fromEntries(RULES);
 function ruleFlags(t){
   if(t.type!=='option'||t.net==null||t.result==='OPEN'||t.result==='UNKNOWN')return [];
   const r=[],buys=t.fills.filter(f=>f.side==='BUY'),hm=t.entry.slice(11,16),zero=t.exp===t.entry.slice(0,10);
-  if(t.dir==='LONG'&&buys.slice(1).some(f=>f.price<=buys[0].price*0.97))r.push('adddown');
+  if(t.dir==='LONG'&&buys.slice(1).some(f=>f.price*100<=buys[0].price*97+1e-6))r.push('adddown');
   if(zero&&hm<'10:00')r.push('early0');
   if(zero&&hm>='14:00'&&hm<'15:00')r.push('late0');
   if(zero&&t.hold>600)r.push('longhold');
@@ -779,7 +779,7 @@ function renderReports(){
   const gtag={};all.forEach(t=>t.tags.forEach(g=>(gtag[g]=gtag[g]||[]).push(t)));const tags=Object.keys(gtag).map(k=>({label:k,...stats(gtag[k])})).sort((a,b)=>b.net-a.net);
   const gpb=grp(all.filter(t=>t.playbook),t=>t.playbook);const pbs=Object.keys(gpb).map(k=>({label:k,...stats(gpb[k])})).sort((a,b)=>b.net-a.net);
   const gm=grp(c,t=>t.date.slice(0,7));const months=Object.keys(gm).sort().map(k=>({label:k,...stats(gm[k])}));
-  const rl=RULES.map(([k,l])=>({label:l,...stats(c.filter(t=>t.rules.includes(k)))}));rl.push({label:'No rule broken',...stats(c.filter(t=>!t.rules.length&&!onCapDay(t)))});if(S.capDays)rl.push({label:'Over-cap days',...stats(c.filter(onCapDay))});
+  const rl=RULES.map(([k,l])=>({label:l,...stats(c.filter(t=>t.rules.includes(k)))}));rl.push({label:'No rule broken',...stats(c.filter(t=>t.type==='option'&&!t.rules.length&&!onCapDay(t)))});if(S.capDays)rl.push({label:'Over-cap days',...stats(c.filter(onCapDay))});
   const capR=+S.meta.R||0,capD=S.capDays?[...new Set(c.filter(onCapDay).map(t=>t.date))]:[],capNet=c.filter(onCapDay).reduce((a,t)=>a+t.net,0);
   const best=inst.slice(0,5),worst=inst.slice(-5).reverse().filter(w=>!best.includes(w));
   const seg=(key,opts,cur)=>opts.map(([v,l])=>`<button class="btn sm ${cur===v?'on':''}" data-seg="${key}" data-v="${v}">${l}</button>`).join(' ');
