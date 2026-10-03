@@ -1,12 +1,12 @@
 # Spec: monthly-drive-backup
 
-**Approved:** 2026-10-03
+**Approved:** 2026-10-03 · Requirement 1 narrowed to monthly CSV moves after approval, awaiting Ty's confirmation
 
 **Intent:** accepted 2026-10-03 · **Status:** approved
 
 ## Requirements
 
-1. **Daily, idempotent run.** A launchd job on Ty's Mac runs once a day at 14:00 Hanoi, which is after the backup Action's 06:17 UTC run on the 1st. If the Mac was asleep, launchd runs it at the next wake. It does work only when this month's master isn't in `Backups/` yet, or when `Raw Records/` holds a CSV that has already been synced. Otherwise it exits without writing anything (intent, Outcome 1–3).
+1. **Daily, idempotent run.** A launchd job on Ty's Mac runs once a day at 14:00 Hanoi, which is after the backup Action's 06:17 UTC run on the 1st. If the Mac was asleep, launchd runs it at the next wake. It does work only when this month's master isn't in `Backups/` yet; the CSV moves happen in that same run, so CSVs move once a month, not daily. Otherwise it exits without writing anything (intent, Outcome 1–3). *(Narrowed after approval to match Ty's "on the first of each month"; awaiting Ty's confirmation.)*
 2. **Master file.** The job downloads `trade-journal-backup-<YYYY-MM>-01.json.gz` from the public release URL with `curl`, which needs no credential. It runs `restore.js --check` on the file from a fresh clone of `main`, copies the file to `Backups/`, and confirms the copy's SHA-256 matches. If the release isn't published yet, it exits quietly and tries again the next day (Outcome 1).
 3. **CSV moves.** For each `*.csv` in `Raw Records/`, the job puts that one file alone in a temporary folder and runs `sync.js --check` against the fresh clone's `data/`. It moves the file only when the check prints `"changedFiles": []`:
    - it copies the file to `Backups/CSVs to <YYYY-MM-DD>/`;
