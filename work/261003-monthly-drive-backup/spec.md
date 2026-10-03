@@ -1,12 +1,12 @@
 # Spec: monthly-drive-backup
 
-**Approved:** 2026-10-03 · Requirement 1 narrowed to monthly CSV moves after approval, awaiting Ty's confirmation
+**Approved:** 2026-10-03 · Requirement 1 (monthly moves, master saved last) and the `.part` rename confirmed by Ty's ship, 2026-10-03
 
 **Intent:** accepted 2026-10-03 · **Status:** approved
 
 ## Requirements
 
-1. **Daily, idempotent run.** A launchd job on Ty's Mac runs once a day at 14:00 Hanoi, which is after the backup Action's 06:17 UTC run on the 1st. If the Mac was asleep, launchd runs it at the next wake. It does work only when this month's master isn't in `Backups/` yet; the CSV moves happen in that same run, so CSVs move once a month, not daily. The master is saved last, after the moves, so a run that fails part-way is retried the next day (review #13). Otherwise it exits without writing anything (intent, Outcome 1–3). *(Narrowed after approval to match Ty's "on the first of each month"; awaiting Ty's confirmation.)*
+1. **Daily, idempotent run.** A launchd job on Ty's Mac runs once a day at 14:00 Hanoi, which is after the backup Action's 06:17 UTC run on the 1st. If the Mac was asleep, launchd runs it at the next wake. It does work only when this month's master isn't in `Backups/` yet; the CSV moves happen in that same run, so CSVs move once a month, not daily. The master is saved last, after the moves, so a run that fails part-way is retried the next day (review #13). Otherwise it exits without writing anything (intent, Outcome 1–3). *(Narrowed after approval to match Ty's "on the first of each month"; confirmed by Ty 2026-10-03.)*
 2. **Master file.** The job downloads `trade-journal-backup-<YYYY-MM>-01.json.gz` from the public release URL with `curl`, which needs no credential. It runs `restore.js --check` on the file from a fresh clone of `main`, copies the file to `Backups/`, and confirms the copy's SHA-256 matches. If the release isn't published yet, it exits quietly and tries again the next day (Outcome 1).
 3. **CSV moves.** For each `*.csv` in `Raw Records/`, the job puts that one file alone in a temporary folder and runs `sync.js --check` against the fresh clone's `data/`. It moves the file only when the check prints `"changedFiles": []`:
    - it copies the file to `Backups/CSVs to <YYYY-MM-DD>/`;
@@ -44,7 +44,7 @@ The apple-design skill doesn't apply: there is no UI.
 | Rule (by name) | What in the design touches it | Resolution |
 |---|---|---|
 | "File operation safety — copy, verify size, then delete", item 9: "Never autonomously delete, rename, move or archive" (root `CLAUDE.md`) | The job moves CSVs out of `Raw Records/` every month with nobody present. | **Ty, 2026-10-03 (approve):** this instruction ("move the CSVs into the backups") is the standing authorization for this job only. The job only moves `*.csv` files out of `Raw Records/` and only after their fills are in the journal, and it never deletes a copy.  |
-| Same rule, items 2–5 (copy, then check size, then delete; stop on I/O errors) | The moves happen on the Drive mount. | Requirements 3 and 4: copy, size and hash check, then remove, file by file. It stops on any error and never uses `mv` to move a file; the only rename is the master's `.part` file to its final name, in the same folder, after its hash matched (review #13; awaiting Ty's confirmation with Requirement 1). |
+| Same rule, items 2–5 (copy, then check size, then delete; stop on I/O errors) | The moves happen on the Drive mount. | Requirements 3 and 4: copy, size and hash check, then remove, file by file. It stops on any error and never uses `mv` to move a file; the only rename is the master's `.part` file to its final name, in the same folder, after its hash matched (review #13; confirmed by Ty 2026-10-03). |
 | "Strategic objective" (root `CLAUDE.md`: flag every Mac dependency as debt) | This is a new Mac dependency. | Ty chose it on 2026-10-03 over a Google credential in GitHub. It's named on the Pipeline Wiring page, section 5. |
 | "Never write … personal data by value into this public repo" (repo `CLAUDE.md`) | The Drive path contains the account's email. | The path lives only in the local plist, as `TJ_DRIVE_DIR`. Promise 4 greps the repo for it. |
 | "Changes reach `main` through a PR and Ty's ship" (repo `CLAUDE.md`) | — | Branch `work/monthly-drive-backup`, PR, reviewer, then Ty ships. The plist is installed after the merge. |
