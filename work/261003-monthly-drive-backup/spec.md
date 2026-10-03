@@ -1,6 +1,8 @@
 # Spec: monthly-drive-backup
 
-**Intent:** accepted 2026-10-03 · **Status:** draft
+**Approved:** 2026-10-03
+
+**Intent:** accepted 2026-10-03 · **Status:** approved
 
 ## Requirements
 
@@ -41,7 +43,7 @@ The apple-design skill doesn't apply: there is no UI.
 
 | Rule (by name) | What in the design touches it | Resolution |
 |---|---|---|
-| "File operation safety — copy, verify size, then delete", item 9: "Never autonomously delete, rename, move or archive" (root `CLAUDE.md`) | The job moves CSVs out of `Raw Records/` every month with nobody present. | **Question for Ty:** this instruction ("move the CSVs into the backups", 2026-10-03) becomes the standing authorization for this job only. The job only moves `*.csv` files out of `Raw Records/` and only after their fills are in the journal, and it never deletes a copy. Approving this spec records that authorization. |
+| "File operation safety — copy, verify size, then delete", item 9: "Never autonomously delete, rename, move or archive" (root `CLAUDE.md`) | The job moves CSVs out of `Raw Records/` every month with nobody present. | **Ty, 2026-10-03 (approve):** this instruction ("move the CSVs into the backups") is the standing authorization for this job only. The job only moves `*.csv` files out of `Raw Records/` and only after their fills are in the journal, and it never deletes a copy.  |
 | Same rule, items 2–5 (copy, then check size, then delete; stop on I/O errors) | The moves happen on the Drive mount. | Requirements 3 and 4: copy, size and hash check, then remove, file by file. It stops on any error and never uses `mv`. |
 | "Strategic objective" (root `CLAUDE.md`: flag every Mac dependency as debt) | This is a new Mac dependency. | Ty chose it on 2026-10-03 over a Google credential in GitHub. It's named on the Pipeline Wiring page, section 5. |
 | "Never write … personal data by value into this public repo" (repo `CLAUDE.md`) | The Drive path contains the account's email. | The path lives only in the local plist, as `TJ_DRIVE_DIR`. Promise 4 greps the repo for it. |
