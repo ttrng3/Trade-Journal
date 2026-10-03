@@ -1,6 +1,6 @@
 # Spec: rules-check
 
-**Approved:** 2026-10-03 · Requirements 3 and 5 reworded after review #12, awaiting Ty's confirmation
+**Approved:** 2026-10-03 · Requirements 3 and 5 reworded after review #12; rewording confirmed by Ty 2026-10-03
 
 **Intent:** accepted 2026-10-03 · **Status:** approved
 
