@@ -33,13 +33,17 @@ month's `trade-journal-backup-YYYY-MM-01.json.gz` isn't in Drive
 1. downloads the master from the release, checks it with `restore.js --check`
    against a fresh clone of `main`, copies it into `Backups/` and confirms the
    SHA-256;
-2. moves every CSV in `Raw Records/` whose fills are already in the journal
-   (`sync.js --check` prints `"changedFiles": []` for it alone) into
+2. moves every CSV in `Raw Records/` that parses to at least one fill, all of
+   them already in the journal (`sync.js --check` on that file alone), into
    `Backups/CSVs to <date>/`: copy, check size and SHA-256, then remove. A CSV
-   that hasn't synced yet stays for next month.
+   that hasn't synced yet, or can't be read, stays for next month;
+3. saves the master last, so a run that fails part-way is picked up the next
+   day.
 
-It never deletes a copy, never writes to the repo, and on any failure removes
-nothing, adds a line to `Backups/backup-log.md` and shows a Mac notification.
+It never deletes a copy and never writes to the repo. On any failure it stops,
+shows a Mac notification and adds a line to `Backups/backup-log.md` saying how
+many CSVs had already moved (each verified before its original was removed).
+No release by the 3rd of the month is reported as a failure.
 Ty authorized these monthly moves on 2026-10-03 (the spec's Conflicts table).
 
 The job is `~/Library/LaunchAgents/com.tytr3.trade-journal-backup.plist`, local
@@ -64,8 +68,11 @@ the fill count against the manifest **before writing anything**; a corrupt or
 truncated file is refused whole. It replaces `data/` with the snapshot and
 removes month files the snapshot does not know about.
 
-Fills that arrived after the backup was taken are not lost: they are still in
-the Webull CSVs on Drive, and the next sync adds them back (existing
+Fills that arrived after the backup was taken are not lost: they are in the
+Webull CSVs on Drive, either still in `Raw Records/` or moved to
+`Backups/CSVs to <date>/` by the monthly job. The sync reads only `Raw Records/`,
+so first copy back into it the CSVs from every `Backups/CSVs to <date>/` folder
+dated after the master you restore. The next sync then adds them back (existing
 keys win, so nothing duplicates).
 
 ## The file

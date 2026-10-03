@@ -6,7 +6,7 @@
 
 ## Requirements
 
-1. **Daily, idempotent run.** A launchd job on Ty's Mac runs once a day at 14:00 Hanoi, which is after the backup Action's 06:17 UTC run on the 1st. If the Mac was asleep, launchd runs it at the next wake. It does work only when this month's master isn't in `Backups/` yet; the CSV moves happen in that same run, so CSVs move once a month, not daily. Otherwise it exits without writing anything (intent, Outcome 1–3). *(Narrowed after approval to match Ty's "on the first of each month"; awaiting Ty's confirmation.)*
+1. **Daily, idempotent run.** A launchd job on Ty's Mac runs once a day at 14:00 Hanoi, which is after the backup Action's 06:17 UTC run on the 1st. If the Mac was asleep, launchd runs it at the next wake. It does work only when this month's master isn't in `Backups/` yet; the CSV moves happen in that same run, so CSVs move once a month, not daily. The master is saved last, after the moves, so a run that fails part-way is retried the next day (review #13). Otherwise it exits without writing anything (intent, Outcome 1–3). *(Narrowed after approval to match Ty's "on the first of each month"; awaiting Ty's confirmation.)*
 2. **Master file.** The job downloads `trade-journal-backup-<YYYY-MM>-01.json.gz` from the public release URL with `curl`, which needs no credential. It runs `restore.js --check` on the file from a fresh clone of `main`, copies the file to `Backups/`, and confirms the copy's SHA-256 matches. If the release isn't published yet, it exits quietly and tries again the next day (Outcome 1).
 3. **CSV moves.** For each `*.csv` in `Raw Records/`, the job puts that one file alone in a temporary folder and runs `sync.js --check` against the fresh clone's `data/`. It moves the file only when the check prints `"changedFiles": []`:
    - it copies the file to `Backups/CSVs to <YYYY-MM-DD>/`;
@@ -77,7 +77,7 @@ Verdict: safe to ship
    **Pass:** no file changes and no new log line.
 3. **Failure path.** Make the copy target read-only and run again.
    **Pass:** the script exits non-zero, a notification fires, and `Raw Records/` is unchanged.
-4. **Nothing personal in the repo.** `git grep` for the account email and `CloudStorage`.
+4. **Nothing personal in the repo.** `git grep` for the account email and the Drive mount path (the protocol's step 6 pattern).
    **Pass:** 0 hits.
 5. **Live install.** After the merge, run `launchctl print gui/$UID/com.tytr3.trade-journal-backup` and kick it once.
    **Pass:** the job shows as loaded; the run is a no-op, because October is already done and Raw Records holds only CSVs that haven't synced; and the log says so.
