@@ -33,7 +33,7 @@ Put three CSVs in `$D/Raw Records/`:
    - the master is **not** in `Backups/` (it is saved last), so the next day's run retries;
    - `synced2.csv` is still in `Raw Records/`.
 4. Delete the collision file and run again. **Expected:** exit 0; `synced2.csv` moved; the master saved; one "saved" log line. This proves a failed month is picked up the next day.
-5. Remove the master and the `Backups/CSVs to <today>/` folder, put one synced file in `Raw Records/`, make `Backups/` mode 555, and run. **Expected:** exit 1 (the move folder can't be created); a `NOTIFY: Failed:` line on stderr, even though the log can't be written; `Raw Records/` unchanged. Restore the mode afterwards.
+5. Remove the master and the `Backups/CSVs to <today>/` folder, put one synced file in `Raw Records/`, make `Backups/` mode 555, and run. **Expected:** exit 1 (the move folder can't be created); a `NOTIFY: Failed:` line on stderr; `Raw Records/` unchanged. The notification goes out before the log write, so it fires whether or not the log can be written; an existing `backup-log.md` is still appendable inside a 555 folder, so a FAILED line may appear. Restore the mode afterwards.
 6. `git grep -n -i -E 'gmail\.com|GoogleDrive-[a-z]|Cloud[S]torage/'`. **Expected:** no output. The patterns are written so this line can't match itself.
 7. Live check, after the merge:
    - run `launchctl print gui/$UID/com.tytr3.trade-journal-backup | grep -E 'state|last exit'`, then `launchctl kickstart gui/$UID/com.tytr3.trade-journal-backup`;
