@@ -3,7 +3,7 @@
 **Status:** accepted 2026-10-03
 **Source:** chat, 2026-10-03
 
-**Problem.** The page shows what happened but not whether a trade broke the rules Ty set on 2026-10-03. An analysis of the 532 closed long option trades from 2024-12-10 to 2026-10-02 found the losses come from a few repeatable habits. Today nothing on the page points at them:
+**Problem.** The page shows what happened but not whether a trade broke the rules Ty set on 2026-10-03. An analysis in chat on 2026-10-03 (not filed; the figures below are Likely, and the Rules card this change adds recomputes them from `data/`) of the 532 closed long option trades from 2024-12-10 to 2026-10-02 found the losses come from a few repeatable habits. Today nothing on the page points at them:
 - adding contracts below the first entry price: 61% of trades; those trades netted −$6,519;
 - entries from 14:00 to 15:00 ET: profit factor 0.36, −$3,084;
 - SPXW: profit factor 0.41, −$3,885;

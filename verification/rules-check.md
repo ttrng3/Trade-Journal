@@ -7,7 +7,7 @@ The Rules card in Reports, the rule badges and the "Rule breaks only" filter in 
 ## Clean state
 
 ```bash
-cd ~/Projects/Trade-Journal && git checkout main && git pull --ff-only
+cd ~/Projects/Trade-Journal && git checkout <branch under test> && git pull --ff-only   # main after the merge
 ```
 Run on the Mac. You need `node` and Playwright (`npm i playwright` in a scratch folder, never in this repo). Use a fresh browser profile, which is Playwright's default. Never clear `localStorage` in Ty's own browser: it holds his settings, including R.
 
@@ -30,16 +30,16 @@ Run on the Mac. You need `node` and Playwright (`npm i playwright` in a scratch 
 All of these must hold:
 
 - `capLineBeforeR` reads "Daily cap: set R in Settings to check it."
-- For every Rules row (add-down, early 0DTE, late 0DTE, long hold, SPXW, No rule broken), the page's Trades and Net P&L equal the recount's `n` and `net` (rounded to whole dollars).
-- The over-cap line's day count and net equal the recount's `capDays`.
+- For every Rules row (add-down, early 0DTE, late 0DTE, long hold, SPXW, No rule broken, Over-cap days), the page's Trades and Net P&L equal the recount's `n` and `net` (rounded to whole dollars).
+- The over-cap line's day count and net, and the Over-cap days row's trades and net, equal the recount's `capDays` (`days`, `n`, `net`).
 - The trade-log title shows `<filtered> of <total>`, where `<filtered>` equals the recount's `filtered`.
-- `addDownBadge0909` is at least 1.
+- `addDownBadgeSample` (the add-down trade entered 2026-09-08 in `SPY260909C00768000`) is at least 1.
 - `errors` holds nothing except the 404 for `data/journal.json`, which the page probes on purpose and falls back from (`.pages-allow` notes it).
 - Step 3 prints `"changedFiles": []`.
 - Step 4 prints `0` and `False`.
-- Step 5 prints `"pass": true`.
+- Step 5 prints `"pass": true` after the merge. On the branch, `served_equals_main` is false by design (Pages still serves `main`) and every other verdict must be true.
 
-Measured on 2026-10-03 on branch `work/rules-check` (local server): 322 / −$6,309, 28 / −$529, 32 / −$1,598, 144 / −$3,523, 87 / −$3,450, 118 / +$1,962; 16 over-cap days, −$11,136; 411 of 532. These pass only as long as the data is unchanged. New fills inside the range move them, so compare the page against the recount, never against these figures.
+Measured on 2026-10-03 on branch `work/rules-check` (local server): 322 / −$6,309, 28 / −$529, 32 / −$1,598, 144 / −$3,523, 87 / −$3,450, 118 / +$1,962; 16 over-cap days (130 trades), −$11,136; 411 of 532. These pass only as long as the data is unchanged. New fills inside the range move them, so compare the page against the recount, never against these figures.
 
 ### recount.js
 ```js
@@ -50,12 +50,12 @@ for(const s of idx.shards)fills.push(...Object.values(JSON.parse(fs.readFileSync
 const all=P.buildTrades(fills,{feeC:0,feeS:0,longOnly:true});
 const closed=all.filter(t=>t.net!=null&&t.result!=='OPEN'&&t.result!=='UNKNOWN');
 const rules=t=>{if(t.type!=='option')return[];const r=[],b=t.fills.filter(f=>f.side==='BUY'),hm=t.entry.slice(11,16),z=t.exp===t.entry.slice(0,10);
- if(b.slice(1).some(f=>f.price<=b[0].price*0.97))r.push('add-down');if(z&&hm<'10:00')r.push('early 0DTE');if(z&&hm>='14:00'&&hm<'15:00')r.push('late 0DTE');if(z&&t.hold>600)r.push('long hold');if(t.und==='SPXW')r.push('SPXW');return r;};
+ if(t.dir==='LONG'&&b.slice(1).some(f=>f.price<=b[0].price*0.97))r.push('add-down');if(z&&hm<'10:00')r.push('early 0DTE');if(z&&hm>='14:00'&&hm<'15:00')r.push('late 0DTE');if(z&&t.hold>600)r.push('long hold');if(t.und==='SPXW')r.push('SPXW');return r;};
 const day={};closed.forEach(t=>day[t.date]=(day[t.date]||0)+t.net);const cap=new Set(Object.keys(day).filter(d=>day[d]<-3*riskR));
 const inR=closed.filter(t=>t.date>=from&&t.date<=to);const sum=a=>Math.round(a.reduce((x,t)=>x+t.net,0));
 const out={};['add-down','early 0DTE','late 0DTE','long hold','SPXW'].forEach(k=>{const a=inR.filter(t=>rules(t).includes(k));out[k]={n:a.length,net:sum(a)}});
 const clean=inR.filter(t=>!rules(t).length&&!cap.has(t.date));out['No rule broken']={n:clean.length,net:sum(clean)};
-const capT=inR.filter(t=>cap.has(t.date));out.capDays={days:new Set(capT.map(t=>t.date)).size,net:sum(capT)};
+const capT=inR.filter(t=>cap.has(t.date));out.capDays={days:new Set(capT.map(t=>t.date)).size,n:capT.length,net:sum(capT)};
 out.filtered=inR.filter(t=>rules(t).length||cap.has(t.date)).length;
 console.log(JSON.stringify(out));
 ```
@@ -80,7 +80,7 @@ const {chromium}=require('playwright');
  await card.screenshot({path:shots+'/rules-card.png'});
  await p.click('[data-view="trades"]');await p.click('#frules');await p.waitForTimeout(300);
  res.tradeLogTitle=await p.textContent('#view-trades h3');
- res.addDownBadge0909=await p.$$eval('#tt tr.row',rs=>rs.filter(r=>/2026-09-08/.test(r.innerText)&&/SPY260909C00768000/.test(r.innerText)&&/add-down/.test(r.innerText)).length);
+ res.addDownBadgeSample=await p.$$eval('#tt tr.row',rs=>rs.filter(r=>/2026-09-08/.test(r.innerText)&&/SPY260909C00768000/.test(r.innerText)&&/add-down/.test(r.innerText)).length);
  await p.screenshot({path:shots+'/trade-log-filtered.png'});
  res.errors=errs;console.log(JSON.stringify(res,null,1));await b.close();
 })();

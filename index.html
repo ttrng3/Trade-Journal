@@ -516,7 +516,7 @@ const RULE_LBL=Object.fromEntries(RULES);
 function ruleFlags(t){
   if(t.type!=='option'||t.net==null||t.result==='OPEN'||t.result==='UNKNOWN')return [];
   const r=[],buys=t.fills.filter(f=>f.side==='BUY'),hm=t.entry.slice(11,16),zero=t.exp===t.entry.slice(0,10);
-  if(buys.slice(1).some(f=>f.price<=buys[0].price*0.97))r.push('adddown');
+  if(t.dir==='LONG'&&buys.slice(1).some(f=>f.price<=buys[0].price*0.97))r.push('adddown');
   if(zero&&hm<'10:00')r.push('early0');
   if(zero&&hm>='14:00'&&hm<'15:00')r.push('late0');
   if(zero&&t.hold>600)r.push('longhold');
@@ -779,7 +779,7 @@ function renderReports(){
   const gtag={};all.forEach(t=>t.tags.forEach(g=>(gtag[g]=gtag[g]||[]).push(t)));const tags=Object.keys(gtag).map(k=>({label:k,...stats(gtag[k])})).sort((a,b)=>b.net-a.net);
   const gpb=grp(all.filter(t=>t.playbook),t=>t.playbook);const pbs=Object.keys(gpb).map(k=>({label:k,...stats(gpb[k])})).sort((a,b)=>b.net-a.net);
   const gm=grp(c,t=>t.date.slice(0,7));const months=Object.keys(gm).sort().map(k=>({label:k,...stats(gm[k])}));
-  const rl=RULES.map(([k,l])=>({label:l,...stats(c.filter(t=>t.rules.includes(k)))}));rl.push({label:'No rule broken',...stats(c.filter(t=>!t.rules.length&&!onCapDay(t)))});
+  const rl=RULES.map(([k,l])=>({label:l,...stats(c.filter(t=>t.rules.includes(k)))}));rl.push({label:'No rule broken',...stats(c.filter(t=>!t.rules.length&&!onCapDay(t)))});if(S.capDays)rl.push({label:'Over-cap days',...stats(c.filter(onCapDay))});
   const capR=+S.meta.R||0,capD=S.capDays?[...new Set(c.filter(onCapDay).map(t=>t.date))]:[],capNet=c.filter(onCapDay).reduce((a,t)=>a+t.net,0);
   const best=inst.slice(0,5),worst=inst.slice(-5).reverse().filter(w=>!best.includes(w));
   const seg=(key,opts,cur)=>opts.map(([v,l])=>`<button class="btn sm ${cur===v?'on':''}" data-seg="${key}" data-v="${v}">${l}</button>`).join(' ');
@@ -813,7 +813,7 @@ function renderTrades(){
       <select id="fund"><option value="">All tickers</option>${unds.map(u=>`<option ${F.und===u?'selected':''}>${u}</option>`).join('')}</select>
       <select id="fres"><option value="">All results</option>${['WIN','LOSS','SCRATCH','OPEN','UNKNOWN'].map(r=>`<option ${F.result===r?'selected':''}>${r}</option>`).join('')}</select>
       <select id="ftag"><option value="">All tags</option>${tagsUsed.map(t=>`<option ${F.tag===t?'selected':''}>${esc(t)}</option>`).join('')}</select>
-      <button class="btn sm ${F.rules?'on':''}" id="frules" aria-pressed="${F.rules}">Rule breaks only</button>
+      <button class="btn sm ${F.rules?'on':''}" id="frules" aria-pressed="${!!F.rules}">Rule breaks only</button>
       ${F.day?`<button class="btn sm on" id="fday">day: ${F.day} ×</button>`:''}</div></header>
     <div class="scroll"><table class="tbl" id="tt"><thead><tr><th style="width:20px"></th>${th('entry','Date / time')}${th('sym','Contract')}<th>Dir</th>${th('eq','Qty',1)}${th('avgIn','Avg in',1)}${th('avgOut','Avg out',1)}${th('net','Net P&L',1)}${th('hold','Hold',1)}<th>Result</th><th>Playbook / tags</th><th style="width:40px"></th></tr></thead>
     <tbody>${rows.map(rowHtml).join('')||`<tr><td colspan="12" class="sub" style="text-align:center;padding:24px">No trades match.</td></tr>`}</tbody></table></div></div>`;
@@ -883,7 +883,7 @@ function renderSettings(){
   el.innerHTML=`<div class="grid2"><div class="card"><header><h3>Calculation</h3></header><div class="body"><div class="settings">
     <label for="feeC">Fee per option contract ($)</label><input id="feeC" type="number" step="0.01" value="${m.feeC??0}">
     <label for="feeS">Fee per share ($)</label><input id="feeS" type="number" step="0.0001" value="${m.feeS??0}">
-    <label for="riskR">R: dollars risked per trade</label><input id="riskR" type="number" step="1" min="0" value="${m.R??''}" placeholder="not set">
+    <label for="riskR">R: dollars risked per trade</label><input id="riskR" type="number" step="1" min="0" value="${m.R||''}" placeholder="not set">
     <label for="longOnly">Options are long-only</label><input id="longOnly" type="checkbox" ${m.longOnly!==false?'checked':''} style="width:auto">
     </div><p class="sub" style="margin:10px 0 0">The Webull export carries no commission column, so fees default to zero. With long-only on, a sell with no matching buy is treated as a position bought before the export window (unknown cost) rather than a short trade. Turn it off only if you really sell options to open.</p>
     <button class="btn primary" id="saveSettings" style="margin-top:12px">Save and recalculate</button></div></div>

@@ -14,13 +14,13 @@ Ty's answers, 2026-10-03, in chat:
 ## Requirements
 
 1. Every closed option trade (net known, so not OPEN or UNKNOWN) is checked against five trade rules (intent, Outcome 1–5):
-   - **add-down:** a BUY fill after the first, at a price ≤ 97% of the first BUY's price;
+   - **add-down:** on a long trade, a BUY fill after the first, at a price ≤ 97% of the first BUY's price;
    - **early 0DTE:** expiry date equals entry date, and the entry time is before 10:00 ET;
    - **late 0DTE:** expiry date equals entry date, and the entry time is from 14:00 to before 15:00 ET;
    - **long hold:** 0DTE, and held more than 600 seconds;
    - **SPXW:** the underlying is `SPXW`.
 2. Every day is checked against the cap: its closed-trade net is below −3 × R (intent, Outcome 6). A day is the page's own day, `t.date` (the exit date). With no R set, the cap is not checked and the page says so.
-3. In the trade log, each rule a trade breaks shows as a badge in the Result cell. Every trade on an over-cap day also shows an "over cap" badge (intent, Outcome).
+3. In the trade log, each rule a trade breaks shows as a badge in the Result cell. Every closed trade on an over-cap day also shows an "over cap" badge (intent, Outcome); open and unknown-cost trades have no net, so they carry no rule or cap badge. *(Clarified 2026-10-03 after review #12.)*
 4. The trade log gets one toggle, "Rule breaks only", which keeps trades breaking at least one rule, the cap included (Ty's answer 5).
 5. Reports gets one card, "Rules", for the current date range. It shows:
    - one row per rule: trades that broke it, their net, win rate and profit factor, using the page's existing `stats()`;
@@ -91,12 +91,12 @@ Run on the Mac on the branch (served locally), then again on Pages after the mer
 
 1. **Counts match.** A Playwright script opens the page in a fresh browser profile and sets R = 100 through the Settings field. It sets a custom range of 2024-12-10 to 2026-10-02 and reads the Rules card. Separately, a Node recount loads `data/` with `tools/parse-webull.js` `buildTrades`, applies the definitions in Requirements 1–2 and prints the same numbers.
    **Pass:** for every rule row, "No rule broken" and "Over-cap days", the count and net are equal.
-2. **Badges and filter.** With "Rule breaks only" on, the trade log count equals the trades breaking at least one rule in the recount. One add-down trade from 2026-09-09 shows the add-down badge.
+2. **Badges and filter.** With "Rule breaks only" on, the trade log count equals the trades breaking at least one rule in the recount. The add-down trade entered 2026-09-08 in `SPY260909C00768000` shows the add-down badge.
    **Pass:** both true.
 3. **Data untouched.** `node tools/sync.js --csv-dir <empty> --check`.
    **Pass:** `"changedFiles": []`.
 4. **R never published.** `git grep -n "\"R\"\s*:"` and a search of `data/` for the R key.
-   **Pass:** 0 hits. The live page after the merge shows "Set R in Settings" in a fresh profile.
+   **Pass:** 0 hits. The live page after the merge shows "Daily cap: set R in Settings to check it." in a fresh profile.
 5. **Existing protocol.** `verification/journal.md` step 1.
    **Pass:** `"pass": true`.
 6. **Evidence:** the JSON from steps 1–2, one screenshot of the Rules card and one of the filtered trade log.
