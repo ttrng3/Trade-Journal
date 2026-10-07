@@ -17,3 +17,11 @@ data/fills/*.json
 # back to the fills shards when it's absent, which is the cloud sync's path.
 !data/journal.json
 @data/
+# Trading wiki (Ty, 2026-10-07; work/261007-bot-trading-wiki). The compiled wiki
+# is published; the raw day files it is compiled from are not.
+wiki.html
+wiki/*.md
+wiki/*/*.md
+@wiki/
+!raw/*.json
+@raw/
