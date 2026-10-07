@@ -31,6 +31,14 @@ wrongly deleted on 2026-09-23 and again on 2026-09-26 by reading the rule as
 the URL, because the job needs a publish target. `tools/build-fragment.py`
 derives the fragment the artifact needs from `index.html`.
 
+## The trading wiki
+
+https://ttrng3.github.io/Trade-Journal/wiki.html (the **Wiki** button in the page header) holds the lessons from
+Ty's trades and the bots' trades, compiled by the same 11:00 routine (Ty, 2026-10-07). A Mac job uploads the
+bots' session to `Raw Records/Bots/` at 10:30; the routine writes `raw/<day>.json` once (not served by Pages,
+readable in this public repo), then updates `wiki/` by concept: days, mistakes, setups, what-ifs, rules, and a
+weekly report on Saturdays. `docs/wiki.md` is its runbook. The Cowork preview carries the wiki too.
+
 ## What the page itself can save
 
 Nothing in the browser can write to this repo, so the Pages build is a
