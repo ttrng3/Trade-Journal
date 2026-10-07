@@ -52,11 +52,11 @@ article blockquote{margin:8px 0;padding-left:12px;border-left:3px solid var(--ru
   <p class="crumb" id="crumb"></p>
   <article id="page">Loading…</article>
 </main>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/18.0.14/lib/marked.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.4.16/purify.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/18.0.14/lib/marked.umd.min.js" integrity="sha512-trN9mtGYvoySPVI909KTnwbJI9AkKPydRCV/qAsUG1+q39hhpKltEag9b5JpdjeIZn5i8IH62hHRFdbKwMFh9w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.4.16/purify.min.js" integrity="sha512-flQmhkXNRQ3iUfvtdCobtpMjCb6kE+zLnTiAulAQJ3WykVfy84JvCMOo6vhwWXHTXjR25h9Zj+LyGFRWKjRoag==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
 // Pages live in wiki/<path>.md; the address is wiki.html#p=<path> (a hash, so no query string reaches the server).
-const SAFE = /^[a-z0-9][a-z0-9\-\/]*$/;
+const SAFE = /^[A-Za-z0-9][A-Za-z0-9\-\/]*$/;   // weekly pages are e.g. weekly/2026-W41
 function current(){
   const m = location.hash.match(/p=([^&]+)/);
   const p = m ? decodeURIComponent(m[1]) : "index";

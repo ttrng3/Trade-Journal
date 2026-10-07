@@ -20,7 +20,8 @@ minus one day (Tuesday's run compiles Monday's session, Saturday's compiles Frid
 2. **Raw day.** `python3 tools/postexit.py --day <day> --bundle <file or omit>`. It writes `raw/<day>.json` and
    refuses to overwrite one that exists (that is correct on a re-run: compile from the existing file).
    Then `python3 tools/wiki-check.py --day <day> [--bundle <file>]` must print `RAW OK …`. If it fails, stop the
-   wiki step, push nothing under `raw/` or `wiki/`, and report the FAIL lines.
+   wiki step, push nothing under `raw/` or `wiki/`, and report the FAIL lines. A `WARN manual path missing` line
+   (Ty traded an underlying the collector had no bars for) does not stop the step; say it on the day page.
 3. **Compile.** Read `raw/<day>.json` and the current `wiki/`. Write or update, in place:
    - `wiki/days/<day>.md` — the day (template below). It must contain the text `raw/<day>.json`.
    - The concept pages the day touches, under `wiki/mistakes/`, `wiki/setups/`, `wiki/what-ifs/`, `wiki/rules/`.

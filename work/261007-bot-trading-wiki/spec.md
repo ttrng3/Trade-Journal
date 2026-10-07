@@ -121,6 +121,10 @@ This becomes `verification/bot-trading-wiki.md` in Stage 4.
 ## Changes during the build
 - Review of PR #14 (2026-10-07): the wiki step runs before the preview refresh, not after it, so each run's
   preview carries that run's wiki. Raw files described as readable in the public repo, not private.
+- Review of PR #15 (2026-10-08): Promise 1 counts finished bot trades, i.e. v7 `close` rows plus sweep `EXIT`
+  lines (a trade still open at the bell has no exit to follow). A manual exit on an underlying outside the
+  collector's list prints `WARN manual path missing` instead of failing the day. Weekly page names keep the ISO
+  capital W (`weekly/2026-W41`). The two cdnjs scripts carry SRI hashes.
 
 ## Out of scope
 - Any change to the bots, their schedules or drills, and any automatic tuning. The weekly report proposes; Ty

@@ -176,7 +176,9 @@ def main():
     if r.returncode != 0:
         sys.exit("rclone failed: " + r.stderr.strip()[-300:])
     ls = subprocess.run(["rclone", "lsf", f"{REMOTE}Bots/", "--drive-root-folder-id", fid], capture_output=True, text=True)
-    print("uploaded" if f"{day}.json" in ls.stdout.split() else "UPLOAD NOT FOUND ON DRIVE")
+    if f"{day}.json" not in ls.stdout.split():
+        sys.exit("UPLOAD NOT FOUND ON DRIVE")
+    print("uploaded")
 
 
 if __name__ == "__main__":

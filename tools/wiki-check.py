@@ -41,7 +41,8 @@ def wiki(root):
 def raw(day, raw_dir, data_dir, bundle_path):
     r = json.load(open(os.path.join(raw_dir, day + ".json")))
     bad = []
-    shard = json.load(open(os.path.join(data_dir, "fills", day[:7] + ".json")))
+    sp = os.path.join(data_dir, "fills", day[:7] + ".json")
+    shard = json.load(open(sp)) if os.path.exists(sp) else {}
     n_manual = sum(1 for f in shard.values() if f["t"].startswith(day))
     if len(r["manual"]) != n_manual:
         bad.append(f"manual fills {len(r['manual'])} != shard {n_manual}")
@@ -53,10 +54,14 @@ def raw(day, raw_dir, data_dir, bundle_path):
         want_s = sum(1 for x in b["v7"] if x["kind"] == "bar")
         if sum(1 for s in r["skips"] if s["bot"] == "v7") != want_s:
             bad.append(f"v7 skips != bundle {want_s}")
-    paths = [x["after"] for x in r["bots"] + r["skips"]] + [x["after"] for x in r["manual"] if x["side"] == "SELL"]
-    for a in paths:
+    warn = []
+    paths = [(x["after"], "bot") for x in r["bots"] + r["skips"]] + \
+            [(x["after"], "manual") for x in r["manual"] if x["side"] == "SELL"]
+    for a, who in paths:
         if "missing" in a:
-            if r["sources"]["bots_bundle"] == "present":
+            if who == "manual":       # an underlying outside the collector's list: say so, don't block the day
+                warn.append(f"manual path missing: {a['missing']}")
+            elif r["sources"]["bots_bundle"] == "present":
                 bad.append(f"path missing: {a['missing']}")
             continue
         last = a["candles"][-1][0] if a["candles"] else "16:00"
@@ -64,6 +69,8 @@ def raw(day, raw_dir, data_dir, bundle_path):
             bad.append(f"short path ({len(a['candles'])} candles, last {last})")
         if "close" not in a:
             bad.append("path without close")
+    for x in sorted(set(warn)):
+        print("WARN", x)
     for x in bad:
         print("FAIL", x)
     ok = not bad

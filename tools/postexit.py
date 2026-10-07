@@ -80,7 +80,8 @@ class Prices:
 
 
 def manual(day, data_dir, px):
-    shard = json.load(open(os.path.join(data_dir, "fills", day[:7] + ".json")))
+    path = os.path.join(data_dir, "fills", day[:7] + ".json")
+    shard = json.load(open(path)) if os.path.exists(path) else {}   # a month with no trades yet has no shard
     rows = []
     for f in sorted(shard.values(), key=lambda f: f["t"]):
         if not f["t"].startswith(day):
