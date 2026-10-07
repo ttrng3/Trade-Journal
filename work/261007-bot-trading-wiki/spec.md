@@ -105,8 +105,8 @@ Verdict: safe to ship, provided the collector's field allowlist is the only path
 Measured on the first trading-day run after merge (target: the 11:00 Hanoi run on 2026-10-09 or the first run
 after merge, whichever is later) and on the first Saturday run after merge (target 2026-10-10, else 2026-10-17):
 
-1. `raw/<day>.json` exists on `main`; its bot trade count equals the `open` rows in that day's v7 journal plus the
-   sweep log's fills; its manual fill count equals the fills that day in the month shard; every exit and skip has
+1. `raw/<day>.json` exists on `main`; its bot trade count equals the `close` rows in that day's v7 journal plus the
+   sweep log's `EXIT` lines; its manual fill count equals the fills that day in the month shard; every exit and skip has
    10 three-minute candles and a close. Check: `python3 tools/wiki-check.py --day <day>`. Pass line:
    `RAW OK trades=<n> skips=<n> manual=<n> paths=complete`.
 2. Wiki links: `python3 tools/wiki-check.py` prints `WIKI OK pages=<n> dangling=0`.
@@ -125,6 +125,12 @@ This becomes `verification/bot-trading-wiki.md` in Stage 4.
   lines (a trade still open at the bell has no exit to follow). A manual exit on an underlying outside the
   collector's list prints `WARN manual path missing` instead of failing the day. Weekly page names keep the ISO
   capital W (`weekly/2026-W41`). The two cdnjs scripts carry SRI hashes.
+- Review round 2 of PR #15 (2026-10-08): a day with no Webull fills yet is **deferred**, not frozen; the next run
+  writes it with `--final` (docs/wiki.md "Which day"), so a CSV filed after 11:00 is never lost. A v7 skip with no
+  stop or target logged is recorded as `first_hit: unknown` instead of stopping the day.
+- **For Ty's ship:** rebuilding `build/artifact.html` for the Wiki link also catches the Cowork preview up with
+  the rules-check feature already on `main` (`work/261003-rules-check`), which was merged without a fragment
+  rebuild. Shipping #15 accepts that catch-up here rather than in its own PR.
 
 ## Out of scope
 - Any change to the bots, their schedules or drills, and any automatic tuning. The weekly report proposes; Ty

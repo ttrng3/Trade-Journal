@@ -113,12 +113,17 @@ def v7_rows(bundle, px):
                        "entry": o.get("entry"), "stop": o.get("stop"), "t1": o.get("t1"), "t2": o.get("t2"),
                        "exit_t": exit_t, "exit": fills.get(c["id"], {}).get("spot"), "exit_rule": c.get("last_rule"),
                        "pnl": round(c.get("pnl", 0), 2), "r": round(c.get("r", 0), 2), "after": px.after(sym, exit_t)})
+    rnd = lambda x: round(x, 2) if isinstance(x, (int, float)) else None
     for b in (r for r in bundle["v7"] if r["kind"] == "bar"):
-        t = b["ts"][11:19]
-        hit, hit_t = px.first_hit(b["symbol"], t, b["d"], b["stop"], b["t2"])
-        skips.append({"bot": "v7", "symbol": b["symbol"], "dir": "call" if b["d"] > 0 else "put", "t": t, "kind": "skipped",
+        t, d = b["ts"][11:19], b.get("d") or 1
+        stop, target = b.get("stop"), b.get("t2")
+        if isinstance(stop, (int, float)) and isinstance(target, (int, float)):
+            hit, hit_t = px.first_hit(b["symbol"], t, d, stop, target)
+        else:
+            hit, hit_t = "unknown (no stop or target logged)", None
+        skips.append({"bot": "v7", "symbol": b["symbol"], "dir": "call" if d > 0 else "put", "t": t, "kind": "skipped",
                       "setup": ", ".join(b.get("setups", [])), "why": why_v7(b.get("votes")),
-                      "entry": round(b["entry"], 2), "stop": round(b["stop"], 2), "target": round(b["t2"], 2),
+                      "entry": rnd(b.get("entry")), "stop": rnd(stop), "target": rnd(target),
                       "first_hit": hit, "first_hit_t": hit_t, "after": px.after(b["symbol"], t)})
     return trades, skips
 
@@ -170,10 +175,19 @@ def main():
     ap.add_argument("--bundle", default=None, help="the Bots/<day>.json from Drive; omit or give a missing path if absent")
     ap.add_argument("--data-dir", default="data")
     ap.add_argument("--raw-dir", default="raw")
+    ap.add_argument("--final", action="store_true",
+                    help="write even when the shard has no Webull fills for the day (the next run's recheck)")
     a = ap.parse_args()
     out = os.path.join(a.raw_dir, a.day + ".json")
     if os.path.exists(out):
         print(json.dumps({"exists": True, "file": out}))
+        return
+    sp = os.path.join(a.data_dir, "fills", a.day[:7] + ".json")
+    has_fills = os.path.exists(sp) and any(f["t"].startswith(a.day) for f in json.load(open(sp)).values())
+    if not has_fills and not a.final:
+        # Ty's CSV may arrive after this run (CLAUDE.md, 2026-09-26). Freezing now would lose his trades for good,
+        # so the day waits for the next run, which writes it with --final whether or not fills have come.
+        print(json.dumps({"deferred": True, "day": a.day, "why": "no Webull fills for this day yet"}))
         return
     bundle = json.load(open(a.bundle)) if a.bundle and os.path.exists(a.bundle) else None
     if bundle and bundle.get("day") != a.day:

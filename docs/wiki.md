@@ -9,8 +9,17 @@ pages that already exist; it does not only append a dated log.
 
 ## Which day
 
-The routine fires 11:00 Hanoi, Tuesday to Saturday. Compile the **previous US session**: the run's Hanoi date
-minus one day (Tuesday's run compiles Monday's session, Saturday's compiles Friday's). Call it `<day>`.
+The routine fires 11:00 Hanoi, Tuesday to Saturday. The **previous US session** is the run's Hanoi date minus
+one day (Tuesday's run compiles Monday's session, Saturday's compiles Friday's). Call it `<day>`.
+
+A raw day is written once, so it must not be written before Ty's CSV has arrived. Each run therefore handles:
+- **`<day>`** with `postexit.py --day <day>`. If the shard has no fills for it yet, it prints `{"deferred": true}`
+  and writes nothing: Ty may file the export after 11:00 (CLAUDE.md "Known mistakes", 2026-09-26).
+- **Every earlier weekday in the last 7 days that has no `raw/<that day>.json`** (a deferred day, or a run that
+  failed) with `postexit.py --day <that day> --final`, which writes it whether or not fills came. A day Ty did
+  not trade therefore lands one run late, with its bot trades; a Friday deferred on Saturday lands on Tuesday.
+
+Compile (steps 3–6) every raw day this run wrote, oldest first.
 
 ## Steps
 
@@ -30,7 +39,8 @@ minus one day (Tuesday's run compiles Monday's session, Saturday's compiles Frid
      section, each as a `[[link]]`.
 4. **Saturday only.** Write `wiki/weekly/<yyyy-Www>.md` for the ISO week of `<day>` (template below), link it at
    the top of `wiki/index.md`, then `python3 tools/wiki-check.py --weekly wiki/weekly/<yyyy-Www>.md` must print
-   `WEEKLY OK …`.
+   `WEEKLY OK …`. If a day of that week was deferred, the report says which; the run that later writes that day
+   also updates that week's report.
 5. **Check.** `python3 tools/wiki-check.py` must print `WIKI OK … dangling=0`. Fix any dangling link before pushing.
 6. **Push.** One commit, `wiki: <day>`, holding `raw/<day>.json` and the changed `wiki/` files, pushed the same way
    the runbook pushes data (`docs/nightly-sync.md`, "Pushing"). A wiki failure never blocks or undoes the

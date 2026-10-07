@@ -20,6 +20,9 @@ kill it afterwards (`lsof -ti:8765 | xargs kill`).
 3. `python3 tools/wiki-check.py --day D --bundle $S/b.json --raw-dir $S/raw` → `RAW OK … paths=complete`.
 4. `python3 tools/postexit.py --day D --raw-dir $S/raw-nobundle` (no bundle) → writes the file with
    `"bots_bundle": "missing"`, manual count unchanged; `wiki-check.py --day D --raw-dir $S/raw-nobundle` → `RAW OK`.
+   **Late CSV:** pick a weekday `E` with no fills in its shard (e.g. one in a month with no shard yet).
+   `postexit.py --day E --raw-dir $S/raw-late` → `{"deferred": true, …}` and no file; the same with `--final` →
+   writes `raw-late/E.json` with `manual` 0.
 5. Build `$S/site`: copy `wiki.html`; write `wiki/index.md` linking `[[days/D]]`, a day page citing `raw/D.json`
    with a table and a `[[what-ifs/x]]` link, the page `what-ifs/x.md`, and `what-ifs/evil.md` containing
    `<img src=x onerror="window.__xss=1"><script>window.__xss=2</script>`.
@@ -39,6 +42,8 @@ Steps 1–4 and 7, in one Python run (print the object):
  "raw_written_once": sha_before == sha_after,
  "raw_ok": "RAW OK" in check_day_out,
  "nobundle_still_writes_manual": nb["sources"]["bots_bundle"] == "missing" and len(nb["manual"]) == len(raw["manual"]),
+ "no_fills_day_deferred": deferred_out.get("deferred") is True and not existed_after_defer,  # checked before the --final run
+ "final_writes_no_fills_day": os.path.exists(f"{S}/raw-late/{E}.json") and late["manual"] == [],
  "wiki_ok": "dangling=0" in check_wiki_out,
  "journal_untouched": sync_check["changedFiles"] == [],
 }
@@ -64,10 +69,12 @@ Evil page: `xss_fired == 0`. Hostile address `#p=../../index`: renders the index
   only `V7_KEEP` fields and `SWEEP_KEEP` lines → `bundle_fields_allowlisted`, `bundle_no_broker_ids`.
 - **A wiki page carrying HTML** (the compiler copies a symbol or reason text that contains markup) → sanitised by
   DOMPurify → `xss_fired == 0` on `what-ifs/evil`.
-- **A crafted address** (`#p=../../index`, `#p=//evil`) → the page path is checked against `^[a-z0-9][a-z0-9\-/]*$`
+- **A crafted address** (`#p=../../index`, `#p=//evil`) → the page path is checked against `^[A-Za-z0-9][A-Za-z0-9\-/]*$` (upper case for `weekly/2026-W41`)
   and falls back to the index.
 - **A second run the same day** (routine retried) → `raw_written_once`.
 - **The Mac off at 10:30** → no bundle → `nobundle_still_writes_manual`; the day page says "bot bundle missing".
+- **Ty files the CSV after 11:00** → the day has no fills yet → `no_fills_day_deferred`, then the next run's
+  `--final` writes it → `final_writes_no_fills_day` (with his fills, if they arrived by then).
 
 ## Sanctioned substitutes
 - Before merge, `wiki/` on main holds no compiled day, so step 6 runs on the scratch site built in step 5 from
