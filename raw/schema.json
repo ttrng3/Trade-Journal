@@ -1,0 +1,16 @@
+{
+  "_about": "Format of raw/<YYYY-MM-DD>.json, one file per trading session, written once by tools/postexit.py and never edited. Not served by Pages, but readable in this public repo. Prices are the underlying's unless a field says premium.",
+  "day": "YYYY-MM-DD, the US session",
+  "written_utc": "when postexit.py wrote the file",
+  "sources": {"webull_fills": "count of Ty's fills that session", "bots_bundle": "present | missing (Mac collector did not deliver)"},
+  "manual": [{"sym": "option symbol", "underlying": "e.g. SPY", "side": "BUY | SELL", "t": "fill time ET", "qty": 0, "premium": 0.0,
+              "after": "exits (SELL) only: see 'after'"}],
+  "bots": [{"bot": "v7 | sweep", "id": "", "setup": "", "drill": false, "symbol": "", "dir": "call | put",
+            "entry_t": "", "entry": 0.0, "stop": 0.0, "t1": 0.0, "t2": 0.0, "exit_t": "", "exit_rule": "", "pnl": 0.0, "r": 0.0,
+            "after": "see 'after'"}],
+  "skips": [{"bot": "v7 | sweep", "symbol": "", "dir": "call | put", "t": "", "kind": "skipped | cancelled", "why": "the bot's own reason",
+             "entry": 0.0, "stop": 0.0, "target": 0.0, "first_hit": "target | stop | neither, later that session", "first_hit_t": "",
+             "after": "see 'after'"}],
+  "after": {"candles": "next 10 three-minute candles [t, open, high, low, close] after the exit or skip time",
+            "close": "session close", "proxy": "present only when the path is a proxy, e.g. 'SPY x 10' for SPX"}
+}
