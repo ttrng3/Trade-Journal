@@ -13,7 +13,8 @@ id-like tokens scrubbed, into the public repo.
 
 Adds 1-minute bars (Alpaca, keys read in place from orb-options/.env) for every symbol a bot touched
 plus Ty's usual underlyings, then copies the bundle to Raw Records/Bots/<day>.json on Drive with rclone.
-The Drive folder id is read at run time from the Drive for desktop mount, so it is never stored here.
+rclone reaches the folder by its path from My Drive, so no Drive id or account is stored here, and the job
+works under launchd, which macOS does not let read the Drive for desktop mount.
 Standard library only: the Mac's system python has no requests.
 """
 import argparse
@@ -31,9 +32,9 @@ from zoneinfo import ZoneInfo
 
 ET = ZoneInfo("America/New_York")
 ORB = os.path.expanduser("~/Projects/orb-options")
-RAW_RECORDS = os.path.expanduser("~/Library/CloudStorage/GoogleDrive-{}/My Drive/Claude Workspace/"
-                                  "09 Trading/Trade Journal/Raw Records")
-REMOTE = os.environ.get("TJ_RCLONE_REMOTE", "igdrive:")   # an rclone Drive remote; the root is overridden per call
+REMOTE = os.environ.get("TJ_RCLONE_REMOTE", "igdrive:")   # an rclone Drive remote, read from My Drive's root
+BOTS = os.environ.get("TJ_BOTS_PATH", "Claude Workspace/09 Trading/Trade Journal/Raw Records/Bots")
+ROOT = ["--drive-root-folder-id", "root"]   # by path from My Drive: a launchd job may not read the Drive mount
 USUAL = ["SPY", "QQQ", "IWM", "TSLA", "META", "AMZN", "NFLX", "AMD", "NVDA", "AAPL", "GOOGL", "COIN"]
 V7_KEEP = {
     "start": ["ts", "mode"],
@@ -141,14 +142,6 @@ def bars(sym, day, env, feed="sip"):
     return out
 
 
-def drive_folder_id(account):
-    path = RAW_RECORDS.format(account)
-    raw = subprocess.run(["xattr", "-p", "com.google.drivefs.item-id#S", path], capture_output=True, text=True)
-    if raw.returncode != 0 or not raw.stdout.strip():
-        sys.exit(f"cannot read the Drive id of Raw Records (is Drive for desktop running?): {path}")
-    return raw.stdout.strip()
-
-
 def collect(day, env):
     v7, v7_paths = v7_events(day)
     sweep, sweep_path = sweep_lines(day)
@@ -179,8 +172,6 @@ def main():
     ap.add_argument("--day", default=None, help="one day; default: every recent session missing from Drive")
     ap.add_argument("--out", default=None)
     ap.add_argument("--no-upload", action="store_true")
-    ap.add_argument("--account", default=os.environ.get("TJ_DRIVE_ACCOUNT", ""),
-                    help="the Google account in the Drive for desktop folder name (CloudStorage/GoogleDrive-<account>)")
     a = ap.parse_args()
     env = load_env()
     if a.no_upload:
@@ -191,11 +182,10 @@ def main():
         print(json.dumps({"day": day, "holiday": b["holiday"], "v7_rows": len(b["v7"]), "sweep_lines": len(b["sweep"]),
                           "symbols": len(b["bars_1m"]), "bars": sum(len(v) for v in b["bars_1m"].values()), "file": out}))
         return
-    if not a.account:
-        sys.exit("set TJ_DRIVE_ACCOUNT (the launchd plist does) or pass --account")
-    fid = drive_folder_id(a.account)
     def ls():
-        r = subprocess.run(["rclone", "lsf", f"{REMOTE}Bots/", "--drive-root-folder-id", fid], capture_output=True, text=True)
+        r = subprocess.run(["rclone", "lsf", f"{REMOTE}{BOTS}/"] + ROOT, capture_output=True, text=True)
+        if r.returncode != 0 and "directory not found" in r.stderr:
+            return []                            # first run: copyto creates Bots/
         if r.returncode != 0:
             sys.exit("rclone lsf failed: " + r.stderr.strip()[-300:])
         return r.stdout.split()
@@ -207,7 +197,7 @@ def main():
         b = collect(day, env)
         out = os.path.join(tempfile.mkdtemp(), f"{day}.json")
         json.dump(b, open(out, "w"), separators=(",", ":"))
-        r = subprocess.run(["rclone", "copyto", out, f"{REMOTE}Bots/{day}.json", "--drive-root-folder-id", fid],
+        r = subprocess.run(["rclone", "copyto", out, f"{REMOTE}{BOTS}/{day}.json"] + ROOT,
                            capture_output=True, text=True)
         if r.returncode != 0:
             sys.exit(f"rclone failed for {day}: " + r.stderr.strip()[-300:])

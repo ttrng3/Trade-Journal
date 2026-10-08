@@ -154,6 +154,10 @@ This becomes `verification/bot-trading-wiki.md` in Stage 4.
   the parser misses is kept as `unparsed_exits` and warned, not a blocker; skip `setup` is scrubbed; repo
   `CLAUDE.md` and `REVIEW.md` name the wiki step's `raw/` and `wiki/`; `wiki.html` adds one token, `--print-ink`,
   mirroring `index.html`'s print grey.
+- Wire-up (2026-10-08, PR #16): under launchd macOS refused the collector the Drive for desktop mount, so it now
+  reaches `Raw Records/Bots/` by path from My Drive with rclone (no Drive id, no account in the repo or the plist),
+  proven by a launchd run that uploaded 10/01–10/07. The routine gets the wiki step through `docs/nightly-sync.md`
+  (which its prompt says outranks the prompt) instead of a hand-resent 9 KB prompt.
 - **For Ty, at ship:** this spec was amended after its 2026-10-07 approval (the entries above). Shipping #15
   approves the amended spec, including the v8 split, which reached this session relayed by the v8 session.
 

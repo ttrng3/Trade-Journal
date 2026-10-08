@@ -71,18 +71,16 @@ This is the pipeline's one Mac dependency; the routine itself stays cloud-only. 
 of the last 7 days that has no bundle on Drive yet, so a Mac asleep for days catches up on wake (launchd merges
 missed runs into one). A weekday with no bars for any symbol is uploaded with `"holiday": true`.
 
-Install or reinstall, on the Mac, from the main checkout (the account is the one in the Drive for desktop folder
-name `~/Library/CloudStorage/GoogleDrive-<account>`, so it is never written into this repo):
+Install or reinstall, on the Mac, from the main checkout:
 
-    ( n=$(ls ~/Library/CloudStorage | grep -c '^GoogleDrive-'); [ "$n" = 1 ] || { echo "found $n Drive accounts: set acct by hand"; exit 1; }
-      acct=$(ls ~/Library/CloudStorage | sed -n 's/^GoogleDrive-//p')
-      sed -e "s|__HOME__|$HOME|g" -e "s|__ACCOUNT__|$acct|g" tools/com.ty.bot-collect.plist > ~/Library/LaunchAgents/com.ty.bot-collect.plist
-      launchctl unload ~/Library/LaunchAgents/com.ty.bot-collect.plist 2>/dev/null; launchctl load ~/Library/LaunchAgents/com.ty.bot-collect.plist )
+    sed -e "s|__HOME__|$HOME|g" tools/com.ty.bot-collect.plist > ~/Library/LaunchAgents/com.ty.bot-collect.plist
+    launchctl unload ~/Library/LaunchAgents/com.ty.bot-collect.plist 2>/dev/null; launchctl load ~/Library/LaunchAgents/com.ty.bot-collect.plist
 
 Run once by hand: `launchctl start com.ty.bot-collect`, then read the log's last line (`uploaded`).
 
-The upload uses the rclone Drive remote named `igdrive:` (set up for the Instagram bridge; the collector overrides
-its root folder per call). A Mac whose remote has another name sets `TJ_RCLONE_REMOTE` (e.g. `gdrive:`) in the
+The upload uses the rclone Drive remote named `igdrive:` (set up for the Instagram bridge) and reaches
+`Raw Records/Bots/` by its path from My Drive (`--drive-root-folder-id root`), never through the Drive for desktop
+mount: macOS does not let a launchd job read that mount (first install, 2026-10-08). A Mac whose remote has another name sets `TJ_RCLONE_REMOTE` (e.g. `gdrive:`) in the
 plist's `EnvironmentVariables`.
 
 ## Rules for every page
