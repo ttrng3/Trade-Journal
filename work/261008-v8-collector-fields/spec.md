@@ -37,7 +37,8 @@ Not a Supabase repo; Pages serves only `.pages-allow`, untouched.
 ## Promise
 - `python3 tools/bot-collect.py --day 2026-10-07 --out <f> --no-upload` → every row fits `V7_KEEP`, none holds `order_id` or `settings_sha` (measured 2026-10-08: 197 rows, allowlisted True, no order ids True).
 - Base vs head on 2026-10-07: `fill`, `close`, `start`, `bar`, `drill` rows identical; `open` rows gain only `entry_tags`; 4 `entry_start` rows added (measured 2026-10-08: base 193 rows, head 197).
-- The first v8 day (3d, Fri 2026-10-09) is checked the same way, with the bundle searched as text for `order_id`, `oca` and `sha`.
+- Verifier PASS 2026-10-08 (both checks above; no broker-id keys; base and head bars identical).
+- The first v8 day (3d, Fri 2026-10-09) is checked the same way, with the bundle searched for any key named `order_id`, `exit_order_id`, `oca`, `exit_oca`, `guard_oca`, `settings_sha` or `tune_sha` (a plain text search for "sha" also hits the skip reason "no shape").
 
 ## Out of scope
 Using the new fields in the wiki or the weekly report.
