@@ -36,7 +36,7 @@ kill it afterwards (`lsof -ti:8765 | xargs kill`).
 7. `node tools/sync.js --csv-dir <empty dir> --check` → `"changedFiles": []` (the journal is untouched).
 
 ## Invariants
-Steps 1–4 and 7, in one Python run (print the object):
+Steps 1–4 and 7, in one Python run (print the object): `scrub` is `tools/postexit.py`'s, imported.
 
 ```python
 {
@@ -50,6 +50,9 @@ Steps 1–4 and 7, in one Python run (print the object):
  "final_writes_no_fills_day": os.path.exists(f"{S}/raw-late/{E}.json") and late["manual"] == [],
  "empty_day_skipped": empty_out.get("skipped") is True and not os.path.exists(f"{S}/raw-empty/{E}.json"),
  "holiday_not_written": holiday_out.get("holiday") is True and not os.path.exists(f"{S}/raw-hol/{D}.json"),
+ "scrub_keeps_setups": scrub("bot1_st_flip") == "bot1_st_flip" and scrub("bot2_late_momo") == "bot2_late_momo",
+ "scrub_catches_ids": scrub("acct DU" + "1" * 7) == "acct [id]" and scrub("order " + "8" * 7) == "order [id]"
+                      and scrub("exec " + "a1b2" * 3) == "exec [id]",   # ids built at run time, none typed here
  "reasons_scrubbed": not any(re.search(r"\b(?=(?:[A-Za-z_-]*\d){5})[A-Za-z0-9_-]{6,}\b", s["why"] or "") for s in raw["skips"]),
  "wiki_ok": "dangling=0 uncited=0" in check_wiki_out,
  "journal_untouched": sync_check["changedFiles"] == [],

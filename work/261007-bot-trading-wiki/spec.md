@@ -166,7 +166,10 @@ This becomes `verification/bot-trading-wiki.md` in Stage 4.
 
 - Scrub fix (2026-10-08, after the first compiled day): the id filter scrubbed setup names such as
   `bot1_st_flip` (any 6+ character token with a digit). It now scrubs only tokens with 5 or more digits. The
-  2026-10-07 raw day keeps its `[id]` setups, since raw days are write-once.
+  2026-10-07 raw day keeps its `[id]` setups, since raw days are write-once. Hex ids of 8+ characters (with a digit)
+  are scrubbed too, so the guard behind the allowlist stays as wide for ids; tokens with 1–4 digits that are not hex,
+  such as setup names, now pass.
+- **For Ty, at ship of #17:** the Scrub fix entry above is a change after #16's ship. Shipping #17 approves it.
 ## Out of scope
 - Any change to the bots, their schedules or drills, and any automatic tuning. The weekly report proposes; Ty
   decides on Friday.

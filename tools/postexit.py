@@ -16,12 +16,13 @@ import re
 import sys
 
 N_CANDLES = 10
-ID_LIKE = re.compile(r"\b(?=(?:[A-Za-z_-]*\d){5})[A-Za-z0-9_-]{6,}\b")   # 5+ digits: order ids, account numbers, contract codes (not bot1_st_flip)
+ID_LIKE = re.compile(r"\b(?=(?:[A-Za-z_-]*\d){5})[A-Za-z0-9_-]{6,}\b")
+HEX_ID = re.compile(r"\b(?=[0-9a-fA-F]*\d)[0-9a-fA-F]{8,}\b")            # hex order or exec ids   # 5+ digits: order ids, account numbers, contract codes (not bot1_st_flip)
 
 
 def scrub(text):
     """Free-text reasons go to a public repo: replace any token that looks like an id."""
-    return ID_LIKE.sub("[id]", text) if isinstance(text, str) else text
+    return HEX_ID.sub("[id]", ID_LIKE.sub("[id]", text)) if isinstance(text, str) else text
 PROXY = {"SPX": ("SPY", 10.0), "SPXW": ("SPY", 10.0)}   # Alpaca has no index bars
 
 
