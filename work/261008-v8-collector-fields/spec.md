@@ -1,6 +1,6 @@
 # Spec: v8-collector-fields
 
-**Approved:** 2026-10-08 (as the intent)
+**Approved:** 2026-10-08 (Ty, "approve all three", after the spec was written)
 
 **Intent:** accepted 2026-10-08 · **Status:** approved
 
