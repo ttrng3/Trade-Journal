@@ -7,7 +7,7 @@ is written once; these pages are the compiled output. Numbers carry their source
 None yet. The first weekly report is written on the Saturday run covering Friday's session.
 
 ## Hypothesis ledger
-- [[hypothesis_ledger]]: every bot, agent and tune tested, and what happened
+- [[hypothesis-ledger]]: every bot, agent and tune tested, and what happened
 
 ## Days
 - [[days/2026-10-07]]

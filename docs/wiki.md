@@ -47,9 +47,10 @@ Do steps 1–2 for every day this run writes, then compile (steps 3–6) each of
    - `wiki/days/<day>.md` — the day (template below). It must contain the text `raw/<day>.json`.
    - The concept pages the day touches, under `wiki/mistakes/`, `wiki/setups/`, `wiki/what-ifs/`, `wiki/rules/`.
      Reuse a page when one fits; create one only when none does. Never delete a page or an evidence line.
-   - `wiki/hypothesis_ledger.md` — never compiled from a day. Leave it as it is unless the day's bundle shows a new
-     bot, agent or setup name; then add an `untested` row for it. Rows are added or appended to, never rewritten.
-   - `wiki/index.md` — the map: latest weekly report first, then the last 10 days, then every concept page by
+   - `wiki/hypothesis-ledger.md` — never compiled from a day. Leave it as it is unless the day's bundle shows a
+     setup or agent name that no row's `bundle name` holds; then add an `untested` row for it in the matching table
+     (bots and setups: next `H` id; agents: next `A` id). Rows are added or appended to, never rewritten.
+   - `wiki/index.md` — the map: latest weekly report first, then the Hypothesis ledger link, then the last 10 days, then every concept page by
      section, each as a `[[link]]`.
 4. **Saturday only.** Write `wiki/weekly/<yyyy-Www>.md` for the ISO week of `<day>` (template below), link it at
    the top of `wiki/index.md`, then `python3 tools/wiki-check.py --weekly wiki/weekly/<yyyy-Www>.md` must print
@@ -89,6 +90,8 @@ plist's `EnvironmentVariables`.
 
 - **Numbers come from `raw/` only, copied or computed in code** (`python3 -c …` over the raw files). Never from
   memory, never estimated. Each number carries its source: `(Verified: raw/2026-10-06.json)`.
+  One exception: `wiki/hypothesis-ledger.md` copies its numbers from the bots' study records (not in this repo),
+  cited per table as `(Verified: study records)`; nothing on it is recomputed.
 - **Drills are not trades.** v7 drills (`"drill": true`) are wiring tests; list them under "Drills" on the day
   page and never count them in win/loss, P&L or a mistake.
 - **Skips are what-ifs.** A skip's `first_hit` says whether the setup would have reached its target or its stop

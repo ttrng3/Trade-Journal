@@ -5,7 +5,7 @@
 
 **Problem.** The bots have tested about fifteen ideas since 4 Oct, and the results live in study scripts, memory notes and the plan doc. Nothing in one place stops a failed idea coming back under a new name. Bot #3 (Champ's ORB) is the live case: two ORB versions already failed.
 
-**Outcome.** `wiki/hypothesis_ledger.md`, linked from the wiki index, holds one row per bot, agent and Friday tune: id, idea, source, symbol, date, version/commit, variations tried, regime when tested, result, status, lesson. It is seeded with every bot, setup and agent tested from 4 to 8 Oct, the failures included. The compile runbook adds an `untested` row when a new bot, agent or setup name appears and otherwise leaves the page alone.
+**Outcome.** `wiki/hypothesis-ledger.md`, linked from the wiki index, holds one row per bot, agent and Friday tune: id, idea, source, symbol, date, version/commit, variations tried, regime when tested, result, status, lesson. It is seeded with every bot, setup and agent tested from 4 to 8 Oct, the failures included. The compile runbook adds an `untested` row when a new bot, agent or setup name appears and otherwise leaves the page alone.
 
 **Who and what is affected.** `wiki/` (published on Pages under the existing `wiki/*.md` allow line) and `docs/wiki.md`. No code, no data, no bot.
 

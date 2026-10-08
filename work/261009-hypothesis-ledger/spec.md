@@ -4,7 +4,7 @@
 **Intent:** accepted 2026-10-09 · **Status:** approved
 
 ## Requirements
-1. `wiki/hypothesis_ledger.md` with the eleven columns in the intent, in three tables: bots and setups, agents, Friday tunes (empty, header only).
+1. `wiki/hypothesis-ledger.md` with the eleven columns in the intent, in three tables: bots and setups, agents, Friday tunes (empty, header only).
 2. Seed rows H01–H15 (Phase A ORB, 5-min ORB retest, VWAP/EMA, sweep V0–V6, Bot #1, Bot #2, Chandelier, Trend+Timing, gap, QQQ→TSLA lead, Bot #1 on other symbols, sweep reclaim, volume rule, the TradingView setup study, Bot #3 on Champ's rules) and A01 structure, A02 Flow agent. Every number is copied from the orb-options study records as of 2026-10-08; nothing is recomputed.
 3. `wiki/index.md` links it; `docs/wiki.md` step 3 says when the compiler adds a row.
 
