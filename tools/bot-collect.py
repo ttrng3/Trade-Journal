@@ -75,7 +75,7 @@ def v7_events(day):
     for p in sorted(set(paths)):
         for line in open(p):
             r = json.loads(line)
-            key = (r.get("kind"), r.get("ts"), r.get("id"), r.get("symbol"), r.get("bar"))
+            key = (r.get("kind"), r.get("ts"), r.get("id"), r.get("symbol"), r.get("bar"), r.get("bot"), r.get("local"))
             if key in seen:                      # the same day's journal in two checkouts: count each row once
                 continue
             seen.add(key)
