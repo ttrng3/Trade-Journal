@@ -40,7 +40,12 @@ def wiki(root):
 
 
 def raw(day, raw_dir, data_dir, bundle_path):
-    r = json.load(open(os.path.join(raw_dir, day + ".json")))
+    rp = os.path.join(raw_dir, day + ".json")
+    if not os.path.exists(rp):
+        print(f"FAIL no raw/{day}.json")
+        print("RAW FAIL trades=0 skips=0 manual=0 paths=incomplete")
+        return False
+    r = json.load(open(rp))
     bad = []
     sp = os.path.join(data_dir, "fills", day[:7] + ".json")
     shard = json.load(open(sp)) if os.path.exists(sp) else {}

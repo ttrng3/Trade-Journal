@@ -23,6 +23,8 @@ kill it afterwards (`lsof -ti:8765 | xargs kill`).
    **Late CSV:** pick a weekday `E` with no fills in its shard (e.g. one in a month with no shard yet).
    `postexit.py --day E --raw-dir $S/raw-late` → `{"deferred": true, …}` and no file; the same with `--final` →
    writes `raw-late/E.json` with `manual` 0.
+   **Holiday:** copy the D bundle with `"holiday": true` and `bars_1m.SPY = []` → `postexit.py --day D --bundle <copy>
+   --raw-dir $S/raw-hol` prints `{"holiday": true, …}` and writes nothing.
 5. Build `$S/site`: copy `wiki.html`; write `wiki/index.md` linking `[[days/D]]`, a day page citing `raw/D.json`
    with a table and a `[[what-ifs/x]]` link, the page `what-ifs/x.md`, and `what-ifs/evil.md` containing
    `<img src=x onerror="window.__xss=1"><script>window.__xss=2</script>`.
@@ -44,6 +46,8 @@ Steps 1–4 and 7, in one Python run (print the object):
  "nobundle_still_writes_manual": nb["sources"]["bots_bundle"] == "missing" and len(nb["manual"]) == len(raw["manual"]),
  "no_fills_day_deferred": deferred_out.get("deferred") is True and not existed_after_defer,  # checked before the --final run
  "final_writes_no_fills_day": os.path.exists(f"{S}/raw-late/{E}.json") and late["manual"] == [],
+ "holiday_not_written": holiday_out.get("holiday") is True and not os.path.exists(f"{S}/raw-hol/{D}.json"),
+ "reasons_scrubbed": not any(re.search(r"\b(?=[A-Za-z0-9_-]*\d)[A-Za-z0-9_-]{6,}\b", s["why"] or "") for s in raw["skips"]),
  "wiki_ok": "dangling=0 uncited=0" in check_wiki_out,
  "journal_untouched": sync_check["changedFiles"] == [],
 }
@@ -66,7 +70,9 @@ Evil page: `xss_fired == 0`. Hostile address `#p=../../index`: renders the index
 - **A stranger on the public site** gets the compiled wiki only. `raw/` is not served (`!raw/*.json` in
   `.pages-allow`); after merge `curl -o /dev/null -w '%{http_code}' …/raw/schema.json` → `404`, `…/wiki.html` → `200`.
 - **A bot that starts logging something new** (a broker id, an account field) cannot leak it: the collector keeps
-  only `V7_KEEP` fields and `SWEEP_KEEP` lines → `bundle_fields_allowlisted`, `bundle_no_broker_ids`.
+  only `V7_KEEP` fields and `SWEEP_KEEP` lines → `bundle_fields_allowlisted`, `bundle_no_broker_ids`; free-text
+  reasons are scrubbed of id-like tokens before they reach `raw/` → `reasons_scrubbed`.
+- **A market holiday** (no SPY bars) is never written as a day → `holiday_not_written`.
 - **A wiki page carrying HTML** (the compiler copies a symbol or reason text that contains markup) → sanitised by
   DOMPurify → `xss_fired == 0` on `what-ifs/evil`.
 - **A crafted address** (`#p=../../index`, `#p=//evil`) → the page path is checked against `^[A-Za-z0-9][A-Za-z0-9\-/]*$` (upper case for `weekly/2026-W41`)

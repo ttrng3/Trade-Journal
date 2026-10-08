@@ -16,6 +16,12 @@ import re
 import sys
 
 N_CANDLES = 10
+ID_LIKE = re.compile(r"\b(?=[A-Za-z0-9_-]*\d)[A-Za-z0-9_-]{6,}\b")   # order ids, account numbers, contract codes
+
+
+def scrub(text):
+    """Free-text reasons go to a public repo: replace any token that looks like an id."""
+    return ID_LIKE.sub("[id]", text) if isinstance(text, str) else text
 PROXY = {"SPX": ("SPY", 10.0), "SPXW": ("SPY", 10.0)}   # Alpaca has no index bars
 
 
@@ -97,7 +103,8 @@ def manual(day, data_dir, px):
 def why_v7(votes):
     zero = [k for k, v in (votes or {}).items() if not v.get("vote")]
     words = [f"{k}: {v['why']}" for k, v in (votes or {}).items() if v.get("why") and not v.get("vote")]
-    return "no vote from " + ", ".join(zero) + (f" ({'; '.join(words)})" if words else "") if zero else "not all agreed"
+    out = "no vote from " + ", ".join(zero) + (f" ({'; '.join(words)})" if words else "") if zero else "not all agreed"
+    return scrub(out)
 
 
 def v7_rows(bundle, px):
@@ -152,7 +159,7 @@ def sweep_rows(bundle, px):
             sym = text.split()[2 if text.startswith("NOT FILLED") else 1].rstrip(":")
             a = armed.pop(sym, None)
             kind = "skipped" if text.startswith("SKIPPED") else "cancelled"
-            why = text.split(":", 1)[-1].strip()
+            why = scrub(text.split(":", 1)[-1].strip())
             if a:
                 d = 1 if a["dir"] == "call" else -1
                 hit, hit_t = px.first_hit(sym, t, d, a["stop"], a["target"])
@@ -206,6 +213,9 @@ def main():
     bundle = json.load(open(a.bundle)) if a.bundle and os.path.exists(a.bundle) else None
     if bundle and bundle.get("day") != a.day:
         sys.exit(f"bundle is for {bundle.get('day')}, not {a.day}")
+    if bundle and bundle.get("holiday"):
+        print(json.dumps({"holiday": True, "day": a.day, "why": "no SPY bars: the market was closed"}))
+        return
     px = Prices(bundle)
     man = manual(a.day, a.data_dir, px)
     bots, skips = [], []

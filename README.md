@@ -54,7 +54,7 @@ grows. The status line in the header says how many fills are overlay-only.
 ## Look
 
 `index.html` is hand-maintained — `tools/sync.js` and the nightly routine write
-`data/` only and never touch it. Its visual system is Apple HIG. **Light only — Ty ruled 2026-09-24** (dark mode ran for one morning and was withdrawn): the page stays light whatever the viewer's system setting, and there is no dark theme. Do not add one back. Base tokens sit in the first `<style>`, then
+`data/`, and the wiki step `raw/` and `wiki/`; none of them ever touches it. Its visual system is Apple HIG. **Light only — Ty ruled 2026-09-24** (dark mode ran for one morning and was withdrawn): the page stays light whatever the viewer's system setting, and there is no dark theme. Do not add one back. Base tokens sit in the first `<style>`, then
 `<style id="apple-layer">` adds materials, translucent header and accessibility
 fallbacks; the TradingView embed is pinned to its light theme. `--accent`
 means *positive P&L* (green); interactive chrome is `--blue`. Any new colour must

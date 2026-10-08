@@ -35,7 +35,9 @@ Do steps 1–2 for every day this run writes, then compile (steps 3–6) each of
    compiled, and the day page says "bot bundle missing".
 2. **Raw day.** `python3 tools/postexit.py --day <day> --bundle <file or omit>`. It writes `raw/<day>.json` and
    refuses to overwrite one that exists (that is correct on a re-run: compile from the existing file).
-   Then `python3 tools/wiki-check.py --day <day> [--bundle <file>]` must print `RAW OK …`. If it fails, stop the
+   If it printed `{"deferred": true}` or `{"holiday": true}`, skip the check and the compile for that day (a
+   holiday is never written and never caught up). Otherwise `python3 tools/wiki-check.py --day <day> [--bundle <file>]`
+   must print `RAW OK …`. If it fails, stop the
    wiki step, push nothing under `raw/` or `wiki/`, and report the FAIL lines. This check runs for **every** raw
    day the run writes, catch-up days included. A `WARN manual path missing` line
    (Ty traded an underlying the collector had no bars for) does not stop the step; say it on the day page.
@@ -63,15 +65,17 @@ Do steps 1–2 for every day this run writes, then compile (steps 3–6) each of
 The bots run on the Mac and write only there, so `tools/bot-collect.py` runs there at 10:30 Hanoi, Tuesday to
 Saturday (launchd `com.ty.bot-collect`), and copies `Raw Records/Bots/<day>.json` to Drive with rclone. It reads
 the bots' files, never writes them, and keeps only allowlisted fields. Log: `~/Library/Logs/bot-collect.log`.
-This is the pipeline's one Mac dependency; the routine itself stays cloud-only.
+This is the pipeline's one Mac dependency; the routine itself stays cloud-only. Each run uploads **every** weekday
+of the last 7 days that has no bundle on Drive yet, so a Mac asleep for days catches up on wake (launchd merges
+missed runs into one). A weekday with no SPY bars is uploaded with `"holiday": true`.
 
 Install or reinstall, on the Mac, from the main checkout (the account is the one in the Drive for desktop folder
 name `~/Library/CloudStorage/GoogleDrive-<account>`, so it is never written into this repo):
 
-    n=$(ls ~/Library/CloudStorage | grep -c '^GoogleDrive-'); [ "$n" = 1 ] || { echo "found $n Drive accounts: set acct by hand"; exit 1; }
-    acct=$(ls ~/Library/CloudStorage | sed -n 's/^GoogleDrive-//p')
-    sed -e "s|__HOME__|$HOME|g" -e "s|__ACCOUNT__|$acct|g" tools/com.ty.bot-collect.plist > ~/Library/LaunchAgents/com.ty.bot-collect.plist
-    launchctl unload ~/Library/LaunchAgents/com.ty.bot-collect.plist 2>/dev/null; launchctl load ~/Library/LaunchAgents/com.ty.bot-collect.plist
+    ( n=$(ls ~/Library/CloudStorage | grep -c '^GoogleDrive-'); [ "$n" = 1 ] || { echo "found $n Drive accounts: set acct by hand"; exit 1; }
+      acct=$(ls ~/Library/CloudStorage | sed -n 's/^GoogleDrive-//p')
+      sed -e "s|__HOME__|$HOME|g" -e "s|__ACCOUNT__|$acct|g" tools/com.ty.bot-collect.plist > ~/Library/LaunchAgents/com.ty.bot-collect.plist
+      launchctl unload ~/Library/LaunchAgents/com.ty.bot-collect.plist 2>/dev/null; launchctl load ~/Library/LaunchAgents/com.ty.bot-collect.plist )
 
 Run once by hand: `launchctl start com.ty.bot-collect`, then read the log's last line (`uploaded`).
 

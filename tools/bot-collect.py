@@ -7,8 +7,9 @@
 Reads, never writes, the bots' own files in ~/Projects/orb-options:
   v7     out/v7/journal-<day>.jsonl (main checkout or any worktree; replay/ is ignored)
   sweep  sweep/out/forward/<day>.log
-Only the fields in V7_KEEP and the sweep lines in SWEEP_KEEP leave this Mac, so contract ids,
-broker ids and anything a bot adds later stay out of the public repo by default.
+Only the fields in V7_KEEP and the sweep lines in SWEEP_KEEP leave this Mac (to Drive, which is private).
+Sweep lines stay whole so postexit.py can parse them; postexit.py writes only parsed fields, and reasons with
+id-like tokens scrubbed, into the public repo.
 
 Adds 1-minute bars (Alpaca, keys read in place from orb-options/.env) for every symbol a bot touched
 plus Ty's usual underlyings, then copies the bundle to Raw Records/Bots/<day>.json on Drive with rclone.
@@ -107,7 +108,7 @@ def bars(sym, day, env, feed="sip"):
     a 403 (data too recent for the free plan) falls back to IEX."""
     start = dt.datetime.fromisoformat(day + "T09:30").replace(tzinfo=ET)
     end = dt.datetime.fromisoformat(day + "T16:00").replace(tzinfo=ET)
-    rows, token = [], None
+    rows, token, tries = [], None, 0
     while True:
         q = {"timeframe": "1Min", "start": start.isoformat(), "end": end.isoformat(), "limit": 10000,
              "feed": feed, "adjustment": "raw"}
@@ -119,9 +120,12 @@ def bars(sym, day, env, feed="sip"):
         try:
             body = json.load(urllib.request.urlopen(req, timeout=60))
         except urllib.error.HTTPError as e:
-            if e.code == 429:
+            if e.code == 429 and tries < 6:
+                tries += 1
                 time.sleep(5)
                 continue
+            if e.code == 429:
+                sys.exit(f"Alpaca rate limit did not clear after 6 tries ({sym} {day})")
             if e.code == 403 and feed == "sip":
                 return bars(sym, day, env, "iex")
             raise
@@ -145,46 +149,69 @@ def drive_folder_id(account):
     return raw.stdout.strip()
 
 
+def collect(day, env):
+    v7, v7_paths = v7_events(day)
+    sweep, sweep_path = sweep_lines(day)
+    syms = set(USUAL) | {r["symbol"] for r in v7 if r.get("symbol")}
+    syms |= {l["text"].split()[1].rstrip(":") for l in sweep if l["text"].startswith(("ARMED", "CANCELLED", "ENTRY", "EXIT"))}
+    b1 = {s: bars(s, day, env) for s in sorted(syms)}
+    return {
+        "day": day,
+        "collected_utc": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "holiday": not b1.get("SPY"),            # no SPY bars on a weekday = the market was closed
+        "sources": {"v7": len(v7_paths), "sweep": bool(sweep_path)},
+        "v7": v7,
+        "sweep": sweep,
+        "bars_1m": b1,
+    }
+
+
+def recent_sessions(n_days=7):
+    """Weekdays in the last n_days calendar days, up to the last finished session."""
+    last = dt.date.fromisoformat(last_session())
+    days = [last - dt.timedelta(days=i) for i in range(n_days)]
+    return sorted(d.isoformat() for d in days if d.weekday() < 5)
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--day", default=None)
+    ap.add_argument("--day", default=None, help="one day; default: every recent session missing from Drive")
     ap.add_argument("--out", default=None)
     ap.add_argument("--no-upload", action="store_true")
     ap.add_argument("--account", default=os.environ.get("TJ_DRIVE_ACCOUNT", ""),
                     help="the Google account in the Drive for desktop folder name (CloudStorage/GoogleDrive-<account>)")
     a = ap.parse_args()
-    day = a.day or last_session()
-    v7, v7_paths = v7_events(day)
-    sweep, sweep_path = sweep_lines(day)
-    syms = set(USUAL) | {r["symbol"] for r in v7 if r.get("symbol")}
-    syms |= {l["text"].split()[1].rstrip(":") for l in sweep if l["text"].startswith(("ARMED", "CANCELLED", "ENTRY", "EXIT"))}
     env = load_env()
-    bundle = {
-        "day": day,
-        "collected_utc": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "sources": {"v7": len(v7_paths), "sweep": bool(sweep_path)},
-        "v7": v7,
-        "sweep": sweep,
-        "bars_1m": {s: bars(s, day, env) for s in sorted(syms)},
-    }
-    out = a.out or os.path.join(tempfile.mkdtemp(), f"{day}.json")
-    with open(out, "w") as f:
-        json.dump(bundle, f, separators=(",", ":"))
-    print(json.dumps({"day": day, "v7_rows": len(v7), "sweep_lines": len(sweep), "symbols": len(syms),
-                      "bars": sum(len(v) for v in bundle["bars_1m"].values()), "file": out}))
     if a.no_upload:
+        day = a.day or last_session()
+        b = collect(day, env)
+        out = a.out or os.path.join(tempfile.mkdtemp(), f"{day}.json")
+        json.dump(b, open(out, "w"), separators=(",", ":"))
+        print(json.dumps({"day": day, "holiday": b["holiday"], "v7_rows": len(b["v7"]), "sweep_lines": len(b["sweep"]),
+                          "symbols": len(b["bars_1m"]), "bars": sum(len(v) for v in b["bars_1m"].values()), "file": out}))
         return
     if not a.account:
         sys.exit("set TJ_DRIVE_ACCOUNT (the launchd plist does) or pass --account")
     fid = drive_folder_id(a.account)
-    r = subprocess.run(["rclone", "copyto", out, f"{REMOTE}Bots/{day}.json", "--drive-root-folder-id", fid],
-                       capture_output=True, text=True)
-    if r.returncode != 0:
-        sys.exit("rclone failed: " + r.stderr.strip()[-300:])
-    ls = subprocess.run(["rclone", "lsf", f"{REMOTE}Bots/", "--drive-root-folder-id", fid], capture_output=True, text=True)
-    if f"{day}.json" not in ls.stdout.split():
-        sys.exit("UPLOAD NOT FOUND ON DRIVE")
-    print("uploaded")
+    ls = lambda: subprocess.run(["rclone", "lsf", f"{REMOTE}Bots/", "--drive-root-folder-id", fid],
+                                capture_output=True, text=True).stdout.split()
+    have = set(ls())
+    # A Mac asleep for days runs this once on wake; launchd merges the missed runs, so every recent session
+    # without a bundle on Drive is collected now, not only the last one.
+    days = [a.day] if a.day else [d for d in recent_sessions() if f"{d}.json" not in have]
+    for day in days:
+        b = collect(day, env)
+        out = os.path.join(tempfile.mkdtemp(), f"{day}.json")
+        json.dump(b, open(out, "w"), separators=(",", ":"))
+        r = subprocess.run(["rclone", "copyto", out, f"{REMOTE}Bots/{day}.json", "--drive-root-folder-id", fid],
+                           capture_output=True, text=True)
+        if r.returncode != 0:
+            sys.exit(f"rclone failed for {day}: " + r.stderr.strip()[-300:])
+        print(json.dumps({"day": day, "holiday": b["holiday"], "v7_rows": len(b["v7"]), "sweep_lines": len(b["sweep"])}))
+    missing = [d for d in days if f"{d}.json" not in set(ls())]
+    if missing:
+        sys.exit("UPLOAD NOT FOUND ON DRIVE: " + ", ".join(missing))
+    print("uploaded" if days else "nothing missing")
 
 
 if __name__ == "__main__":

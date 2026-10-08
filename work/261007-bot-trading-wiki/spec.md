@@ -134,7 +134,7 @@ This becomes `verification/bot-trading-wiki.md` in Stage 4.
   rebuild. Shipping #15 accepts that catch-up here rather than in its own PR.
 - Review round 3 of PR #15 + the v8 split (2026-10-08): Ty approved the split ("proceed with the split", relayed
   by the v8 session): Trade-Journal stays the compiler, wiki and weekly report and computes every path-dependent
-  number (MFE/MAE, post-exit paths, target-or-stop-first, shadow exits); v8 (orb-options, built by tytr3-69)
+  number (MFE/MAE, post-exit paths, target-or-stop-first, shadow exits); v8 (orb-options, built by the v8 session)
   writes only decision-time facts and sends its field list before it builds; the collector's allowlist keeps
   dropping unknown fields. v7's `stop_move` and `green` rows are now collected and attached to each bot trade.
   Catch-up days download their own bundle and pass `RAW OK` before compiling; pages say "Manual trades", never a
@@ -143,6 +143,9 @@ This becomes `verification/bot-trading-wiki.md` in Stage 4.
   (`first_hit: unknown (not armed)`) and `wiki-check.py` counts sweep skips; journal rows found in two checkouts
   count once; the first run writes its day with `--final` and catches up nothing; the install refuses a Mac with
   more than one Drive account; `[[page#anchor]]` renders as a link.
+- Review round 5 (2026-10-08): reasons written to `raw/` are scrubbed of id-like tokens; holidays (no SPY bars) are
+  never written; the collector uploads every recent session missing from Drive; a deferred or holiday day skips the
+  RAW check; bar fetches give up after 6 rate-limit retries; the README says the routine writes `raw/` and `wiki/`.
 
 ## Out of scope
 - Any change to the bots, their schedules or drills, and any automatic tuning. The weekly report proposes; Ty
