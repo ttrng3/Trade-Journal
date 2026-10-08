@@ -36,17 +36,26 @@ REMOTE = os.environ.get("TJ_RCLONE_REMOTE", "igdrive:")   # an rclone Drive remo
 BOTS = "Claude Workspace/09 Trading/Trade Journal/Raw Records/Bots"
 ROOT = ["--drive-root-folder-id", "root"]   # by path from My Drive: a launchd job may not read the Drive mount
 USUAL = ["SPY", "QQQ", "IWM", "TSLA", "META", "AMZN", "NFLX", "AMD", "NVDA", "AAPL", "GOOGL", "COIN"]
-V7_KEEP = {
-    "start": ["ts", "mode"],
+V7_KEEP = {   # v8 (orb-options PR #4) adds decision-time facts; broker order ids and settings hashes never leave
+    "start": ["ts", "mode", "v"],
     "drill": ["ts", "drill_at"],
     "open": ["ts", "id", "bot", "symbol", "setup", "d", "qty", "entry", "entry_premium", "stop", "t1", "t2", "R",
-             "entry_time"],
-    "fill": ["ts", "id", "qty", "price", "rule", "spot"],
-    "close": ["ts", "id", "bot", "symbol", "setup", "pnl", "r", "last_rule", "at"],
+             "entry_time", "v", "grade", "grade_why", "entry_tags", "dte", "bid", "ask", "spread_pct", "oi",
+             "opt_volume", "risk_usd", "entries_last_hour"],
+    "fill": ["ts", "id", "qty", "price", "rule", "spot", "mid_at_exit", "spread_paid"],
+    "close": ["ts", "id", "bot", "symbol", "setup", "pnl", "r", "last_rule", "at", "r_option", "risk_usd"],
     "stop_move": ["ts", "id", "leg", "role", "old", "new", "move"],
     "green": ["ts", "id", "spot"],
     "bar": ["ts", "symbol", "bar", "d", "ready", "setups", "all_agree", "signal", "entry", "stop", "R", "t1", "t2",
             "votes"],
+    "entry_start": ["ts", "symbol", "qty", "price", "bid", "ask", "grade", "grade_why"],
+    "bot_halt": ["ts", "reason", "bot", "id", "grade_why"],
+    "presession": ["ts", "bars", "events", "stop_file", "hwm_file"],
+    "flat_check": ["ts", "positions"],
+    "backstop": ["ts", "id", "qty", "price", "stop"],
+    "flat_order": ["ts", "id", "qty", "price", "active_from"],
+    "stray_fill": ["ts", "local", "qty"],
+    "oca_check": ["ts", "id", "status_filled", "fill_shares", "guard_qty", "flat_qty", "open_qty"],
 }
 SWEEP_KEEP = ("Sweep bot", "Started after", "ARMED", "CANCELLED", "SKIPPED", "NOT FILLED", "ENTRY", "EXIT")
 
