@@ -47,6 +47,8 @@ Do steps 1–2 for every day this run writes, then compile (steps 3–6) each of
    - `wiki/days/<day>.md` — the day (template below). It must contain the text `raw/<day>.json`.
    - The concept pages the day touches, under `wiki/mistakes/`, `wiki/setups/`, `wiki/what-ifs/`, `wiki/rules/`.
      Reuse a page when one fits; create one only when none does. Never delete a page or an evidence line.
+   - `wiki/hypothesis_ledger.md` — never compiled from a day. Leave it as it is unless the day's bundle shows a new
+     bot, agent or setup name; then add an `untested` row for it. Rows are added or appended to, never rewritten.
    - `wiki/index.md` — the map: latest weekly report first, then the last 10 days, then every concept page by
      section, each as a `[[link]]`.
 4. **Saturday only.** Write `wiki/weekly/<yyyy-Www>.md` for the ISO week of `<day>` (template below), link it at
