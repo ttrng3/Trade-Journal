@@ -151,13 +151,19 @@ def sweep_rows(bundle, px):
         elif text.startswith(("CANCELLED", "SKIPPED", "NOT FILLED")):
             sym = text.split()[2 if text.startswith("NOT FILLED") else 1].rstrip(":")
             a = armed.pop(sym, None)
+            kind = "skipped" if text.startswith("SKIPPED") else "cancelled"
+            why = text.split(":", 1)[-1].strip()
             if a:
                 d = 1 if a["dir"] == "call" else -1
                 hit, hit_t = px.first_hit(sym, t, d, a["stop"], a["target"])
-                skips.append({"bot": "sweep", "symbol": sym, "dir": a["dir"], "t": t, "kind": "cancelled",
-                              "setup": f"{a['order']} entry armed {a['t']}", "why": text.split(":", 1)[-1].strip(),
+                skips.append({"bot": "sweep", "symbol": sym, "dir": a["dir"], "t": t, "kind": kind,
+                              "setup": f"{a['order']} entry armed {a['t']}", "why": why,
                               "entry": a["entry"], "stop": a["stop"], "target": a["target"],
                               "first_hit": hit, "first_hit_t": hit_t, "after": px.after(sym, t)})
+            else:                                  # no ARMED line before it: keep it, with no levels to test
+                skips.append({"bot": "sweep", "symbol": sym, "dir": None, "t": t, "kind": kind, "setup": "not armed",
+                              "why": why, "entry": None, "stop": None, "target": None,
+                              "first_hit": "unknown (not armed)", "first_hit_t": None, "after": px.after(sym, t)})
         elif text.startswith("ENTRY"):
             m = re.match(rf"ENTRY (\S+) (\d+)x (\S+) @ {NUM} · stock {NUM} · stop {NUM} .*· target {NUM}", text)
             if m:

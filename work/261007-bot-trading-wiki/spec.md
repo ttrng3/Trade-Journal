@@ -139,6 +139,10 @@ This becomes `verification/bot-trading-wiki.md` in Stage 4.
   dropping unknown fields. v7's `stop_move` and `green` rows are now collected and attached to each bot trade.
   Catch-up days download their own bundle and pass `RAW OK` before compiling; pages say "Manual trades", never a
   name beside money; `wiki-check.py` reports `uncited=` apart from `dangling=`; the rclone remote is settable.
+- Review round 4 (2026-10-08): sweep SKIPPED/CANCELLED/NOT FILLED lines with no ARMED line are kept as skips
+  (`first_hit: unknown (not armed)`) and `wiki-check.py` counts sweep skips; journal rows found in two checkouts
+  count once; the first run writes its day with `--final` and catches up nothing; the install refuses a Mac with
+  more than one Drive account; `[[page#anchor]]` renders as a link.
 
 ## Out of scope
 - Any change to the bots, their schedules or drills, and any automatic tuning. The weekly report proposes; Ty

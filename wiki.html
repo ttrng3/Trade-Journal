@@ -65,7 +65,7 @@ function current(){
 }
 function links(md){
   // [[section/page]] or [[section/page|label]] -> markdown link to #p=section/page
-  return md.replace(/\[\[([^\]|#]+)(?:\|([^\]]+))?\]\]/g, (_, p, label) => {
+  return md.replace(/\[\[([^\]|#]+)(?:#[^\]|]*)?(?:\|([^\]]+))?\]\]/g, (_, p, label) => {   // an #anchor is dropped
     p = p.trim(); return `[${(label || p.split("/").pop()).trim()}](#p=${encodeURIComponent(p).replace(/%2F/g, "/")})`;
   });
 }

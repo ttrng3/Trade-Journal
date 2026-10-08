@@ -55,6 +55,9 @@ def raw(day, raw_dir, data_dir, bundle_path):
         want_s = sum(1 for x in b["v7"] if x["kind"] == "bar")
         if sum(1 for s in r["skips"] if s["bot"] == "v7") != want_s:
             bad.append(f"v7 skips != bundle {want_s}")
+        want_w = sum(1 for x in b["sweep"] if x["text"].startswith(("CANCELLED", "SKIPPED", "NOT FILLED")))
+        if sum(1 for s in r["skips"] if s["bot"] == "sweep") != want_w:
+            bad.append(f"sweep skips != bundle {want_w}")
     warn = []
     paths = [(x["after"], "bot") for x in r["bots"] + r["skips"]] + \
             [(x["after"], "manual") for x in r["manual"] if x["side"] == "SELL"]

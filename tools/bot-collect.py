@@ -60,10 +60,14 @@ def last_session(now=None):
 
 def v7_events(day):
     paths = glob.glob(f"{ORB}/out/v7/journal-{day}.jsonl") + glob.glob(f"{ORB}/.claude/worktrees/*/out/v7/journal-{day}.jsonl")
-    out = []
+    out, seen = [], set()
     for p in sorted(set(paths)):
         for line in open(p):
             r = json.loads(line)
+            key = (r.get("kind"), r.get("ts"), r.get("id"), r.get("symbol"), r.get("bar"))
+            if key in seen:                      # the same day's journal in two checkouts: count each row once
+                continue
+            seen.add(key)
             keep = V7_KEEP.get(r.get("kind"))
             if keep is None:
                 continue

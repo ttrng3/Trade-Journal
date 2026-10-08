@@ -15,11 +15,15 @@ one day (Tuesday's run compiles Monday's session, Saturday's compiles Friday's).
 A raw day is written once, so it must not be written before Ty's CSV has arrived. Each run therefore handles:
 - **`<day>`** with `postexit.py --day <day>`. If the shard has no fills for it yet, it prints `{"deferred": true}`
   and writes nothing: Ty may file the export after 11:00 (CLAUDE.md "Known mistakes", 2026-09-26).
-- **Every earlier weekday in the last 7 days that has no `raw/<that day>.json`** (a deferred day, or a run that
-  failed) with `postexit.py --day <that day> --final --bundle <its own Bots/<that day>.json>`, which writes it
-  whether or not fills came. A day Ty did not trade therefore lands one run late, with its bot trades; a Friday
-  deferred on Saturday lands on Tuesday. The deferral covers one run of lateness: a CSV filed before the next run
-  is kept; one filed later than that is not (the day is then frozen without it).
+- **Every earlier weekday in the last 7 days that has no `raw/<that day>.json`, and is later than the oldest day
+  file already in `raw/`** (a deferred day, or a run that failed), with
+  `postexit.py --day <that day> --final --bundle <its own Bots/<that day>.json>`, which writes it whether or not
+  fills came. A day Ty did not trade therefore lands one run late, with its bot trades; a Friday deferred on
+  Saturday lands on Tuesday. The deferral covers one run of lateness: a CSV filed before the next run is kept; one
+  filed later than that is not (the day is then frozen without it).
+- **The very first run** (no `raw/YYYY-MM-DD.json` yet; `raw/schema.json` does not count) writes `<day>` with
+  `--final` and catches up nothing, so no day from before the collector ran is frozen without its bots, and every
+  later run has a first day to count from.
 
 Do steps 1–2 for every day this run writes, then compile (steps 3–6) each of them, oldest first.
 
@@ -64,7 +68,8 @@ This is the pipeline's one Mac dependency; the routine itself stays cloud-only.
 Install or reinstall, on the Mac, from the main checkout (the account is the one in the Drive for desktop folder
 name `~/Library/CloudStorage/GoogleDrive-<account>`, so it is never written into this repo):
 
-    acct=$(ls ~/Library/CloudStorage | sed -n 's/^GoogleDrive-//p' | head -1)
+    n=$(ls ~/Library/CloudStorage | grep -c '^GoogleDrive-'); [ "$n" = 1 ] || { echo "found $n Drive accounts: set acct by hand"; exit 1; }
+    acct=$(ls ~/Library/CloudStorage | sed -n 's/^GoogleDrive-//p')
     sed -e "s|__HOME__|$HOME|g" -e "s|__ACCOUNT__|$acct|g" tools/com.ty.bot-collect.plist > ~/Library/LaunchAgents/com.ty.bot-collect.plist
     launchctl unload ~/Library/LaunchAgents/com.ty.bot-collect.plist 2>/dev/null; launchctl load ~/Library/LaunchAgents/com.ty.bot-collect.plist
 
