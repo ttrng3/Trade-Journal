@@ -16,7 +16,7 @@ import re
 import sys
 
 N_CANDLES = 10
-ID_LIKE = re.compile(r"\b(?=[A-Za-z0-9_-]*\d)[A-Za-z0-9_-]{6,}\b")   # order ids, account numbers, contract codes
+ID_LIKE = re.compile(r"\b(?=(?:[A-Za-z_-]*\d){5})[A-Za-z0-9_-]{6,}\b")   # 5+ digits: order ids, account numbers, contract codes (not bot1_st_flip)
 
 
 def scrub(text):

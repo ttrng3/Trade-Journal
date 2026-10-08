@@ -164,6 +164,9 @@ This becomes `verification/bot-trading-wiki.md` in Stage 4.
   (which its prompt says outranks the prompt) instead of re-sending the whole prompt by hand.
 - **For Ty, at ship of #16:** the Wire-up entry above is a change after #15's ship. Shipping #16 approves it.
 
+- Scrub fix (2026-10-08, after the first compiled day): the id filter scrubbed setup names such as
+  `bot1_st_flip` (any 6+ character token with a digit). It now scrubs only tokens with 5 or more digits. The
+  2026-10-07 raw day keeps its `[id]` setups, since raw days are write-once.
 ## Out of scope
 - Any change to the bots, their schedules or drills, and any automatic tuning. The weekly report proposes; Ty
   decides on Friday.

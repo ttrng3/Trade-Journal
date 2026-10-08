@@ -50,7 +50,7 @@ Steps 1–4 and 7, in one Python run (print the object):
  "final_writes_no_fills_day": os.path.exists(f"{S}/raw-late/{E}.json") and late["manual"] == [],
  "empty_day_skipped": empty_out.get("skipped") is True and not os.path.exists(f"{S}/raw-empty/{E}.json"),
  "holiday_not_written": holiday_out.get("holiday") is True and not os.path.exists(f"{S}/raw-hol/{D}.json"),
- "reasons_scrubbed": not any(re.search(r"\b(?=[A-Za-z0-9_-]*\d)[A-Za-z0-9_-]{6,}\b", s["why"] or "") for s in raw["skips"]),
+ "reasons_scrubbed": not any(re.search(r"\b(?=(?:[A-Za-z_-]*\d){5})[A-Za-z0-9_-]{6,}\b", s["why"] or "") for s in raw["skips"]),
  "wiki_ok": "dangling=0 uncited=0" in check_wiki_out,
  "journal_untouched": sync_check["changedFiles"] == [],
 }
