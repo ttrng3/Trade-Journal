@@ -42,8 +42,9 @@ underlyings (SPY, QQQ, IWM, TSLA, META, AMZN, NFLX, AMD, NVDA, AAPL, GOOGL, COIN
 Writes one bundle to `Drive: 09 Trading/Trade Journal/Raw Records/Bots/<day>.json` with rclone.
 If the Mac was asleep at 10:30, launchd runs the job on wake.
 
-**2. Routine (existing `Trade Journal daily sync`).** The prompt gains one step, placed **before** its preview
-step so the preview stays last: "compile the wiki: follow `docs/wiki.md`." Everything else lives in the repo, which the prompt already says wins.
+**2. Routine (existing `Trade Journal daily sync`).** (#16: the step arrives through `docs/nightly-sync.md` "The wiki
+step", which the prompt says outranks it, not a prompt edit.) The runbook gains one step, placed **before** the preview
+step: "compile the wiki: follow `docs/wiki.md`". Everything else lives in the repo, which the prompt already says wins.
 `docs/wiki.md` tells the run to:
 - (a) read the day's Webull fills from the just-synced month shard and the Bots bundle from Drive;
 - (b) run `python3 tools/postexit.py` → writes `raw/<day>.json` (requirements 1–2; all numbers computed in code,
@@ -65,7 +66,7 @@ links, opens on the latest weekly report, then the day pages, then the concept p
 **4. Files.** The existing Cowork preview also carries `wiki.html` and the `wiki/*.md` files (supporting files,
 changed ones only per run). New: `tools/bot-collect.py` (Mac), `tools/postexit.py`, `tools/wiki-check.py`, `docs/wiki.md`,
 `wiki.html`, `raw/`, `wiki/`, the launchd plist (kept in `tools/`, installed to `~/Library/LaunchAgents/`).
-Changed: `index.html` (one link), `.pages-allow`, README (one paragraph), the routine prompt (one line), the
+Changed: `index.html` (one link), `.pages-allow`, README (one paragraph), the routine's runbook `docs/nightly-sync.md` (#16; first planned as one prompt line), the
 Pipeline Wiring page (row + dated entry).
 
 **SPX trades** (230 of Ty's 2,227 fills in `data/fills/2026-08.json`–`2026-10.json` are SPXW; counted 2026-10-07 at `e603b28`): Alpaca has no index bars, so their price path uses SPY ×
@@ -82,7 +83,7 @@ static page, and ty-report-standard's visual section governs static pages.
 | "Public on purpose; do not widen what is served" (repo `CLAUDE.md`) | `wiki.html` and `wiki/` are new published files | Ty's say-so is in the intent (2026-10-07). `.pages-allow` lines go in **their own PR first**, as the repo requires: `wiki.html`, `wiki/*.md`, `wiki/*/*.md`, `@wiki/`, `!raw/*.json`, `@raw/`. Raw day files are not served by Pages, but they are readable in the public repo, like the fills. |
 | "Strategic objective — true autonomy" (workspace `CLAUDE.md`) | The collector runs on the Mac | Unavoidable: the bots run on the Mac and write only there. Recorded as Mac debt. If the bots move to a server later, the collector moves with them. The routine itself stays cloud-only. |
 | The routine's own "never use a remote-devices/Mac tool" | — | Kept. The Mac pushes to Drive; the routine only reads Drive, as it already does for the CSVs. |
-| "Routine updates use the live config" (memory) | The prompt gains one line | Built from a same-turn `get`, appending one line only, then the update is read back and diffed against the `get`: the only change may be that line. |
+| "Routine updates use the live config" (memory) | The prompt gains one line (superseded by #16: no prompt edit; the runbook carries the step) | Built from a same-turn `get`, appending one line only, then the update is read back and diffed against the `get`: the only change may be that line. |
 | "Artifact mirror contract" | The preview is built from `index.html` only; `wiki.html` is a second page | **Ty, 2026-10-07: the Cowork preview shows the wiki as well.** The same preview (never a second artifact) carries `wiki.html` as a supporting page and the changed `wiki/*.md` as supporting files, so its Wiki link opens the wiki inside the preview. The routine's existing preview step publishes only the wiki files that changed that run, then republishes the page alone, per the contract's mechanics. Its URL stays out of sight. |
 | Pipeline Wiring page (artifact mirror contract) | A pipeline change | Row update + dated section-7 entry, in the ship turn. |
 | "Light only" + any new colour is a token (README "Look") | New page | `wiki.html` copies `index.html`'s tokens; no new colour. |
@@ -142,7 +143,8 @@ This becomes `verification/bot-trading-wiki.md` in Stage 4.
 - Review round 4 (2026-10-08): sweep SKIPPED/CANCELLED/NOT FILLED lines with no ARMED line are kept as skips
   (`first_hit: unknown (not armed)`) and `wiki-check.py` counts sweep skips; journal rows found in two checkouts
   count once; the first run writes its day with `--final` and catches up nothing; the install refuses a Mac with
-  more than one Drive account; `[[page#anchor]]` renders as a link.
+  more than one Drive account (removed by #16: the collector no longer reads the Drive mount, so there is no
+  account to pick); `[[page#anchor]]` renders as a link.
 - Review round 5 (2026-10-08): reasons written to `raw/` are scrubbed of id-like tokens; holidays (no SPY bars) are
   never written; the collector uploads every recent session missing from Drive; a deferred or holiday day skips the
   RAW check; bar fetches give up after 6 rate-limit retries; the README says the routine writes `raw/` and `wiki/`.
@@ -156,6 +158,11 @@ This becomes `verification/bot-trading-wiki.md` in Stage 4.
   mirroring `index.html`'s print grey.
 - **For Ty, at ship:** this spec was amended after its 2026-10-07 approval (the entries above). Shipping #15
   approves the amended spec, including the v8 split, which reached this session relayed by the v8 session.
+- Wire-up (2026-10-08, PR #16): under launchd macOS refused the collector the Drive for desktop mount, so it now
+  reaches `Raw Records/Bots/` by path from My Drive with rclone (no Drive id, no account in the repo or the plist),
+  proven by a launchd run that uploaded 10/01–10/07. The routine gets the wiki step through `docs/nightly-sync.md`
+  (which its prompt says outranks the prompt) instead of re-sending the whole prompt by hand.
+- **For Ty, at ship of #16:** the Wire-up entry above is a change after #15's ship. Shipping #16 approves it.
 
 ## Out of scope
 - Any change to the bots, their schedules or drills, and any automatic tuning. The weekly report proposes; Ty

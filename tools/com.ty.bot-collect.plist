@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<!-- Template. Install with the command in docs/wiki.md ("Mac collector"), which fills __HOME__ and __ACCOUNT__.
+<!-- Template. Install with the command in docs/wiki.md ("Mac collector"), which fills __HOME__.
      10:30 Hanoi, Tuesday to Saturday (launchd weekday 0 = Sunday): after the US close, before the 11:00 routine.
      A Mac asleep at 10:30 runs it on wake. -->
 <plist version="1.0">
@@ -13,7 +13,6 @@
   </array>
   <key>EnvironmentVariables</key>
   <dict>
-    <key>TJ_DRIVE_ACCOUNT</key><string>__ACCOUNT__</string>
     <key>PATH</key><string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
   </dict>
   <key>StartCalendarInterval</key>
