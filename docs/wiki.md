@@ -16,20 +16,24 @@ A raw day is written once, so it must not be written before Ty's CSV has arrived
 - **`<day>`** with `postexit.py --day <day>`. If the shard has no fills for it yet, it prints `{"deferred": true}`
   and writes nothing: Ty may file the export after 11:00 (CLAUDE.md "Known mistakes", 2026-09-26).
 - **Every earlier weekday in the last 7 days that has no `raw/<that day>.json`** (a deferred day, or a run that
-  failed) with `postexit.py --day <that day> --final`, which writes it whether or not fills came. A day Ty did
-  not trade therefore lands one run late, with its bot trades; a Friday deferred on Saturday lands on Tuesday.
+  failed) with `postexit.py --day <that day> --final --bundle <its own Bots/<that day>.json>`, which writes it
+  whether or not fills came. A day Ty did not trade therefore lands one run late, with its bot trades; a Friday
+  deferred on Saturday lands on Tuesday. The deferral covers one run of lateness: a CSV filed before the next run
+  is kept; one filed later than that is not (the day is then frozen without it).
 
-Compile (steps 3–6) every raw day this run wrote, oldest first.
+Do steps 1–2 for every day this run writes, then compile (steps 3–6) each of them, oldest first.
 
 ## Steps
 
-1. **Bundle.** With the Drive connector, look in `09 Trading/Trade Journal/Raw Records/Bots/` for `<day>.json` and
-   download it. It is written by the Mac at 10:30 Hanoi. If it is absent, go on without it: Ty's trades are still
+1. **Bundle.** For each day this run writes, look in `09 Trading/Trade Journal/Raw Records/Bots/` for that day's
+   `<day>.json` with the Drive connector and download it.
+   It is written by the Mac at 10:30 Hanoi. If it is absent, go on without it: the manual trades are still
    compiled, and the day page says "bot bundle missing".
 2. **Raw day.** `python3 tools/postexit.py --day <day> --bundle <file or omit>`. It writes `raw/<day>.json` and
    refuses to overwrite one that exists (that is correct on a re-run: compile from the existing file).
    Then `python3 tools/wiki-check.py --day <day> [--bundle <file>]` must print `RAW OK …`. If it fails, stop the
-   wiki step, push nothing under `raw/` or `wiki/`, and report the FAIL lines. A `WARN manual path missing` line
+   wiki step, push nothing under `raw/` or `wiki/`, and report the FAIL lines. This check runs for **every** raw
+   day the run writes, catch-up days included. A `WARN manual path missing` line
    (Ty traded an underlying the collector had no bars for) does not stop the step; say it on the day page.
 3. **Compile.** Read `raw/<day>.json` and the current `wiki/`. Write or update, in place:
    - `wiki/days/<day>.md` — the day (template below). It must contain the text `raw/<day>.json`.
@@ -41,7 +45,8 @@ Compile (steps 3–6) every raw day this run wrote, oldest first.
    the top of `wiki/index.md`, then `python3 tools/wiki-check.py --weekly wiki/weekly/<yyyy-Www>.md` must print
    `WEEKLY OK …`. If a day of that week was deferred, the report says which; the run that later writes that day
    also updates that week's report.
-5. **Check.** `python3 tools/wiki-check.py` must print `WIKI OK … dangling=0`. Fix any dangling link before pushing.
+5. **Check.** `python3 tools/wiki-check.py` must print `WIKI OK … dangling=0 uncited=0`. Fix any broken link or
+   missing citation before pushing.
 6. **Push.** One commit, `wiki: <day>`, holding `raw/<day>.json` and the changed `wiki/` files, pushed the same way
    the runbook pushes data (`docs/nightly-sync.md`, "Pushing"). A wiki failure never blocks or undoes the
    journal's own data push.
@@ -65,6 +70,10 @@ name `~/Library/CloudStorage/GoogleDrive-<account>`, so it is never written into
 
 Run once by hand: `launchctl start com.ty.bot-collect`, then read the log's last line (`uploaded`).
 
+The upload uses the rclone Drive remote named `igdrive:` (set up for the Instagram bridge; the collector overrides
+its root folder per call). A Mac whose remote has another name sets `TJ_RCLONE_REMOTE` (e.g. `gdrive:`) in the
+plist's `EnvironmentVariables`.
+
 ## Rules for every page
 
 - **Numbers come from `raw/` only, copied or computed in code** (`python3 -c …` over the raw files). Never from
@@ -76,6 +85,7 @@ Run once by hand: `launchctl start com.ty.bot-collect`, then read the log's last
 - **After an exit:** `after.candles` are the next 10 three-minute candles. Say plainly whether holding would
   have helped (price went further the trade's way) or hurt. A path with `proxy` (SPX via SPY × 10) says so.
 - **Public repo.** No account numbers, no broker ids, no personal data, no work-entity names, no preview URL.
+  **No person's name beside money:** Ty's own trades are "Manual trades" on every page, never his name.
 - Links are `[[section/page]]` without `.md`, e.g. `[[mistakes/tight-stop]]`. Slugs are lowercase kebab-case.
 - Plain prose, short. No filler, no "overall", no em-dash chains.
 
@@ -87,9 +97,9 @@ Run once by hand: `launchctl start com.ty.bot-collect`, then read the log's last
     Source: raw/<day>.json · bot bundle: present|missing
 
     ## Result
-    One or two sentences: Ty's net, each bot's net, the key number. (Verified: raw/<day>.json)
+    One or two sentences: the manual net, each bot's net, the key number. (Verified: raw/<day>.json)
 
-    ## Ty's trades
+    ## Manual trades
     Round trips by underlying: entry, exit, P&L, what price did after the exit.
 
     ## Bot trades

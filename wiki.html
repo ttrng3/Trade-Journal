@@ -8,7 +8,7 @@
 :root{
   /* Apple HIG light set, copied from index.html's tokens (light only, README "Look") */
   --bg:#F2F2F7;--paper:#FFFFFF;--ink:#1C1C1E;--ink-soft:#3C3C43;--muted:#8E8E93;--rule:#E5E5EA;
-  --blue-ink:#0040DD;--critical:#D70015;
+  --blue-ink:#0040DD;--critical:#D70015;--print-ink:#222222;
   --sans:-apple-system,BlinkMacSystemFont,"San Francisco","Helvetica Neue",Helvetica,Ubuntu,Roboto,sans-serif;
   --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   color-scheme:light;
@@ -36,9 +36,9 @@ article blockquote{margin:8px 0;padding-left:12px;border-left:3px solid var(--ru
 .err{color:var(--critical)}
 @media print{
   header{position:static}
-  body{background:#fff}
+  body{background:var(--paper)}
   article{border:0;padding:0;break-inside:avoid}
-  article p,article li,.crumb{color:#222}
+  article p,article li,.crumb{color:var(--print-ink)}
 }
 </style>
 </head>
@@ -59,7 +59,8 @@ article blockquote{margin:8px 0;padding-left:12px;border-left:3px solid var(--ru
 const SAFE = /^[A-Za-z0-9][A-Za-z0-9\-\/]*$/;   // weekly pages are e.g. weekly/2026-W41
 function current(){
   const m = location.hash.match(/p=([^&]+)/);
-  const p = m ? decodeURIComponent(m[1]) : "index";
+  let p = "index";
+  try{ if(m) p = decodeURIComponent(m[1]); }catch(e){ return "index"; }   // a malformed %-escape falls back too
   return SAFE.test(p) && !p.includes("..") ? p : "index";
 }
 function links(md){

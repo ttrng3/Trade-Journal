@@ -103,6 +103,13 @@ def why_v7(votes):
 def v7_rows(bundle, px):
     opens = {r["id"]: r for r in bundle["v7"] if r["kind"] == "open"}
     fills = {r["id"]: r for r in bundle["v7"] if r["kind"] == "fill"}
+    moves, greens = {}, {}
+    for r in bundle["v7"]:
+        if r["kind"] == "stop_move":
+            moves.setdefault(r["id"], []).append({"t": r["ts"][11:19], "leg": r.get("leg"), "role": r.get("role"),
+                                                  "old": r.get("old"), "new": r.get("new"), "move": r.get("move")})
+        elif r["kind"] == "green":
+            greens.setdefault(r["id"], r["ts"][11:19])
     trades, skips = [], []
     for c in (r for r in bundle["v7"] if r["kind"] == "close"):
         o = opens.get(c["id"], {})
@@ -112,7 +119,8 @@ def v7_rows(bundle, px):
                        "symbol": sym, "dir": "call" if d > 0 else "put", "entry_t": str(o.get("entry_time", ""))[11:19],
                        "entry": o.get("entry"), "stop": o.get("stop"), "t1": o.get("t1"), "t2": o.get("t2"),
                        "exit_t": exit_t, "exit": fills.get(c["id"], {}).get("spot"), "exit_rule": c.get("last_rule"),
-                       "pnl": round(c.get("pnl", 0), 2), "r": round(c.get("r", 0), 2), "after": px.after(sym, exit_t)})
+                       "pnl": round(c.get("pnl", 0), 2), "r": round(c.get("r", 0), 2),
+                       "green_t": greens.get(c["id"]), "stop_moves": moves.get(c["id"], []), "after": px.after(sym, exit_t)})
     rnd = lambda x: round(x, 2) if isinstance(x, (int, float)) else None
     for b in (r for r in bundle["v7"] if r["kind"] == "bar"):
         t, d = b["ts"][11:19], b.get("d") or 1

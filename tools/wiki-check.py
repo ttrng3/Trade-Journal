@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Checks for the trading wiki. Each mode prints one pass line, or FAIL lines, and exits non-zero on a fail.
 
-  python3 tools/wiki-check.py                                  # WIKI OK pages=<n> dangling=0
+  python3 tools/wiki-check.py                                  # WIKI OK pages=<n> dangling=0 uncited=0
   python3 tools/wiki-check.py --day 2026-10-06 [--bundle <Bots/<day>.json>]
                                                                # RAW OK trades=<n> skips=<n> manual=<n> paths=complete
   python3 tools/wiki-check.py --weekly wiki/weekly/2026-W41.md # WEEKLY OK words=<n> unlabelled=0
@@ -22,20 +22,21 @@ LABEL = re.compile(r"Verified|Likely|Assumption|raw/\d{4}-\d{2}-\d{2}")
 def wiki(root):
     pages = sorted(glob.glob(os.path.join(root, "**", "*.md"), recursive=True))
     names = {os.path.relpath(p, root)[:-3] for p in pages}
-    bad = []
+    dangling, uncited = [], []
     for p in pages:
         text = open(p).read()
         for m in LINK.finditer(text):
             if m[1].strip() not in names:
-                bad.append(f"{os.path.relpath(p, root)} -> [[{m[1]}]]")
+                dangling.append(f"{os.path.relpath(p, root)} -> [[{m[1]}]]")
         if os.path.relpath(p, root).startswith("days/"):
             day = os.path.basename(p)[:-3]
             if f"raw/{day}.json" not in text:
-                bad.append(f"{os.path.relpath(p, root)} does not cite raw/{day}.json")
-    for b in bad:
+                uncited.append(f"{os.path.relpath(p, root)} does not cite raw/{day}.json")
+    for b in dangling + uncited:
         print("FAIL", b)
-    print(f"WIKI {'OK' if not bad else 'FAIL'} pages={len(pages)} dangling={len(bad)}")
-    return not bad
+    ok = not dangling and not uncited
+    print(f"WIKI {'OK' if ok else 'FAIL'} pages={len(pages)} dangling={len(dangling)} uncited={len(uncited)}")
+    return ok
 
 
 def raw(day, raw_dir, data_dir, bundle_path):

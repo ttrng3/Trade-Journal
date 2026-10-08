@@ -26,7 +26,7 @@ kill it afterwards (`lsof -ti:8765 | xargs kill`).
 5. Build `$S/site`: copy `wiki.html`; write `wiki/index.md` linking `[[days/D]]`, a day page citing `raw/D.json`
    with a table and a `[[what-ifs/x]]` link, the page `what-ifs/x.md`, and `what-ifs/evil.md` containing
    `<img src=x onerror="window.__xss=1"><script>window.__xss=2</script>`.
-   `python3 tools/wiki-check.py --wiki-dir $S/site/wiki` → `WIKI OK … dangling=0`.
+   `python3 tools/wiki-check.py --wiki-dir $S/site/wiki` → `WIKI OK … dangling=0 uncited=0`.
 6. In a **fresh** headless Chrome profile at 390×844, open `http://127.0.0.1:8765/wiki.html#p=days/D`, then
    `#p=what-ifs/evil`, then `#p=../../index`, evaluating the step-6 expression on each. Screenshot the day page.
 7. `node tools/sync.js --csv-dir <empty dir> --check` → `"changedFiles": []` (the journal is untouched).
@@ -44,7 +44,7 @@ Steps 1–4 and 7, in one Python run (print the object):
  "nobundle_still_writes_manual": nb["sources"]["bots_bundle"] == "missing" and len(nb["manual"]) == len(raw["manual"]),
  "no_fills_day_deferred": deferred_out.get("deferred") is True and not existed_after_defer,  # checked before the --final run
  "final_writes_no_fills_day": os.path.exists(f"{S}/raw-late/{E}.json") and late["manual"] == [],
- "wiki_ok": "dangling=0" in check_wiki_out,
+ "wiki_ok": "dangling=0 uncited=0" in check_wiki_out,
  "journal_untouched": sync_check["changedFiles"] == [],
 }
 ```

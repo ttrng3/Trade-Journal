@@ -32,7 +32,7 @@ ET = ZoneInfo("America/New_York")
 ORB = os.path.expanduser("~/Projects/orb-options")
 RAW_RECORDS = os.path.expanduser("~/Library/CloudStorage/GoogleDrive-{}/My Drive/Claude Workspace/"
                                   "09 Trading/Trade Journal/Raw Records")
-REMOTE = "igdrive:"            # any rclone Drive remote works; the root is overridden per call
+REMOTE = os.environ.get("TJ_RCLONE_REMOTE", "igdrive:")   # an rclone Drive remote; the root is overridden per call
 USUAL = ["SPY", "QQQ", "IWM", "TSLA", "META", "AMZN", "NFLX", "AMD", "NVDA", "AAPL", "GOOGL", "COIN"]
 V7_KEEP = {
     "start": ["ts", "mode"],
@@ -41,6 +41,8 @@ V7_KEEP = {
              "entry_time"],
     "fill": ["ts", "id", "qty", "price", "rule", "spot"],
     "close": ["ts", "id", "bot", "symbol", "setup", "pnl", "r", "last_rule", "at"],
+    "stop_move": ["ts", "id", "leg", "role", "old", "new", "move"],
+    "green": ["ts", "id", "spot"],
     "bar": ["ts", "symbol", "bar", "d", "ready", "setups", "all_agree", "signal", "entry", "stop", "R", "t1", "t2",
             "votes"],
 }

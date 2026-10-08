@@ -7,6 +7,7 @@
               "after": "exits (SELL) only: see 'after'"}],
   "bots": [{"bot": "v7 | sweep", "id": "", "setup": "", "drill": false, "symbol": "", "dir": "call | put",
             "entry_t": "", "entry": 0.0, "stop": 0.0, "t1": 0.0, "t2": 0.0, "exit_t": "", "exit_rule": "", "pnl": 0.0, "r": 0.0,
+            "green_t": "v7: when the trade reached +1R, or null", "stop_moves": "v7: [{t, leg, role, old, new, move}]",
             "after": "see 'after'"}],
   "skips": [{"bot": "v7 | sweep", "symbol": "", "dir": "call | put", "t": "", "kind": "skipped | cancelled", "why": "the bot's own reason",
              "entry": 0.0, "stop": 0.0, "target": 0.0, "first_hit": "target | stop | neither, later that session", "first_hit_t": "",

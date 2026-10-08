@@ -109,7 +109,7 @@ after merge, whichever is later) and on the first Saturday run after merge (targ
    sweep log's `EXIT` lines; its manual fill count equals the fills that day in the month shard; every exit and skip has
    10 three-minute candles and a close. Check: `python3 tools/wiki-check.py --day <day>`. Pass line:
    `RAW OK trades=<n> skips=<n> manual=<n> paths=complete`.
-2. Wiki links: `python3 tools/wiki-check.py` prints `WIKI OK pages=<n> dangling=0`.
+2. Wiki links: `python3 tools/wiki-check.py` prints `WIKI OK pages=<n> dangling=0 uncited=0`.
 3. Saturday: `wiki/weekly/<yyyy-Www>.md` exists, under 600 words, every number labelled. Pass line from
    `wiki-check.py --weekly`: `WEEKLY OK words=<n> unlabelled=0`.
 4. On the phone: the verifier opens https://ttrng3.github.io/Trade-Journal/wiki.html at 390 px wide, and the
@@ -126,11 +126,19 @@ This becomes `verification/bot-trading-wiki.md` in Stage 4.
   collector's list prints `WARN manual path missing` instead of failing the day. Weekly page names keep the ISO
   capital W (`weekly/2026-W41`). The two cdnjs scripts carry SRI hashes.
 - Review round 2 of PR #15 (2026-10-08): a day with no Webull fills yet is **deferred**, not frozen; the next run
-  writes it with `--final` (docs/wiki.md "Which day"), so a CSV filed after 11:00 is never lost. A v7 skip with no
+  writes it with `--final` (docs/wiki.md "Which day"), so a CSV filed before the next run is kept (one
+  run of lateness; a CSV filed later than that is not). A v7 skip with no
   stop or target logged is recorded as `first_hit: unknown` instead of stopping the day.
 - **For Ty's ship:** rebuilding `build/artifact.html` for the Wiki link also catches the Cowork preview up with
   the rules-check feature already on `main` (`work/261003-rules-check`), which was merged without a fragment
   rebuild. Shipping #15 accepts that catch-up here rather than in its own PR.
+- Review round 3 of PR #15 + the v8 split (2026-10-08): Ty approved the split ("proceed with the split", relayed
+  by the v8 session): Trade-Journal stays the compiler, wiki and weekly report and computes every path-dependent
+  number (MFE/MAE, post-exit paths, target-or-stop-first, shadow exits); v8 (orb-options, built by tytr3-69)
+  writes only decision-time facts and sends its field list before it builds; the collector's allowlist keeps
+  dropping unknown fields. v7's `stop_move` and `green` rows are now collected and attached to each bot trade.
+  Catch-up days download their own bundle and pass `RAW OK` before compiling; pages say "Manual trades", never a
+  name beside money; `wiki-check.py` reports `uncited=` apart from `dangling=`; the rclone remote is settable.
 
 ## Out of scope
 - Any change to the bots, their schedules or drills, and any automatic tuning. The weekly report proposes; Ty
