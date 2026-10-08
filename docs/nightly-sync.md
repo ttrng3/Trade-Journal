@@ -23,7 +23,9 @@ After the data push and **before** the preview step, every run compiles the trad
 `docs/wiki.md` (raw day files, the wiki pages, the Saturday weekly report). It runs on quiet nights too, because
 the bots trade even when Ty doesn't. The preview step then also sends `wiki.html` and the `wiki/` files this run
 changed, as `docs/wiki.md` step 7 says. A wiki failure is reported and never blocks or undoes the journal's own
-data push. (Ty, 2026-10-07; `work/261007-bot-trading-wiki/`.)
+data push. **On a BLOCKED run** (the data push refused, see "Pushing") the wiki step is skipped and reported as
+skipped: it runs only after a successful data push or a successful heartbeat-only write, so a wiki commit can
+never carry held-back data to `main`, and no raw day is frozen from a month file that isn't on `main`. (Ty, 2026-10-07; `work/261007-bot-trading-wiki/`.)
 
 ## Why the snapshot is sharded
 

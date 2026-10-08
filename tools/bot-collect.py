@@ -189,8 +189,10 @@ def main():
             # missing folder means a wrong path, and an upload would quietly build a new tree in the wrong place.
             parent = subprocess.run(["rclone", "lsf", f"{REMOTE}{BOTS.rsplit('/', 1)[0]}/"] + ROOT,
                                     capture_output=True, text=True)
-            if parent.returncode != 0:
+            if parent.returncode != 0 and "directory not found" in parent.stderr:
                 sys.exit("Raw Records not found on Drive by path: " + parent.stderr.strip()[-300:])
+            if parent.returncode != 0:
+                sys.exit("rclone lsf failed: " + parent.stderr.strip()[-300:])
             return []                            # first run: copyto creates Bots/
         if r.returncode != 0:
             sys.exit("rclone lsf failed: " + r.stderr.strip()[-300:])

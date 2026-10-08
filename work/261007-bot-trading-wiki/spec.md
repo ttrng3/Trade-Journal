@@ -43,8 +43,8 @@ Writes one bundle to `Drive: 09 Trading/Trade Journal/Raw Records/Bots/<day>.jso
 If the Mac was asleep at 10:30, launchd runs the job on wake.
 
 **2. Routine (existing `Trade Journal daily sync`).** (#16: the step arrives through `docs/nightly-sync.md` "The wiki
-step", which the prompt says outranks it, not a prompt edit.) The prompt gains one step, placed **before** its preview
-step so the preview stays last: "compile the wiki: follow `docs/wiki.md`." Everything else lives in the repo, which the prompt already says wins.
+step", which the prompt says outranks it, not a prompt edit.) The runbook gains one step, placed **before** the preview
+step: "compile the wiki: follow `docs/wiki.md`". Everything else lives in the repo, which the prompt already says wins.
 `docs/wiki.md` tells the run to:
 - (a) read the day's Webull fills from the just-synced month shard and the Bots bundle from Drive;
 - (b) run `python3 tools/postexit.py` → writes `raw/<day>.json` (requirements 1–2; all numbers computed in code,
@@ -161,7 +161,7 @@ This becomes `verification/bot-trading-wiki.md` in Stage 4.
 - Wire-up (2026-10-08, PR #16): under launchd macOS refused the collector the Drive for desktop mount, so it now
   reaches `Raw Records/Bots/` by path from My Drive with rclone (no Drive id, no account in the repo or the plist),
   proven by a launchd run that uploaded 10/01–10/07. The routine gets the wiki step through `docs/nightly-sync.md`
-  (which its prompt says outranks the prompt) instead of a hand-resent 9 KB prompt.
+  (which its prompt says outranks the prompt) instead of re-sending the whole prompt by hand.
 - **For Ty, at ship of #16:** the Wire-up entry above is a change after #15's ship. Shipping #16 approves it.
 
 ## Out of scope
