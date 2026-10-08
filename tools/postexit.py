@@ -85,6 +85,10 @@ class Prices:
         return "neither", None
 
 
+def bundle_exists(path):
+    return bool(path) and os.path.exists(path)
+
+
 def manual(day, data_dir, px):
     path = os.path.join(data_dir, "fills", day[:7] + ".json")
     shard = json.load(open(path)) if os.path.exists(path) else {}   # a month with no trades yet has no shard
@@ -122,10 +126,10 @@ def v7_rows(bundle, px):
         o = opens.get(c["id"], {})
         sym, d = c.get("symbol") or o.get("symbol"), o.get("d", 1)
         exit_t = (c.get("at") or c["ts"])[11:19]
-        trades.append({"bot": "v7", "id": c["id"], "setup": c.get("setup"), "drill": c.get("setup") == "drill",
+        trades.append({"bot": "v7", "id": f"v7-{len(trades) + 1}", "setup": scrub(c.get("setup")), "drill": c.get("setup") == "drill",
                        "symbol": sym, "dir": "call" if d > 0 else "put", "entry_t": str(o.get("entry_time", ""))[11:19],
                        "entry": o.get("entry"), "stop": o.get("stop"), "t1": o.get("t1"), "t2": o.get("t2"),
-                       "exit_t": exit_t, "exit": fills.get(c["id"], {}).get("spot"), "exit_rule": c.get("last_rule"),
+                       "exit_t": exit_t, "exit": fills.get(c["id"], {}).get("spot"), "exit_rule": scrub(c.get("last_rule")),
                        "pnl": round(c.get("pnl", 0), 2), "r": round(c.get("r", 0), 2),
                        "green_t": greens.get(c["id"]), "stop_moves": moves.get(c["id"], []), "after": px.after(sym, exit_t)})
     rnd = lambda x: round(x, 2) if isinstance(x, (int, float)) else None
@@ -185,7 +189,7 @@ def sweep_rows(bundle, px):
                 pnl = round((float(m[6]) - o["premium"]) * o["qty"] * 100, 2)
                 trades.append({"bot": "sweep", "id": f"{m[1]}-{o['t']}", "setup": "sweep V0", "drill": False,
                                "symbol": m[1], "dir": o["dir"], "entry_t": o["t"], "entry": o["entry"], "stop": o["stop"],
-                               "t1": o["target"], "t2": o["target"], "exit_t": t, "exit": float(m[3]), "exit_rule": m[2],
+                               "t1": o["target"], "t2": o["target"], "exit_t": t, "exit": float(m[3]), "exit_rule": scrub(m[2]),
                                "pnl": pnl, "r": float(m[4]), "after": px.after(m[1], t)})
     return trades, skips
 
@@ -205,6 +209,10 @@ def main():
         return
     sp = os.path.join(a.data_dir, "fills", a.day[:7] + ".json")
     has_fills = os.path.exists(sp) and any(f["t"].startswith(a.day) for f in json.load(open(sp)).values())
+    if not has_fills and not bundle_exists(a.bundle):
+        # no fills and no bundle: nothing to journal (a holiday with the Mac off, or a day nothing ran). Never write it.
+        print(json.dumps({"skipped": True, "day": a.day, "why": "no Webull fills and no bot bundle"}))
+        return
     if not has_fills and not a.final:
         # Ty's CSV may arrive after this run (CLAUDE.md, 2026-09-26). Freezing now would lose his trades for good,
         # so the day waits for the next run, which writes it with --final whether or not fills have come.

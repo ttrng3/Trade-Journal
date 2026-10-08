@@ -20,9 +20,11 @@ kill it afterwards (`lsof -ti:8765 | xargs kill`).
 3. `python3 tools/wiki-check.py --day D --bundle $S/b.json --raw-dir $S/raw` → `RAW OK … paths=complete`.
 4. `python3 tools/postexit.py --day D --raw-dir $S/raw-nobundle` (no bundle) → writes the file with
    `"bots_bundle": "missing"`, manual count unchanged; `wiki-check.py --day D --raw-dir $S/raw-nobundle` → `RAW OK`.
-   **Late CSV:** pick a weekday `E` with no fills in its shard (e.g. one in a month with no shard yet).
-   `postexit.py --day E --raw-dir $S/raw-late` → `{"deferred": true, …}` and no file; the same with `--final` →
-   writes `raw-late/E.json` with `manual` 0.
+   **Late CSV:** pick a weekday `E` with no fills in its shard (e.g. one in a month with no shard yet), and make
+   `$S/bE.json`, a copy of the D bundle with `"day"` set to `E`. `postexit.py --day E --bundle $S/bE.json --raw-dir
+   $S/raw-late` → `{"deferred": true, …}` and no file; the same with `--final` → writes `raw-late/E.json` with
+   `manual` 0. With **no** bundle, `postexit.py --day E --final --raw-dir $S/raw-empty` → `{"skipped": true, …}` and
+   no file (nothing to journal).
    **Holiday:** copy the D bundle with `"holiday": true` and `bars_1m.SPY = []` → `postexit.py --day D --bundle <copy>
    --raw-dir $S/raw-hol` prints `{"holiday": true, …}` and writes nothing.
 5. Build `$S/site`: copy `wiki.html`; write `wiki/index.md` linking `[[days/D]]`, a day page citing `raw/D.json`
@@ -46,6 +48,7 @@ Steps 1–4 and 7, in one Python run (print the object):
  "nobundle_still_writes_manual": nb["sources"]["bots_bundle"] == "missing" and len(nb["manual"]) == len(raw["manual"]),
  "no_fills_day_deferred": deferred_out.get("deferred") is True and not existed_after_defer,  # checked before the --final run
  "final_writes_no_fills_day": os.path.exists(f"{S}/raw-late/{E}.json") and late["manual"] == [],
+ "empty_day_skipped": empty_out.get("skipped") is True and not os.path.exists(f"{S}/raw-empty/{E}.json"),
  "holiday_not_written": holiday_out.get("holiday") is True and not os.path.exists(f"{S}/raw-hol/{D}.json"),
  "reasons_scrubbed": not any(re.search(r"\b(?=[A-Za-z0-9_-]*\d)[A-Za-z0-9_-]{6,}\b", s["why"] or "") for s in raw["skips"]),
  "wiki_ok": "dangling=0 uncited=0" in check_wiki_out,

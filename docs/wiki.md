@@ -35,8 +35,10 @@ Do steps 1–2 for every day this run writes, then compile (steps 3–6) each of
    compiled, and the day page says "bot bundle missing".
 2. **Raw day.** `python3 tools/postexit.py --day <day> --bundle <file or omit>`. It writes `raw/<day>.json` and
    refuses to overwrite one that exists (that is correct on a re-run: compile from the existing file).
-   If it printed `{"deferred": true}` or `{"holiday": true}`, skip the check and the compile for that day (a
-   holiday is never written and never caught up). Otherwise `python3 tools/wiki-check.py --day <day> [--bundle <file>]`
+   If it printed `{"deferred": true}`, `{"holiday": true}` or `{"skipped": true}` (no fills and no bundle: nothing
+   to journal), skip the check and the compile for that day; none of these writes a file. If it printed
+   `{"exists": true}`, the day was written by an earlier run: skip the check (the shard may have grown since) and
+   compile from the existing file. Otherwise `python3 tools/wiki-check.py --day <day> [--bundle <file>]`
    must print `RAW OK …`. If it fails, stop the
    wiki step, push nothing under `raw/` or `wiki/`, and report the FAIL lines. This check runs for **every** raw
    day the run writes, catch-up days included. A `WARN manual path missing` line

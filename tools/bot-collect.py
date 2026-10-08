@@ -153,12 +153,13 @@ def collect(day, env):
     v7, v7_paths = v7_events(day)
     sweep, sweep_path = sweep_lines(day)
     syms = set(USUAL) | {r["symbol"] for r in v7 if r.get("symbol")}
-    syms |= {l["text"].split()[1].rstrip(":") for l in sweep if l["text"].startswith(("ARMED", "CANCELLED", "ENTRY", "EXIT"))}
+    syms |= {l["text"].split()[1].rstrip(":") for l in sweep if l["text"].startswith(("ARMED", "CANCELLED", "SKIPPED", "ENTRY", "EXIT"))}
+    syms |= {l["text"].split()[2].rstrip(":") for l in sweep if l["text"].startswith("NOT FILLED")}
     b1 = {s: bars(s, day, env) for s in sorted(syms)}
     return {
         "day": day,
         "collected_utc": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "holiday": not b1.get("SPY"),            # no SPY bars on a weekday = the market was closed
+        "holiday": not any(b1.values()),         # no bars for any symbol on a weekday = the market was closed
         "sources": {"v7": len(v7_paths), "sweep": bool(sweep_path)},
         "v7": v7,
         "sweep": sweep,
@@ -193,8 +194,11 @@ def main():
     if not a.account:
         sys.exit("set TJ_DRIVE_ACCOUNT (the launchd plist does) or pass --account")
     fid = drive_folder_id(a.account)
-    ls = lambda: subprocess.run(["rclone", "lsf", f"{REMOTE}Bots/", "--drive-root-folder-id", fid],
-                                capture_output=True, text=True).stdout.split()
+    def ls():
+        r = subprocess.run(["rclone", "lsf", f"{REMOTE}Bots/", "--drive-root-folder-id", fid], capture_output=True, text=True)
+        if r.returncode != 0:
+            sys.exit("rclone lsf failed: " + r.stderr.strip()[-300:])
+        return r.stdout.split()
     have = set(ls())
     # A Mac asleep for days runs this once on wake; launchd merges the missed runs, so every recent session
     # without a bundle on Drive is collected now, not only the last one.

@@ -146,6 +146,12 @@ This becomes `verification/bot-trading-wiki.md` in Stage 4.
 - Review round 5 (2026-10-08): reasons written to `raw/` are scrubbed of id-like tokens; holidays (no SPY bars) are
   never written; the collector uploads every recent session missing from Drive; a deferred or holiday day skips the
   RAW check; bar fetches give up after 6 rate-limit retries; the README says the routine writes `raw/` and `wiki/`.
+- Review round 6 (2026-10-08): v7 trade ids in `raw/` are a per-day counter (`v7-1`, …), and `setup` and
+  `exit_rule` are scrubbed too; a day with no fills and no bundle is never written (`{"skipped": true}`); a holiday
+  needs every symbol bar-less; an existing raw day skips the RAW check on a re-run; `rclone lsf` failures stop the
+  collector; unarmed SKIPPED / NOT FILLED symbols get bars.
+- **For Ty, at ship:** this spec was amended after its 2026-10-07 approval (the entries above). Shipping #15
+  approves the amended spec, including the v8 split, which reached this session relayed by the v8 session.
 
 ## Out of scope
 - Any change to the bots, their schedules or drills, and any automatic tuning. The weekly report proposes; Ty
