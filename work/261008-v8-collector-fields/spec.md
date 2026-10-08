@@ -18,10 +18,10 @@
    | `stray_fill` | ts, local, qty | `local` = the option's contract name (e.g. `SPY 261009C00775000`) |
    | `oca_check` | ts, id, status_filled, fill_shares, guard_qty, flat_qty, open_qty | `id` = the trade id (`run.py`, `id=t["id"]`); counts only |
 3. Never kept: `order_id`, `exit_order_id`, `exit_oca`, `guard_oca`, `oca`, `settings_sha`, `tune_sha`. No kept field holds a broker id or an account id; `id` on every kind is the journal's own trade id.
-4. The dedup key adds `bot` and `local`, so two rows of a kind with no `id` at the same second (two `bot_halt`, two `stray_fill`) are both kept.
+4. Dedup: v7's row kinds keep their old key (kind, ts, id, symbol, bar), so a day held in two checkouts still counts once (whole-row dedup gave 227 rows instead of 197 on 2026-10-07, because the copies differ in small fields); the new kinds dedup on the whole row, so two `bot_halt` or two `stray_fill` rows in one second are both kept.
 
 ## Design
-`tools/bot-collect.py`: the `V7_KEEP` dict and the dedup key. No other file changes.
+`tools/bot-collect.py`: the `V7_KEEP` dict, a `V7_KINDS` set and the dedup key. No other file changes.
 
 ## Conflicts
 Loaded: repo `CLAUDE.md`, entity separation. The bundle goes to private Drive; the public repo gets only what `postexit.py` parses (unchanged: it reads `open`, `fill`, `close`, `stop_move`, `green` and `bar` rows by name).

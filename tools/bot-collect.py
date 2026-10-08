@@ -57,6 +57,7 @@ V7_KEEP = {   # v8 (orb-options PR #4) adds decision-time facts; broker order id
     "stray_fill": ["ts", "local", "qty"],
     "oca_check": ["ts", "id", "status_filled", "fill_shares", "guard_qty", "flat_qty", "open_qty"],
 }
+V7_KINDS = {"start", "drill", "open", "fill", "close", "stop_move", "green", "bar"}   # deduped as before v8
 SWEEP_KEEP = ("Sweep bot", "Started after", "ARMED", "CANCELLED", "SKIPPED", "NOT FILLED", "ENTRY", "EXIT")
 
 
@@ -75,7 +76,10 @@ def v7_events(day):
     for p in sorted(set(paths)):
         for line in open(p):
             r = json.loads(line)
-            key = (r.get("kind"), r.get("ts"), r.get("id"), r.get("symbol"), r.get("bar"), r.get("bot"), r.get("local"))
+            if r.get("kind") in V7_KINDS:        # v7's own key: one row per (kind, time, trade, symbol, bar)
+                key = (r.get("kind"), r.get("ts"), r.get("id"), r.get("symbol"), r.get("bar"))
+            else:                                # v8's new kinds: the whole row, so two halts or two stray
+                key = json.dumps(r, sort_keys=True)   # fills in one second are both kept
             if key in seen:                      # the same day's journal in two checkouts: count each row once
                 continue
             seen.add(key)
