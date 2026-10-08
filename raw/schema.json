@@ -6,12 +6,15 @@
   "manual": [{"sym": "option symbol", "underlying": "e.g. SPY", "side": "BUY | SELL", "t": "fill time ET", "qty": 0, "premium": 0.0,
               "after": "exits (SELL) only: see 'after'"}],
   "bots": [{"bot": "v7 | sweep", "id": "", "setup": "", "drill": false, "symbol": "", "dir": "call | put",
-            "entry_t": "", "entry": 0.0, "stop": 0.0, "t1": 0.0, "t2": 0.0, "exit_t": "", "exit_rule": "", "pnl": 0.0, "r": 0.0,
+            "entry_t": "", "entry": 0.0, "stop": 0.0, "t1": 0.0, "t2": 0.0, "exit_t": "", "exit": "stock price at exit",
+            "exit_rule": "", "pnl": 0.0, "r": 0.0,
             "green_t": "v7: when the trade reached +1R, or null", "stop_moves": "v7: [{t, leg, role, old, new, move}]",
             "after": "see 'after'"}],
-  "skips": [{"bot": "v7 | sweep", "symbol": "", "dir": "call | put", "t": "", "kind": "skipped | cancelled", "why": "the bot's own reason",
-             "entry": 0.0, "stop": 0.0, "target": 0.0, "first_hit": "target | stop | neither, later that session", "first_hit_t": "",
+  "skips": [{"bot": "v7 | sweep", "symbol": "", "dir": "call | put | null", "t": "", "kind": "skipped | cancelled",
+             "setup": "v7 setup names, or the sweep order and arm time, or 'not armed'", "why": "the bot's own reason, id-like tokens scrubbed",
+             "entry": 0.0, "stop": 0.0, "target": 0.0, "first_hit": "target | stop | neither | both in one minute | unknown (…), later that session", "first_hit_t": "",
              "after": "see 'after'"}],
+  "unparsed_exits": [{"bot": "sweep", "t": "", "line": "an EXIT line the parser did not match, scrubbed"}],
   "after": {"candles": "next 10 three-minute candles [t, open, high, low, close] after the exit or skip time",
-            "close": "session close", "proxy": "present only when the path is a proxy, e.g. 'SPY x 10' for SPX"}
+            "close": "session close", "session_last": "start of that day's last 3-minute candle", "proxy": "present only when the path is a proxy, e.g. 'SPY x 10' for SPX"}
 }

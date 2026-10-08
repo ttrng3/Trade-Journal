@@ -46,7 +46,7 @@ def raw(day, raw_dir, data_dir, bundle_path):
         print("RAW FAIL trades=0 skips=0 manual=0 paths=incomplete")
         return False
     r = json.load(open(rp))
-    bad = []
+    bad, warn = [], []
     sp = os.path.join(data_dir, "fills", day[:7] + ".json")
     shard = json.load(open(sp)) if os.path.exists(sp) else {}
     n_manual = sum(1 for f in shard.values() if f["t"].startswith(day))
@@ -55,15 +55,17 @@ def raw(day, raw_dir, data_dir, bundle_path):
     if bundle_path and os.path.exists(bundle_path):
         b = json.load(open(bundle_path))
         want = sum(1 for x in b["v7"] if x["kind"] == "close") + sum(1 for x in b["sweep"] if x["text"].startswith("EXIT"))
-        if len(r["bots"]) != want:
-            bad.append(f"bot trades {len(r['bots'])} != bundle exits {want}")
+        got = len(r["bots"]) + len(r.get("unparsed_exits", []))
+        if got != want:
+            bad.append(f"bot trades {got} != bundle exits {want}")
+        for u in r.get("unparsed_exits", []):
+            warn.append(f"sweep EXIT line not parsed at {u['t']}: {u['line'][:60]}")
         want_s = sum(1 for x in b["v7"] if x["kind"] == "bar")
         if sum(1 for s in r["skips"] if s["bot"] == "v7") != want_s:
             bad.append(f"v7 skips != bundle {want_s}")
         want_w = sum(1 for x in b["sweep"] if x["text"].startswith(("CANCELLED", "SKIPPED", "NOT FILLED")))
         if sum(1 for s in r["skips"] if s["bot"] == "sweep") != want_w:
             bad.append(f"sweep skips != bundle {want_w}")
-    warn = []
     paths = [(x["after"], "bot") for x in r["bots"] + r["skips"]] + \
             [(x["after"], "manual") for x in r["manual"] if x["side"] == "SELL"]
     for a, who in paths:
@@ -73,8 +75,9 @@ def raw(day, raw_dir, data_dir, bundle_path):
             elif r["sources"]["bots_bundle"] == "present":
                 bad.append(f"path missing: {a['missing']}")
             continue
-        last = a["candles"][-1][0] if a["candles"] else "16:00"
-        if len(a["candles"]) < 10 and last < "15:57":
+        last = a["candles"][-1][0] if a["candles"] else None
+        end = a.get("session_last", "15:57")      # a half day ends at 13:00
+        if a["candles"] and len(a["candles"]) < 10 and last < end:
             bad.append(f"short path ({len(a['candles'])} candles, last {last})")
         if "close" not in a:
             bad.append("path without close")

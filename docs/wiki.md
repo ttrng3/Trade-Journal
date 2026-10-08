@@ -69,7 +69,7 @@ Saturday (launchd `com.ty.bot-collect`), and copies `Raw Records/Bots/<day>.json
 the bots' files, never writes them, and keeps only allowlisted fields. Log: `~/Library/Logs/bot-collect.log`.
 This is the pipeline's one Mac dependency; the routine itself stays cloud-only. Each run uploads **every** weekday
 of the last 7 days that has no bundle on Drive yet, so a Mac asleep for days catches up on wake (launchd merges
-missed runs into one). A weekday with no SPY bars is uploaded with `"holiday": true`.
+missed runs into one). A weekday with no bars for any symbol is uploaded with `"holiday": true`.
 
 Install or reinstall, on the Mac, from the main checkout (the account is the one in the Drive for desktop folder
 name `~/Library/CloudStorage/GoogleDrive-<account>`, so it is never written into this repo):

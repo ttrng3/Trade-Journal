@@ -62,7 +62,8 @@ class Prices:
         hhmm = t[:5]
         nxt = [c for c in m3 if c[0] > hhmm or (c[0] == hhmm and len(t) == 5)][:N_CANDLES]
         r = lambda x: round(x * mult, 2)
-        res = {"candles": [[c[0], r(c[1]), r(c[2]), r(c[3]), r(c[4])] for c in nxt], "close": r(self.m1[base][-1][4])}
+        res = {"candles": [[c[0], r(c[1]), r(c[2]), r(c[3]), r(c[4])] for c in nxt], "close": r(self.m1[base][-1][4]),
+               "session_last": m3[-1][0]}            # the last 3-minute candle that day (13:00 close on a half day)
         if mult != 1.0:
             res["proxy"] = f"{base} x {mult:g}"
         return res
@@ -141,17 +142,17 @@ def v7_rows(bundle, px):
         else:
             hit, hit_t = "unknown (no stop or target logged)", None
         skips.append({"bot": "v7", "symbol": b["symbol"], "dir": "call" if d > 0 else "put", "t": t, "kind": "skipped",
-                      "setup": ", ".join(b.get("setups", [])), "why": why_v7(b.get("votes")),
+                      "setup": scrub(", ".join(b.get("setups", []))), "why": why_v7(b.get("votes")),
                       "entry": rnd(b.get("entry")), "stop": rnd(stop), "target": rnd(target),
                       "first_hit": hit, "first_hit_t": hit_t, "after": px.after(b["symbol"], t)})
-    return trades, skips
+    return trades, skips, []
 
 
 NUM = r"(-?\d+(?:\.\d+)?)"
 
 
 def sweep_rows(bundle, px):
-    trades, skips, armed, open_ = [], [], {}, {}
+    trades, skips, armed, open_, unparsed = [], [], {}, {}, []
     for line in bundle["sweep"]:
         t, text = line["t"], line["text"]
         if text.startswith("ARMED"):
@@ -191,7 +192,9 @@ def sweep_rows(bundle, px):
                                "symbol": m[1], "dir": o["dir"], "entry_t": o["t"], "entry": o["entry"], "stop": o["stop"],
                                "t1": o["target"], "t2": o["target"], "exit_t": t, "exit": float(m[3]), "exit_rule": scrub(m[2]),
                                "pnl": pnl, "r": float(m[4]), "after": px.after(m[1], t)})
-    return trades, skips
+            else:                                  # kept, so a format change shows up instead of blocking the day
+                unparsed.append({"bot": "sweep", "t": t, "line": scrub(text)})
+    return trades, skips, unparsed
 
 
 def main():
@@ -222,19 +225,20 @@ def main():
     if bundle and bundle.get("day") != a.day:
         sys.exit(f"bundle is for {bundle.get('day')}, not {a.day}")
     if bundle and bundle.get("holiday"):
-        print(json.dumps({"holiday": True, "day": a.day, "why": "no SPY bars: the market was closed"}))
+        print(json.dumps({"holiday": True, "day": a.day, "why": "no bars for any symbol: the market was closed"}))
         return
     px = Prices(bundle)
     man = manual(a.day, a.data_dir, px)
-    bots, skips = [], []
+    bots, skips, unparsed = [], [], []
     if bundle:
         for f in (v7_rows, sweep_rows):
-            t, s = f(bundle, px)
+            t, s, u = f(bundle, px)
             bots += t
             skips += s
+            unparsed += u
     raw = {"day": a.day, "written_utc": dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
            "sources": {"webull_fills": len(man), "bots_bundle": "present" if bundle else "missing"},
-           "manual": man, "bots": bots, "skips": skips}
+           "manual": man, "bots": bots, "skips": skips, "unparsed_exits": unparsed}
     os.makedirs(a.raw_dir, exist_ok=True)
     with open(out, "w") as f:
         json.dump(raw, f, indent=1, sort_keys=True)

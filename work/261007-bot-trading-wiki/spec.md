@@ -150,6 +150,10 @@ This becomes `verification/bot-trading-wiki.md` in Stage 4.
   `exit_rule` are scrubbed too; a day with no fills and no bundle is never written (`{"skipped": true}`); a holiday
   needs every symbol bar-less; an existing raw day skips the RAW check on a re-run; `rclone lsf` failures stop the
   collector; unarmed SKIPPED / NOT FILLED symbols get bars.
+- Review round 7 (2026-10-08): a path is complete at the day's last candle (half days close 13:00); an EXIT line
+  the parser misses is kept as `unparsed_exits` and warned, not a blocker; skip `setup` is scrubbed; repo
+  `CLAUDE.md` and `REVIEW.md` name the wiki step's `raw/` and `wiki/`; `wiki.html` adds one token, `--print-ink`,
+  mirroring `index.html`'s print grey.
 - **For Ty, at ship:** this spec was amended after its 2026-10-07 approval (the entries above). Shipping #15
   approves the amended spec, including the v8 split, which reached this session relayed by the v8 session.
 
