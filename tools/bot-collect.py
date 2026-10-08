@@ -33,7 +33,7 @@ from zoneinfo import ZoneInfo
 ET = ZoneInfo("America/New_York")
 ORB = os.path.expanduser("~/Projects/orb-options")
 REMOTE = os.environ.get("TJ_RCLONE_REMOTE", "igdrive:")   # an rclone Drive remote, read from My Drive's root
-BOTS = os.environ.get("TJ_BOTS_PATH", "Claude Workspace/09 Trading/Trade Journal/Raw Records/Bots")
+BOTS = "Claude Workspace/09 Trading/Trade Journal/Raw Records/Bots"
 ROOT = ["--drive-root-folder-id", "root"]   # by path from My Drive: a launchd job may not read the Drive mount
 USUAL = ["SPY", "QQQ", "IWM", "TSLA", "META", "AMZN", "NFLX", "AMD", "NVDA", "AAPL", "GOOGL", "COIN"]
 V7_KEEP = {
@@ -185,6 +185,12 @@ def main():
     def ls():
         r = subprocess.run(["rclone", "lsf", f"{REMOTE}{BOTS}/"] + ROOT, capture_output=True, text=True)
         if r.returncode != 0 and "directory not found" in r.stderr:
+            # Empty only when Bots/ itself is missing (the first run) and its parent is really there; any other
+            # missing folder means a wrong path, and an upload would quietly build a new tree in the wrong place.
+            parent = subprocess.run(["rclone", "lsf", f"{REMOTE}{BOTS.rsplit('/', 1)[0]}/"] + ROOT,
+                                    capture_output=True, text=True)
+            if parent.returncode != 0:
+                sys.exit("Raw Records not found on Drive by path: " + parent.stderr.strip()[-300:])
             return []                            # first run: copyto creates Bots/
         if r.returncode != 0:
             sys.exit("rclone lsf failed: " + r.stderr.strip()[-300:])
