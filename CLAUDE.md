@@ -11,7 +11,7 @@ Ty's personal Webull options journal, entity **personal**. Live: https://ttrng3.
 - Pack `data/` into one backup file: `node tools/backup.js --out <file>`; verify it without writing: `node tools/restore.js <file> --check` (`docs/backup.md`)
 
 ## Layout
-- `index.html` is the hand-maintained journal engine, not a thin renderer. `tools/sync.js` and the routine write `data/` only and never touch it or its styles.
+- `index.html` is the hand-maintained journal engine, not a thin renderer. `tools/sync.js` and the routine write `data/` (and the wiki step `raw/` and `wiki/`, `docs/wiki.md`) and never touch it or its styles.
 - Data: `data/index.json` (manifest: `shards`, `shardInfo`, `totalFills`, `notes`, `meta`, `generatedUtc`), `data/fills/<YYYY-MM>.json` (one per month), `data/.last-check` (heartbeat, written every run, not published).
 - `tools/parse-webull.js` is the parser; `tools/sync.js` is the whole pipeline and refuses to run if `totalFills` disagrees with the month files.
 - `.github/workflows/monthly-backup.yml` attaches a backup of `data/` to a release on the 1st; `freshness-check.yml` opens an issue when the sync goes quiet.

@@ -31,6 +31,14 @@ wrongly deleted on 2026-09-23 and again on 2026-09-26 by reading the rule as
 the URL, because the job needs a publish target. `tools/build-fragment.py`
 derives the fragment the artifact needs from `index.html`.
 
+## The trading wiki
+
+https://ttrng3.github.io/Trade-Journal/wiki.html (the **Wiki** button in the page header) holds the lessons from
+Ty's trades and the bots' trades, compiled by the same 11:00 routine (Ty, 2026-10-07). A Mac job uploads the
+bots' session to `Raw Records/Bots/` at 10:30; the routine writes `raw/<day>.json` once (not served by Pages,
+readable in this public repo), then updates `wiki/` by concept: days, mistakes, setups, what-ifs, rules, and a
+weekly report on Saturdays. `docs/wiki.md` is its runbook. The Cowork preview carries the wiki too.
+
 ## What the page itself can save
 
 Nothing in the browser can write to this repo, so the Pages build is a
@@ -46,7 +54,7 @@ grows. The status line in the header says how many fills are overlay-only.
 ## Look
 
 `index.html` is hand-maintained — `tools/sync.js` and the nightly routine write
-`data/` only and never touch it. Its visual system is Apple HIG. **Light only — Ty ruled 2026-09-24** (dark mode ran for one morning and was withdrawn): the page stays light whatever the viewer's system setting, and there is no dark theme. Do not add one back. Base tokens sit in the first `<style>`, then
+`data/`, and the wiki step `raw/` and `wiki/`; none of them ever touches it. Its visual system is Apple HIG. **Light only — Ty ruled 2026-09-24** (dark mode ran for one morning and was withdrawn): the page stays light whatever the viewer's system setting, and there is no dark theme. Do not add one back. Base tokens sit in the first `<style>`, then
 `<style id="apple-layer">` adds materials, translucent header and accessibility
 fallbacks; the TradingView embed is pinned to its light theme. `--accent`
 means *positive P&L* (green); interactive chrome is `--blue`. Any new colour must

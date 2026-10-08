@@ -39,7 +39,7 @@ When unsure between two levels, pick the higher one and say why.
 ## Repo-specific rules
 Rules specific to Trade-Journal. **Every standing ruling in the README and in `docs/nightly-sync.md` (the runbook, which outranks the routine prompt) applies as well; a PR that breaks one is at least High, and Critical where a line below says so.** The lines below are the ones most often at risk.
 
-- **`index.html` is hand-maintained.** `tools/sync.js` and the nightly routine write `data/` only (README, "Look"). A sync-side change that touches `index.html` is High.
+- **`index.html` is hand-maintained.** `tools/sync.js` and the nightly routine write `data/`, and the wiki step `raw/` and `wiki/` (README, "Look"). A sync-side change that touches `index.html` is High.
 - **Serialization is fixed.** Month files are minified with keys sorted and fill fields in alphabetical order (`k,p,price,qty,side,sym,t,tif`); the manifest uses a one-space indent. With no new fills, `node tools/sync.js --check` must report `"changedFiles": []` (runbook, "The tools"). A diff that breaks either is High: every month file would rewrite, burying the real change.
 - **Dedup on content, never on filename.** Existing keys win (runbook, "Dedup on content"). A filename-based dedup is High: on 2026-09-23 it would have dropped 100 real fills (runbook, "Dedup on content").
 - **The integrity guard stays.** `sync.js` refuses to run when `totalFills` disagrees with the month files. Removing or weakening that is High.

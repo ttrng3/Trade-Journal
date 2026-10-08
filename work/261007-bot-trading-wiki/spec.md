@@ -105,11 +105,11 @@ Verdict: safe to ship, provided the collector's field allowlist is the only path
 Measured on the first trading-day run after merge (target: the 11:00 Hanoi run on 2026-10-09 or the first run
 after merge, whichever is later) and on the first Saturday run after merge (target 2026-10-10, else 2026-10-17):
 
-1. `raw/<day>.json` exists on `main`; its bot trade count equals the `open` rows in that day's v7 journal plus the
-   sweep log's fills; its manual fill count equals the fills that day in the month shard; every exit and skip has
+1. `raw/<day>.json` exists on `main`; its bot trade count equals the `close` rows in that day's v7 journal plus the
+   sweep log's `EXIT` lines; its manual fill count equals the fills that day in the month shard; every exit and skip has
    10 three-minute candles and a close. Check: `python3 tools/wiki-check.py --day <day>`. Pass line:
    `RAW OK trades=<n> skips=<n> manual=<n> paths=complete`.
-2. Wiki links: `python3 tools/wiki-check.py` prints `WIKI OK pages=<n> dangling=0`.
+2. Wiki links: `python3 tools/wiki-check.py` prints `WIKI OK pages=<n> dangling=0 uncited=0`.
 3. Saturday: `wiki/weekly/<yyyy-Www>.md` exists, under 600 words, every number labelled. Pass line from
    `wiki-check.py --weekly`: `WEEKLY OK words=<n> unlabelled=0`.
 4. On the phone: the verifier opens https://ttrng3.github.io/Trade-Journal/wiki.html at 390 px wide, and the
@@ -121,6 +121,41 @@ This becomes `verification/bot-trading-wiki.md` in Stage 4.
 ## Changes during the build
 - Review of PR #14 (2026-10-07): the wiki step runs before the preview refresh, not after it, so each run's
   preview carries that run's wiki. Raw files described as readable in the public repo, not private.
+- Review of PR #15 (2026-10-08): Promise 1 counts finished bot trades, i.e. v7 `close` rows plus sweep `EXIT`
+  lines (a trade still open at the bell has no exit to follow). A manual exit on an underlying outside the
+  collector's list prints `WARN manual path missing` instead of failing the day. Weekly page names keep the ISO
+  capital W (`weekly/2026-W41`). The two cdnjs scripts carry SRI hashes.
+- Review round 2 of PR #15 (2026-10-08): a day with no Webull fills yet is **deferred**, not frozen; the next run
+  writes it with `--final` (docs/wiki.md "Which day"), so a CSV filed before the next run is kept (one
+  run of lateness; a CSV filed later than that is not). A v7 skip with no
+  stop or target logged is recorded as `first_hit: unknown` instead of stopping the day.
+- **For Ty's ship:** rebuilding `build/artifact.html` for the Wiki link also catches the Cowork preview up with
+  the rules-check feature already on `main` (`work/261003-rules-check`), which was merged without a fragment
+  rebuild. Shipping #15 accepts that catch-up here rather than in its own PR.
+- Review round 3 of PR #15 + the v8 split (2026-10-08): Ty approved the split ("proceed with the split", relayed
+  by the v8 session): Trade-Journal stays the compiler, wiki and weekly report and computes every path-dependent
+  number (MFE/MAE, post-exit paths, target-or-stop-first, shadow exits); v8 (orb-options, built by the v8 session)
+  writes only decision-time facts and sends its field list before it builds; the collector's allowlist keeps
+  dropping unknown fields. v7's `stop_move` and `green` rows are now collected and attached to each bot trade.
+  Catch-up days download their own bundle and pass `RAW OK` before compiling; pages say "Manual trades", never a
+  name beside money; `wiki-check.py` reports `uncited=` apart from `dangling=`; the rclone remote is settable.
+- Review round 4 (2026-10-08): sweep SKIPPED/CANCELLED/NOT FILLED lines with no ARMED line are kept as skips
+  (`first_hit: unknown (not armed)`) and `wiki-check.py` counts sweep skips; journal rows found in two checkouts
+  count once; the first run writes its day with `--final` and catches up nothing; the install refuses a Mac with
+  more than one Drive account; `[[page#anchor]]` renders as a link.
+- Review round 5 (2026-10-08): reasons written to `raw/` are scrubbed of id-like tokens; holidays (no SPY bars) are
+  never written; the collector uploads every recent session missing from Drive; a deferred or holiday day skips the
+  RAW check; bar fetches give up after 6 rate-limit retries; the README says the routine writes `raw/` and `wiki/`.
+- Review round 6 (2026-10-08): v7 trade ids in `raw/` are a per-day counter (`v7-1`, …), and `setup` and
+  `exit_rule` are scrubbed too; a day with no fills and no bundle is never written (`{"skipped": true}`); a holiday
+  needs every symbol bar-less; an existing raw day skips the RAW check on a re-run; `rclone lsf` failures stop the
+  collector; unarmed SKIPPED / NOT FILLED symbols get bars.
+- Review round 7 (2026-10-08): a path is complete at the day's last candle (half days close 13:00); an EXIT line
+  the parser misses is kept as `unparsed_exits` and warned, not a blocker; skip `setup` is scrubbed; repo
+  `CLAUDE.md` and `REVIEW.md` name the wiki step's `raw/` and `wiki/`; `wiki.html` adds one token, `--print-ink`,
+  mirroring `index.html`'s print grey.
+- **For Ty, at ship:** this spec was amended after its 2026-10-07 approval (the entries above). Shipping #15
+  approves the amended spec, including the v8 split, which reached this session relayed by the v8 session.
 
 ## Out of scope
 - Any change to the bots, their schedules or drills, and any automatic tuning. The weekly report proposes; Ty
