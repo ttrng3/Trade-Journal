@@ -13,3 +13,5 @@
 
 ## Out of scope
 The cost-stress column (its own PR), any change to the compile beyond the one runbook line, Friday tune rows (added by each tune).
+
+Result: verifier 2026-10-09 at 390b93c, served locally: wiki-check `WIKI OK pages=9 dangling=0 uncited=0`; page renders at desktop and 388 px (3 tables, rows 15/2/0, no page side-scroll); index link resolves; privacy scan clean. Known limit: the 12-column tables scroll sideways inside their wrapper on a phone.
