@@ -17,6 +17,6 @@
 
 **Interim (9 Oct):** until a source for the late-bar option price exists, the column = the week at 2× the logged entry spread; the one-bar-late part reads "pending".
 
-**Price source (Ty, 2026-10-09, his later message stands; supersedes "no bot change"):** after 3d passes, the bot logs, log only, the option bid/ask one bar after each fill and at exit (orb-options intent `work/261009-post3d-logging`). The routine reads those fields from the bundle. No Alpaca. Mac-bound while the bot runs on the Mac.
+**Price source (Ty, 2026-10-09, final):** the per-bar marks of orb-options' v1 instrumentation release (Mon 2026-10-12, if the Flow line probe passes): bid/ask/mid of the held contract every 1-minute bar until flat, plus bid/ask/mid at each fill. The routine reads them from the bundle. No Alpaca. Mac-bound until the bot moves to Oracle.
 
 **Open questions.** none known
