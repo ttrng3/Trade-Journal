@@ -15,5 +15,9 @@
 
 **Check done 2026-10-09: the bars log holds the underlying only.** The bot's `bar` rows carry the stock bar, levels and votes; option prices exist only at the moment of an order (`entry_start` / `exit_start` bid and ask, and the fill price). `raw/<day>.json` likewise carries stock candles after each trade. So "one bar late" needs option prices from outside the bot's logs.
 
+**Interim (9 Oct):** until a source for the late-bar option price exists, the column = the week at 2× the logged entry spread; the one-bar-late part reads "pending".
+
 **Open questions.**
-1. Where the option price for the next bar comes from, decided before anything is built. Candidate: Alpaca's historical option 1-minute bars (free key; history from 2024-01-18; trade prints only, no bid/ask), with the late fill = next bar's close ± half the spread the bot logged at that order. It needs an Alpaca key as a secret in the cloud routine's environment, never in this repo. The alternative (IBKR) is Mac-only, which this plan rules out.
+1. Where the late-bar option price comes from. Fact: the 10:30 Hanoi collector runs after the close, when the day's 0DTE contracts have expired, and IBKR serves no history for expired options, so it cannot fetch them. Two candidates:
+   - (a) After 3d passes, a log-only capture in the bot of the option bid/ask one bar after each fill and at exit (IBKR, intraday). Mac-bound while the bot runs on the Mac. **Conflicts with Ty's 2026-10-09 ruling "No bot change and no Mac collector"**, so it needs his explicit yes.
+   - (b) Alpaca historical option 1-minute bars from the cloud routine (trade prints, no bid/ask; late fill = next bar's close ± half the logged spread), needing an Alpaca key as a routine secret, never in this repo.
