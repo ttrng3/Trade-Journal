@@ -1,6 +1,6 @@
 {
- "generatedUtc": "2026-10-08T10:58:00Z",
- "snapshotAt": "2026-10-08T10:58:00.162Z",
+ "generatedUtc": "2026-10-10T04:28:53Z",
+ "snapshotAt": "2026-10-10T04:28:53.313Z",
  "shards": [
   "2020-12",
   "2021-01",
@@ -301,16 +301,34 @@
   },
   {
    "id": "2026-10",
-   "fills": 529,
-   "bytes": 151255
+   "fills": 592,
+   "bytes": 169254
   }
  ],
- "totalFills": 24249,
+ "totalFills": 24312,
  "notes": {},
  "meta": {
   "feeC": 0,
   "feeS": 0,
   "imports": [
+   {
+    "at": "2026-10-10T04:28:53.242Z",
+    "dup": 9,
+    "first": "2026-10-07T13:03:50",
+    "fresh": 35,
+    "last": "2026-10-08T13:07:32",
+    "name": "Webull_Orders_Records_Options copy 3.csv",
+    "seen": 44
+   },
+   {
+    "at": "2026-10-10T04:28:53.243Z",
+    "dup": 1,
+    "first": "2026-10-08T13:07:32",
+    "fresh": 28,
+    "last": "2026-10-09T11:20:03",
+    "name": "Webull_Orders_Records_Options copy 4.csv",
+    "seen": 29
+   },
    {
     "at": "2026-10-08T10:58:00.099Z",
     "dup": 17,
@@ -482,7 +500,7 @@
    "Reversal",
    "Scalp"
   ],
-  "snapshotAt": "2026-10-08T10:58:00.162Z"
+  "snapshotAt": "2026-10-10T04:28:53.313Z"
  },
  "pages": "https://ttrng3.github.io/Trade-Journal/",
  "repo": "https://github.com/ttrng3/Trade-Journal"
