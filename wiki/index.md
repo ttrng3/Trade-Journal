@@ -4,12 +4,14 @@ Compiled every trading day from the Webull fills and the bots' session, by conce
 is written once; these pages are the compiled output. Numbers carry their source.
 
 ## Latest weekly report
-None yet. The first weekly report is written on the Saturday run covering Friday's session.
+- [[weekly/2026-W41]]: the week realized -$195.00, and all of the loss is in same-day expiry
 
 ## Hypothesis ledger
 - [[hypothesis-ledger]]: every bot, agent and tune tested, and what happened
 
 ## Days
+- [[days/2026-10-09]]
+- [[days/2026-10-08]]
 - [[days/2026-10-07]]
 
 ## Mistakes
@@ -17,9 +19,11 @@ None yet. The first weekly report is written on the Saturday run covering Friday
 
 ## Setups
 - [[setups/zero-dte-scalp]]
+- [[setups/later-expiry-swing]]
 
 ## What-ifs
 - [[what-ifs/coin-skips]]
+- [[what-ifs/cancelled-sweep-orders]]
 
 ## Rules
 - [[rules/committee-veto]]
