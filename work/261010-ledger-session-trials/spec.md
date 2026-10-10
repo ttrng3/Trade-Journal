@@ -1,7 +1,7 @@
 # Spec: ledger-session-trials
 
-**Approved:** not yet — waits for Ty's "approve"
-**Intent:** accepted 2026-10-10 · **Status:** proposed
+**Approved:** 2026-10-11 (Ty released PR 20 at 00:15 Hanoi, merged as b1c849b, and at 00:30 Hanoi asked for this status to read approved)
+**Intent:** accepted 2026-10-10 · **Status:** approved
 
 ## Requirements
 1. Rows S001–S012 at the end of the bots and setups table of `wiki/hypothesis-ledger.md`, in the page's 12 columns, status `failed`. Source: orb-options `research/session_bt/ledger_rows_S001-S012.csv`, branch `pkg/session-v1` @ba529e3. The backtest was rerun on 2026-10-11 from the committed scripts and gave the same trade counts, means and t values for all 12.
