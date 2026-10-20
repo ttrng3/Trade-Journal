@@ -5,6 +5,20 @@ re-entering the same strike several times. Expiry day leaves no room for a posit
 decided by entry timing and by how many times a losing strike is re-entered.
 
 ## Evidence
+- 2026-10-16: two same-day strikes, **both green**, the first clean 0DTE day compiled. QQQ 720P round-tripped
+  5-for-5 at **+$127.00**; TSLA 377.5C took **$378.00** of buys and **$524.00** of sells but closed a contract
+  carried in from earlier in the week, so it is **+$146.00** of net cash rather than a round trip. Net cash across
+  the two strikes was **+$273.00**. (Verified: raw/2026-10-16.json)
+- 2026-10-16: re-entry did not pick the loser this time. Six buy fills on TSLA and five on QQQ, and both strikes
+  ended green — the opposite of 2026-10-07 and 2026-10-08, where the most re-entered strikes were the ones that
+  lost. The size-is-the-tell correlation now has a counterexample.
+  (Verified: computed over raw/2026-10-07…raw/2026-10-16)
+- 2026-10-16: the day's realized result is not the interesting number. The QQQ put settled **$10.14** in the money
+  after being sold at 1.18–1.94, so the same five contracts held to expiry were worth **$5,070.00** against the
+  **$766.00** taken. See [[what-ifs/exit-before-the-close]]. (Verified: raw/2026-10-16.json)
+- 2026-10-12 to 2026-10-15: no same-day-expiry trade is recorded on any of the four days. Those raw days were
+  frozen before Ty's export arrived, so the fills the shard now holds for them are not in `raw/` and cannot be
+  compiled. (Verified: computed over raw/2026-10-12…raw/2026-10-15; data/fills/2026-10.json)
 - 2026-10-09: three same-day contracts round-tripped for **+$21.00** — SPY 776C +$94.00, TSLA 387.5C +$25.00, QQQ 750P
   -$98.00 — and trading stopped at 11:20:03, before midday. The session's real gain was a later-expiry position, not
   these. (Verified: raw/2026-10-09.json)
@@ -29,9 +43,12 @@ decided by entry timing and by how many times a losing strike is re-entered.
   offer no comparison yet. (Verified: raw/2026-10-07.json)
 
 ## Count so far
-Seen on 3 of 3 compiled days: 13 same-day-expiry contracts round-tripped inside the week, 5 winners, **-$615.00**.
-By day, same-day-expiry round trips returned -$729.00, +$118.00 and +$21.00.
-(Verified: computed over raw/2026-10-07…2026-10-09)
+Seen on 4 of 8 compiled days. Counting only same-day strikes bought and sold in equal size: **15 strikes, 69
+contracts, 7 green, -$463.00**. By day those round trips returned **-$729.00, +$118.00, +$21.00 and +$127.00**.
+Two strikes are excluded because they closed or left a carried position rather than round-tripping —
+TSLA 10-07 385C and TSLA 10-16 377.5C; counting net cash on every same-day strike instead gives **+$59.00**.
+The four sessions 2026-10-12 to 2026-10-15 contribute nothing: their raw days were frozen with no fills.
+(Verified: computed over raw/2026-10-07…raw/2026-10-16)
 
 ## What to do about it
 Proposals only. The number to carry forward is round trips per strike against result per strike, because on this day

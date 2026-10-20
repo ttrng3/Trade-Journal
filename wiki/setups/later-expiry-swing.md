@@ -5,6 +5,9 @@ closed on a later session. It is the opposite trade to [[setups/zero-dte-scalp]]
 for a while, so the result turns on the move rather than on entry timing within one session.
 
 ## Evidence
+- 2026-10-16: TSLA 10-23 410C opened, **7 days** to expiry. Three contracts at 1.69, 1.34 and 1.35 for **$438.00**,
+  none sold, carried into the next session. No result yet; it is the second later-expiry position compiled and the
+  only one currently open. (Verified: raw/2026-10-16.json)
 - 2026-10-08 to 2026-10-09: TSLA 10-16 400C, 8 days to expiry when first bought. Four contracts accumulated across
   Thursday at 1.62, 1.46, 1.34 and 1.25 premium, **$567.00** in total, none sold that day. All four were sold on
   Friday morning between 09:30:22 and 09:50:54 at 2.84, 2.86, 3.15 and 4.35 for **$1,320.00**, a **+$753.00** round
@@ -19,9 +22,10 @@ for a while, so the result turns on the move rather than on entry timing within 
   (Verified: computed over raw/2026-10-07…2026-10-09)
 
 ## Count so far
-Seen once on 3 compiled days: 1 completed later-expiry round trip, 1 winner, **+$753.00**. Against it, 13 same-day
-contracts returned -$615.00 and 2 near-dated contracts -$333.00.
-(Verified: computed over raw/2026-10-07…2026-10-09)
+Seen twice on 8 compiled days: **1 completed** later-expiry round trip, 1 winner, **+$753.00**, and **1 open**
+position carrying **$438.00** of cost (TSLA 10-23 410C, opened 2026-10-16). Against the completed one, same-day
+strikes round-tripped in equal size returned **-$463.00** over 15 strikes and 2 near-dated contracts -$333.00.
+(Verified: computed over raw/2026-10-07…raw/2026-10-16)
 
 ## What to do about it
 Proposals only, for the Friday tune. **One position is not a strategy** and the sample here is a single contract in a
