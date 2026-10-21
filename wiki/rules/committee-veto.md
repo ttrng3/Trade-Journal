@@ -5,6 +5,11 @@ committee. The committee gate is on every veto, so the question is never whether
 came with it, and whether that combination blocked setups that would have worked.
 
 ## Evidence
+- **2026-10-12 to 2026-10-20: seven consecutive compiled sessions with no v7 record at all.** Every one of the
+  seven bundles is present and complete — 12 symbols of one-minute bars each — and every one carries **0 v7 rows
+  and no sweep log**. No skip means no gate vote, so none of the counts below has moved since 2026-10-09. The
+  collector is delivering; what is silent is the bots.
+  (Verified: computed over raw/2026-10-12…raw/2026-10-20)
 - 2026-10-09: committee again appeared on all 26 v7 skips. Volume came with 23, levels 21, structure 19, candle 17,
   timeframes 8. Of the 12 that resolved, the share behind each gate that reached target first: candle 12.5%,
   levels 11.1%, volume 10.0%, committee 8.3%, structure 0.0%, timeframes 0.0%. (Verified: raw/2026-10-09.json)
@@ -21,9 +26,10 @@ came with it, and whether that combination blocked setups that would have worked
   structure the least at 23.8%. (Verified: raw/2026-10-07.json)
 
 ## Count so far
-Seen on 3 of 3 compiled days. Across 166 resolved skips, taking them all would have returned **-48.83R**: -41.46R on
-2026-10-07, +1.61R on 2026-10-08 and -8.98R on 2026-10-09. The veto is net protective over three days, but it was
-net costly on one of them. (Verified: computed over raw/2026-10-07…2026-10-09)
+Seen on 3 of 10 compiled days, and on none since 2026-10-09. Across 166 resolved skips, taking them all would have
+returned **-48.83R**: -41.46R on 2026-10-07, +1.61R on 2026-10-08 and -8.98R on 2026-10-09. The veto is net
+protective over those three days, but it was net costly on one of them, and the seven sessions since have added no
+evidence either way. (Verified: computed over raw/2026-10-07…raw/2026-10-20)
 
 ## What to do about it
 Proposals only, for the Friday tune. The proposal carried out of 2026-10-07 was to watch whether the per-gate
@@ -39,6 +45,9 @@ sessions on samples of 1 to 13 resolved skips per gate. Reading a ranking off a 
    (Verified: computed over raw/2026-10-07…2026-10-09)
 3. Note that v7's symbol list narrowed to SPY and QQQ by 2026-10-09, so later days are not comparable with
    2026-10-07's ten symbols without splitting by symbol. (Verified: raw/2026-10-09.json)
+4. **Added 2026-10-20: the gate question is on hold and the wiring question is open.** Seven consecutive sessions
+   with a complete bundle and zero v7 rows is long enough that the next tune should establish whether the bots are
+   running at all before any gate is adjusted. (Verified: computed over raw/2026-10-12…raw/2026-10-20)
 
 See [[what-ifs/coin-skips]] for the one symbol where the veto already looks wrong, and
 [[what-ifs/cancelled-sweep-orders]] for the sweep bot, where cancellation rather than a vote is what prevented the

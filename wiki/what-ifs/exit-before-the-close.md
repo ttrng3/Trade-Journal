@@ -6,6 +6,20 @@ went wrong in the window the post-exit candles cover, so the exit cannot be faul
 normally carries. Only the settlement price shows the cost.
 
 ## Evidence
+- **2026-10-19 and 2026-10-20 reversed the ledger.** The two sessions added **+$3,386.00**, turning a running
+  **-$2,937.00** through 2026-10-16 into **+$449.00** across all 20 compiled same-day strikes. On the evidence to
+  2026-10-16 exiting early looked like the expensive habit; across 20 strikes it is now slightly the cheaper one.
+  (Verified: computed over raw/2026-10-07…raw/2026-10-20)
+- 2026-10-20: SPY 10-20 768C. Nineteen contracts bought for **$3,179.00** and all nineteen sold for **$3,590.00**,
+  **+$411.00**. SPY closed at **769.01**, so the call settled only **$1.01** in the money, **$101.00** a contract.
+  Held, the nineteen were worth **$1,919.00** — **-$1,260.00** against cost. Exiting beat holding by **$1,671.00**,
+  the largest margin either way so far. (Verified: raw/2026-10-20.json)
+- 2026-10-20: the same session also shows the other side, small. SPY 10-20 766C, two contracts for **$236.00** sold
+  for **$287.00**, settled **$3.01** in the money. Held they were worth **$602.00**, so exiting cost **$315.00**.
+  Two same-day SPY calls, three strikes apart, opposite answers. (Verified: raw/2026-10-20.json)
+- 2026-10-19: SPY 10-19 767C. Sixteen contracts bought for **$1,842.00** and all sixteen sold for **$2,030.00**.
+  SPY closed at **766.54**, **$0.46** short of the strike, so the whole position settled worthless and holding
+  would have returned **-$1,842.00**. Exiting beat holding by **$2,030.00**. (Verified: raw/2026-10-19.json)
 - 2026-10-16: QQQ 10-16 720P. Five contracts bought for **$639.00** and all five sold by 10:19:58 for **$766.00**,
   a **+$127.00** day. QQQ closed at **709.86**, so the put settled **$10.14** in the money, **$1,014.00** a
   contract. Held, the five were worth **$5,070.00**: **+$4,431.00** instead of +$127.00, and **$4,304.00** forgone.
@@ -18,9 +32,11 @@ normally carries. Only the settlement price shows the cost.
   **$378.00**. One rule, two opposite outcomes, one day. (Verified: raw/2026-10-16.json)
 
 ## Count so far
-Seen once on 5 compiled days: 1 same-day strike exited before a move that settled in the money, **$4,304.00**
-forgone. Against it, 1 same-day strike on the same session where exiting saved **$378.00**.
-(Verified: computed over raw/2026-10-07…raw/2026-10-16)
+Seen on 7 compiled days, over **20 same-day strikes** with a settlement price. Exiting beat holding on **12** of
+them and cost money on **8**, and the net is **+$449.00** in favour of exiting. The distribution is what matters,
+not the net: the two largest single entries are **+$2,030.00** (2026-10-19) and **-$4,304.00** (2026-10-16), so a
+single strike still moves the total by more than every other strike combined.
+(Verified: computed over raw/2026-10-07…raw/2026-10-20)
 
 ## What to do about it
 Proposals only; Ty decides.
@@ -34,3 +50,8 @@ Proposals only; Ty decides.
 3. The testable question is narrower: when a same-day position is closed for a gain of under $100 per contract and
    the underlying later settles further the trade's way, how often and by how much. That needs more than one day.
    (Assumption: one observation, no rule proposed yet)
+4. **Added 2026-10-20: drop "exiting early is costing money" as a working conclusion.** It was read off one strike
+   on 2026-10-16 and two sessions reversed it — 12 of 20 strikes now favour exiting and the net is **+$449.00**.
+   What survives is that the result is driven by tails, not by the typical strike: the two biggest entries are
+   **+$2,030.00** and **-$4,304.00**. Size the position, not the exit rule.
+   (Verified: computed over raw/2026-10-07…raw/2026-10-20)

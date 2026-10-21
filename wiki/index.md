@@ -11,6 +11,8 @@ is written once; these pages are the compiled output. Numbers carry their source
 - [[hypothesis-ledger]]: every bot, agent and tune tested, and what happened
 
 ## Days
+- [[days/2026-10-20]]
+- [[days/2026-10-19]]
 - [[days/2026-10-16]]
 - [[days/2026-10-15]]
 - [[days/2026-10-14]]
