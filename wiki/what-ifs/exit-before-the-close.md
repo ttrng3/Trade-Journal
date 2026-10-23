@@ -6,6 +6,15 @@ went wrong in the window the post-exit candles cover, so the exit cannot be faul
 normally carries. Only the settlement price shows the cost.
 
 ## Evidence
+- **2026-10-21 erased the reversal with two contracts.** SPY 10-21 769C, two contracts bought for **$291.00** and
+  both sold for **$358.00**, **+$67.00**. SPY closed at **773.10**, so the call settled **$4.10** in the money,
+  **$410.00** a contract. Held, the two were worth **$820.00**: **+$529.00** instead of +$67.00, so exiting cost
+  **$462.00**. That one strike took the running total from **+$449.00** to **-$13.00** across 21 strikes — the
+  smallest position in the series moving the aggregate further than the direction the previous two sessions had
+  established. (Verified: raw/2026-10-21.json; computed over raw/2026-10-07…raw/2026-10-21)
+- **2026-10-21 is the case where the candles agreed with the settlement.** Both exits were followed by SPY rising,
+  **+1.58** and **+0.95** over the next 30 minutes, and the close went further the same way. The usual defence of
+  an exit — that the next half hour looked fine — is not available here. (Verified: raw/2026-10-21.json)
 - **2026-10-19 and 2026-10-20 reversed the ledger.** The two sessions added **+$3,386.00**, turning a running
   **-$2,937.00** through 2026-10-16 into **+$449.00** across all 20 compiled same-day strikes. On the evidence to
   2026-10-16 exiting early looked like the expensive habit; across 20 strikes it is now slightly the cheaper one.
@@ -32,11 +41,12 @@ normally carries. Only the settlement price shows the cost.
   **$378.00**. One rule, two opposite outcomes, one day. (Verified: raw/2026-10-16.json)
 
 ## Count so far
-Seen on 7 compiled days, over **20 same-day strikes** with a settlement price. Exiting beat holding on **12** of
-them and cost money on **8**, and the net is **+$449.00** in favour of exiting. The distribution is what matters,
-not the net: the two largest single entries are **+$2,030.00** (2026-10-19) and **-$4,304.00** (2026-10-16), so a
-single strike still moves the total by more than every other strike combined.
-(Verified: computed over raw/2026-10-07…raw/2026-10-20)
+Seen on 8 compiled days, over **21 same-day strikes** with a settlement price. Exiting beat holding on **12** of
+them and cost money on **9**, and the net is **-$13.00** — dead even, after reading **+$449.00** one session
+earlier. The distribution is the whole story, not the net: the two largest single entries are **+$2,030.00**
+(2026-10-19) and **-$4,304.00** (2026-10-16), so a single strike still moves the total by more than every other
+strike combined, and a 2-contract strike on 2026-10-21 moved it $462.00.
+(Verified: computed over raw/2026-10-07…raw/2026-10-21)
 
 ## What to do about it
 Proposals only; Ty decides.
@@ -55,3 +65,8 @@ Proposals only; Ty decides.
    What survives is that the result is driven by tails, not by the typical strike: the two biggest entries are
    **+$2,030.00** and **-$4,304.00**. Size the position, not the exit rule.
    (Verified: computed over raw/2026-10-07…raw/2026-10-20)
+5. **Added 2026-10-21: stop reporting the net at all.** Two contracts took it from +$449.00 to -$13.00 in one
+   session, which is the clearest possible demonstration that the sign of this total carries no information at 21
+   strikes. Report the per-strike distribution and the two tails; leave the aggregate out of the weekly until the
+   sample is large enough that one strike cannot flip it.
+   (Verified: computed over raw/2026-10-07…raw/2026-10-21)
