@@ -5,6 +5,9 @@ committee. The committee gate is on every veto, so the question is never whether
 came with it, and whether that combination blocked setups that would have worked.
 
 ## Evidence
+- **2026-10-21 makes it eight consecutive sessions with no v7 record.** The bundle is present, `holiday` false, 12
+  symbols of one-minute bars, **0 v7 rows and no sweep log** — the same shape as the seven before it. Nothing below
+  has moved since 2026-10-09. (Verified: raw/2026-10-21.json; computed over raw/2026-10-12…raw/2026-10-21)
 - **2026-10-12 to 2026-10-20: seven consecutive compiled sessions with no v7 record at all.** Every one of the
   seven bundles is present and complete — 12 symbols of one-minute bars each — and every one carries **0 v7 rows
   and no sweep log**. No skip means no gate vote, so none of the counts below has moved since 2026-10-09. The
@@ -26,10 +29,10 @@ came with it, and whether that combination blocked setups that would have worked
   structure the least at 23.8%. (Verified: raw/2026-10-07.json)
 
 ## Count so far
-Seen on 3 of 10 compiled days, and on none since 2026-10-09. Across 166 resolved skips, taking them all would have
+Seen on 3 of 11 compiled days, and on none since 2026-10-09. Across 166 resolved skips, taking them all would have
 returned **-48.83R**: -41.46R on 2026-10-07, +1.61R on 2026-10-08 and -8.98R on 2026-10-09. The veto is net
-protective over those three days, but it was net costly on one of them, and the seven sessions since have added no
-evidence either way. (Verified: computed over raw/2026-10-07…raw/2026-10-20)
+protective over those three days, but it was net costly on one of them, and the eight sessions since have added no
+evidence either way. (Verified: computed over raw/2026-10-07…raw/2026-10-21)
 
 ## What to do about it
 Proposals only, for the Friday tune. The proposal carried out of 2026-10-07 was to watch whether the per-gate
@@ -48,6 +51,9 @@ sessions on samples of 1 to 13 resolved skips per gate. Reading a ranking off a 
 4. **Added 2026-10-20: the gate question is on hold and the wiring question is open.** Seven consecutive sessions
    with a complete bundle and zero v7 rows is long enough that the next tune should establish whether the bots are
    running at all before any gate is adjusted. (Verified: computed over raw/2026-10-12…raw/2026-10-20)
+5. **Added 2026-10-21: it is eight sessions, a full trading week and a half.** The collector has not missed a day,
+   so whatever is silent is upstream of it. Establish that before the next tune touches a gate.
+   (Verified: computed over raw/2026-10-12…raw/2026-10-21)
 
 See [[what-ifs/coin-skips]] for the one symbol where the veto already looks wrong, and
 [[what-ifs/cancelled-sweep-orders]] for the sweep bot, where cancellation rather than a vote is what prevented the

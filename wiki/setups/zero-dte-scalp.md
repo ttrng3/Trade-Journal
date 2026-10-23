@@ -5,6 +5,11 @@ re-entering the same strike several times. Expiry day leaves no room for a posit
 decided by entry timing and by how many times a losing strike is re-entered.
 
 ## Evidence
+- 2026-10-21: one same-day strike, green, **+$67.00** on two contracts of SPY 769C, bought and sold inside 21
+  minutes. The smallest session compiled, and the fifth green one in a row. (Verified: raw/2026-10-21.json)
+- 2026-10-21: size and result moved together again, in the other direction — the smallest position of the five
+  green sessions produced the smallest gain, while the same strike held to settlement was worth **+$529.00**.
+  See [[what-ifs/exit-before-the-close]]. (Verified: raw/2026-10-21.json)
 - 2026-10-20: two same-day strikes, **both green**, **+$462.00** — the best 0DTE session compiled. SPY 768C took 19
   contracts for +$411.00 and SPY 766C two for +$51.00. (Verified: raw/2026-10-20.json)
 - 2026-10-19: one same-day strike, green, **+$188.00** on 16 contracts of SPY 767C, round-tripped in six clusters
@@ -52,13 +57,13 @@ decided by entry timing and by how many times a losing strike is re-entered.
   offer no comparison yet. (Verified: raw/2026-10-07.json)
 
 ## Count so far
-Seen on 6 of 10 compiled days. Counting only same-day strikes bought and sold in equal size: **18 strikes, 106
-contracts, 10 green, +$187.00**. By day those round trips returned **-$729.00, +$118.00, +$21.00, +$127.00,
-+$188.00 and +$462.00** — the book turned positive on 2026-10-20, and every session after 2026-10-07 has been
-green. Two strikes are excluded because they closed or left a carried position rather than round-tripping —
-TSLA 10-07 385C and TSLA 10-16 377.5C; counting net cash on every same-day strike instead gives **+$709.00**.
-The four sessions 2026-10-12 to 2026-10-15 contribute nothing: their raw days were frozen with no fills.
-(Verified: computed over raw/2026-10-07…raw/2026-10-20)
+Seen on 7 of 11 compiled days. Counting only same-day strikes bought and sold in equal size: **19 strikes, 108
+contracts, 11 green, +$254.00**. By day those round trips returned **-$729.00, +$118.00, +$21.00, +$127.00,
++$188.00, +$462.00 and +$67.00** — the book turned positive on 2026-10-20, and every session after 2026-10-07 has
+been green, five in a row. Two strikes are excluded because they closed or left a carried position rather than
+round-tripping — TSLA 10-07 385C and TSLA 10-16 377.5C; counting net cash on every same-day strike instead gives
+**+$776.00**. The four sessions 2026-10-12 to 2026-10-15 contribute nothing: their raw days were frozen with no
+fills. (Verified: computed over raw/2026-10-07…raw/2026-10-21)
 
 ## What to do about it
 Proposals only. The number to carry forward is round trips per strike against result per strike, because on this day
