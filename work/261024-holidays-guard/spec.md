@@ -1,7 +1,7 @@
 # Holiday calendar for the whole journal, a staleness warning, and a current preview build (24 Oct 2026)
 
-Status: **DRAFT, not approved.** Built on `work/261024-holidays-guard`. Source: Ty's follow-ups to PR #22 (by paste,
-24 Oct; see intent.md). Approval and the ship wait for his own words after he sees the recount.
+Status: **APPROVED** — Ty typed "approve", 24 Oct 2026, after seeing the recount (overnight 0–1 DTE: 126 → 128, 2 trades).
+Source: Ty's follow-ups to PR #22 (by paste, then typed; see intent.md). Ships on his phrase.
 
 ## 1. Holiday list (`MKT_HOLIDAYS` in index.html)
 Every NYSE full-day closure from the journal's first trade (2020-12-18) through 2027: 70 dates. Checked against the
