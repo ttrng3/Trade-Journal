@@ -508,20 +508,29 @@ function stats(ts){
 function rebuild(){
   S.trades=buildTrades(Object.values(S.fills),{feeC:+S.meta.feeC||0,feeS:+S.meta.feeS||0,longOnly:S.meta.longOnly!==false});
   S.trades.forEach(t=>{const n=S.notes[t.key]||{};t.notes=n.notes||'';t.tags=n.tags||[];t.playbook=n.playbook||'';t.rating=n.rating||0;t.shots=n.shots||[];t.rules=ruleFlags(t);});
+  const gb=givebackFrom(S.trades);S.trades.forEach(t=>{const g=gb[t.entry.slice(0,10)];if(g&&t.type==='option'&&closedOf([t]).length&&t.entry>g)t.rules.push('giveback');});
   S.capDays=overCapDays(S.trades);
   if(!S.ym){const days=S.trades.map(t=>t.date).sort();const last=days[days.length-1]||todayISO();S.ym={y:+last.slice(0,4),m:+last.slice(5,7)};}
 }
-/* rules check (work/261003-rules-check): five trade rules plus the -3R daily cap */
-const RULES=[['adddown','add-down'],['early0','early 0DTE'],['late0','late 0DTE'],['longhold','long hold'],['spxw','SPXW']];
+/* rules check (work/261003-rules-check, extended by work/261024-personal-rules): trade rules plus the -3R daily cap */
+const RULES=[['adddown','add-down'],['earlyadd','add-down before 10:00'],['late0','late 0DTE'],['longhold','long hold'],['spxw','SPXW'],['spxpm','SPX after 12:00'],['overnight','overnight 0–1 DTE'],['giveback','after 30% giveback']];
+/* personal rules (work/261024-personal-rules): giveback threshold in $, business days to expiry that count as 0–1 DTE */
+const GIVEBACK_MIN=300,GIVEBACK_PCT=0.30;
+const MKT_HOLIDAYS=new Set(['2026-11-26','2026-12-25','2027-01-01','2027-01-18','2027-02-15','2027-03-26','2027-05-31','2027-06-18','2027-07-05','2027-09-06','2027-11-25','2027-12-24']); // NYSE full closures; extend each year
+function bdaysTo(from,to){let n=0,d=new Date(from+'T12:00:00Z');const e=new Date(to+'T12:00:00Z');while(d<e){d.setUTCDate(d.getUTCDate()+1);const w=d.getUTCDay();if(w&&w<6&&!MKT_HOLIDAYS.has(d.toISOString().slice(0,10)))n++;}return n;}
+function givebackFrom(ts){const by={},out={};closedOf(ts).filter(t=>t.type==='option').forEach(t=>{const d=t.exit.slice(0,10);(by[d]=by[d]||[]).push(t);});
+  for(const d in by){let cum=0,pk=0;for(const t of by[d].sort((a,b)=>a.exit.localeCompare(b.exit))){cum+=t.net;if(cum>pk)pk=cum;if(pk>=GIVEBACK_MIN&&cum<=(1-GIVEBACK_PCT)*pk){out[d]=t.exit;break;}}}return out;}
 const RULE_LBL=Object.fromEntries(RULES);
 function ruleFlags(t){
   if(t.type!=='option'||t.net==null||t.result==='OPEN'||t.result==='UNKNOWN')return [];
   const r=[],buys=t.fills.filter(f=>f.side==='BUY'),hm=t.entry.slice(11,16),zero=t.exp===t.entry.slice(0,10);
   if(t.dir==='LONG'&&buys.slice(1).some(f=>f.price*100<=buys[0].price*97+1e-6))r.push('adddown');
-  if(zero&&hm<'10:00')r.push('early0');
+  if(t.dir==='LONG'&&buys.slice(1).some(f=>f.price*100<=buys[0].price*97+1e-6&&f.t.slice(11,16)<'10:00'))r.push('earlyadd');
   if(zero&&hm>='14:00'&&hm<'15:00')r.push('late0');
   if(zero&&t.hold>600)r.push('longhold');
   if(t.und==='SPXW')r.push('spxw');
+  if((t.und==='SPXW'||t.und==='SPX')&&hm>='12:00')r.push('spxpm');
+  if(t.exp&&t.exit&&t.exit.slice(0,10)>t.entry.slice(0,10)&&bdaysTo(t.entry.slice(0,10),t.exp)<=1)r.push('overnight');
   return r;
 }
 function overCapDays(ts){const R=+S.meta.R||0;if(!(R>0))return null;const d={};closedOf(ts).forEach(t=>d[t.date]=(d[t.date]||0)+t.net);return new Set(Object.keys(d).filter(k=>d[k]<-3*R));}
