@@ -1,6 +1,6 @@
 # Intent: holiday calendar for the whole journal, a staleness warning, a current preview build
 
-Status: **relayed by paste, 24 Oct 2026 — not yet accepted in Ty's own words.**
+Status: **ACCEPTED** — Ty typed "accept", 24 Oct 2026 (after the paste; narrowed in his own words: warning only for trades whose expiry is within 7 calendar days of entry).
 
 1. **What:** (1) every NYSE full closure over the journal's whole date range in the "overnight 0–1 DTE" count, checked against the official NYSE calendar and cited; (2) a visible warning on the Rules card when a trade or expiry falls after the list's last year; (3) no stale `build/artifact.html`.
 2. **Why:** PR #22 listed holidays only from 2026-11-26, so older trades could miscount; a list that silently runs out miscounts later; nothing in a public repo should be out of date.
