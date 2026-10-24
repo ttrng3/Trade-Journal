@@ -38,6 +38,8 @@ All of these must hold:
 - `errors` holds nothing except the 404 for `data/journal.json`, which the page probes on purpose and falls back from (`.pages-allow` notes it).
 - Step 3 prints `"changedFiles": []`.
 - Step 4 prints `0` and `False`.
+- **Holiday calendar current:** `holidayStale` on the page is false for today's data, the Rules card shows no `#holidayWarn`, and the page's `HOL_LAST_YEAR` is at least the year of the latest trade date and expiry. Fixture: `holidayStale([{entry:'<HOL_LAST_YEAR+1>-01-04T10:00:00',exp:null}])` is true. The page's holiday set equals the recount's `HOL` exactly (same 70 dates on 24 Oct 2026).
+- **Preview build current:** `python3 tools/build-fragment.py /tmp/frag.html` then `cmp /tmp/frag.html build/artifact.html` prints nothing: the committed `build/artifact.html` is the fragment of the committed `index.html`.
 - Step 5 prints `"pass": true` after the merge. On the branch, `served_equals_main` is false by design (Pages still serves `main`) and every other verdict must be true.
 
 Measured on 2026-10-03 on branch `work/rules-check` (local server): 322 / −$6,309, 28 / −$529, 32 / −$1,598, 144 / −$3,523, 87 / −$3,450, 118 / +$1,962; 16 over-cap days (130 trades), −$11,136; 411 of 532. These pass only as long as the data is unchanged. New fills inside the range move them, so compare the page against the recount, never against these figures.
@@ -50,7 +52,7 @@ const idx=JSON.parse(fs.readFileSync(R+'/data/index.json'));let fills=[];
 for(const s of idx.shards)fills.push(...Object.values(JSON.parse(fs.readFileSync(`${R}/data/fills/${s}.json`))).map(f=>P.hydrate({...f})));
 const all=P.buildTrades(fills,{feeC:0,feeS:0,longOnly:true});
 const closed=all.filter(t=>t.net!=null&&t.result!=='OPEN'&&t.result!=='UNKNOWN');
-const HOL=new Set(['2026-11-26','2026-12-25','2027-01-01','2027-01-18','2027-02-15','2027-03-26','2027-05-31','2027-06-18','2027-07-05','2027-09-06','2027-11-25','2027-12-24']);
+const HOL=new Set(['2020-12-25','2021-01-01','2021-01-18','2021-02-15','2021-04-02','2021-05-31','2021-07-05','2021-09-06','2021-11-25','2021-12-24','2022-01-17','2022-02-21','2022-04-15','2022-05-30','2022-06-20','2022-07-04','2022-09-05','2022-11-24','2022-12-26','2023-01-02','2023-01-16','2023-02-20','2023-04-07','2023-05-29','2023-06-19','2023-07-04','2023-09-04','2023-11-23','2023-12-25','2024-01-01','2024-01-15','2024-02-19','2024-03-29','2024-05-27','2024-06-19','2024-07-04','2024-09-02','2024-11-28','2024-12-25','2025-01-01','2025-01-09','2025-01-20','2025-02-17','2025-04-18','2025-05-26','2025-06-19','2025-07-04','2025-09-01','2025-11-27','2025-12-25','2026-01-01','2026-01-19','2026-02-16','2026-04-03','2026-05-25','2026-06-19','2026-07-03','2026-09-07','2026-11-26','2026-12-25','2027-01-01','2027-01-18','2027-02-15','2027-03-26','2027-05-31','2027-06-18','2027-07-05','2027-09-06','2027-11-25','2027-12-24']); // copied from the NYSE/ICE sources named in work/261024-holidays-guard/spec.md, not from index.html
 const bd=(a,b)=>{let n=0;for(let d=new Date(a+'T12:00:00Z');d<new Date(b+'T12:00:00Z');){d.setUTCDate(d.getUTCDate()+1);const k=d.toISOString().slice(0,10);if(d.getUTCDay()%6&&!HOL.has(k))n++;}return n;};
 const gb={},by={};closed.filter(t=>t.type==='option').forEach(t=>(by[t.exit.slice(0,10)]=by[t.exit.slice(0,10)]||[]).push(t));
 for(const d in by){let c=0,p=0;for(const t of by[d].sort((x,y)=>x.exit.localeCompare(y.exit))){c+=t.net;p=Math.max(p,c);if(p>=300&&c<=0.7*p){gb[d]=t.exit;break;}}}

@@ -501,20 +501,39 @@ function stats(ts){
 function rebuild(){
   S.trades=buildTrades(Object.values(S.fills),{feeC:+S.meta.feeC||0,feeS:+S.meta.feeS||0,longOnly:S.meta.longOnly!==false});
   S.trades.forEach(t=>{const n=S.notes[t.key]||{};t.notes=n.notes||'';t.tags=n.tags||[];t.playbook=n.playbook||'';t.rating=n.rating||0;t.shots=n.shots||[];t.rules=ruleFlags(t);});
+  const gb=givebackFrom(S.trades);S.trades.forEach(t=>{const g=gb[t.entry.slice(0,10)];if(g&&t.type==='option'&&closedOf([t]).length&&t.entry>g)t.rules.push('giveback');});
   S.capDays=overCapDays(S.trades);
   if(!S.ym){const days=S.trades.map(t=>t.date).sort();const last=days[days.length-1]||todayISO();S.ym={y:+last.slice(0,4),m:+last.slice(5,7)};}
 }
-/* rules check (work/261003-rules-check): five trade rules plus the -3R daily cap */
-const RULES=[['adddown','add-down'],['early0','early 0DTE'],['late0','late 0DTE'],['longhold','long hold'],['spxw','SPXW']];
+/* rules check (work/261003-rules-check, extended by work/261024-personal-rules): trade rules plus the -3R daily cap */
+const RULES=[['adddown','add-down'],['earlyadd','add-down before 10:00'],['late0','late 0DTE'],['longhold','long hold'],['spxw','SPXW'],['spxpm','SPX after 12:00'],['overnight','overnight 0–1 DTE'],['giveback','after 30% giveback']];
+/* personal rules (work/261024-personal-rules): giveback threshold in $, business days to expiry that count as 0–1 DTE */
+const GIVEBACK_MIN=300,GIVEBACK_PCT=0.30;
+const MKT_HOLIDAYS=new Set([ // NYSE full-day closures, journal start (2020-12-18) through 2027. Sources: NYSE/ICE holiday calendar releases for 2020-22, 2022-24, 2023-25, nyse.com/markets/hours-calendars (2025-27), ICE release of 2024-12-30 (2025-01-09 closure). New Year 2022 fell on a Saturday: no closure (NYSE Rule 7.2).
+  '2020-12-25',
+  '2021-01-01','2021-01-18','2021-02-15','2021-04-02','2021-05-31','2021-07-05','2021-09-06','2021-11-25','2021-12-24',
+  '2022-01-17','2022-02-21','2022-04-15','2022-05-30','2022-06-20','2022-07-04','2022-09-05','2022-11-24','2022-12-26',
+  '2023-01-02','2023-01-16','2023-02-20','2023-04-07','2023-05-29','2023-06-19','2023-07-04','2023-09-04','2023-11-23','2023-12-25',
+  '2024-01-01','2024-01-15','2024-02-19','2024-03-29','2024-05-27','2024-06-19','2024-07-04','2024-09-02','2024-11-28','2024-12-25',
+  '2025-01-01','2025-01-09','2025-01-20','2025-02-17','2025-04-18','2025-05-26','2025-06-19','2025-07-04','2025-09-01','2025-11-27','2025-12-25',
+  '2026-01-01','2026-01-19','2026-02-16','2026-04-03','2026-05-25','2026-06-19','2026-07-03','2026-09-07','2026-11-26','2026-12-25',
+  '2027-01-01','2027-01-18','2027-02-15','2027-03-26','2027-05-31','2027-06-18','2027-07-05','2027-09-06','2027-11-25','2027-12-24']);
+const HOL_LAST_YEAR=Math.max(...[...MKT_HOLIDAYS].map(d=>+d.slice(0,4)));
+function holidayStale(ts){return ts.some(t=>+t.entry.slice(0,4)>HOL_LAST_YEAR||(t.exp&&+t.exp.slice(0,4)>HOL_LAST_YEAR));}
+function bdaysTo(from,to){let n=0,d=new Date(from+'T12:00:00Z');const e=new Date(to+'T12:00:00Z');while(d<e){d.setUTCDate(d.getUTCDate()+1);const w=d.getUTCDay();if(w&&w<6&&!MKT_HOLIDAYS.has(d.toISOString().slice(0,10)))n++;}return n;}
+function givebackFrom(ts){const by={},out={};closedOf(ts).filter(t=>t.type==='option').forEach(t=>{const d=t.exit.slice(0,10);(by[d]=by[d]||[]).push(t);});
+  for(const d in by){let cum=0,pk=0;for(const t of by[d].sort((a,b)=>a.exit.localeCompare(b.exit))){cum+=t.net;if(cum>pk)pk=cum;if(pk>=GIVEBACK_MIN&&cum<=(1-GIVEBACK_PCT)*pk){out[d]=t.exit;break;}}}return out;}
 const RULE_LBL=Object.fromEntries(RULES);
 function ruleFlags(t){
   if(t.type!=='option'||t.net==null||t.result==='OPEN'||t.result==='UNKNOWN')return [];
   const r=[],buys=t.fills.filter(f=>f.side==='BUY'),hm=t.entry.slice(11,16),zero=t.exp===t.entry.slice(0,10);
   if(t.dir==='LONG'&&buys.slice(1).some(f=>f.price*100<=buys[0].price*97+1e-6))r.push('adddown');
-  if(zero&&hm<'10:00')r.push('early0');
+  if(t.dir==='LONG'&&buys.slice(1).some(f=>f.price*100<=buys[0].price*97+1e-6&&f.t.slice(11,16)<'10:00'))r.push('earlyadd');
   if(zero&&hm>='14:00'&&hm<'15:00')r.push('late0');
   if(zero&&t.hold>600)r.push('longhold');
   if(t.und==='SPXW')r.push('spxw');
+  if((t.und==='SPXW'||t.und==='SPX')&&hm>='12:00')r.push('spxpm');
+  if(t.exp&&t.exit&&t.exit.slice(0,10)>t.entry.slice(0,10)&&bdaysTo(t.entry.slice(0,10),t.exp)<=1)r.push('overnight');
   return r;
 }
 function overCapDays(ts){const R=+S.meta.R||0;if(!(R>0))return null;const d={};closedOf(ts).forEach(t=>d[t.date]=(d[t.date]||0)+t.net);return new Set(Object.keys(d).filter(k=>d[k]<-3*R));}
@@ -778,7 +797,7 @@ function renderReports(){
   const best=inst.slice(0,5),worst=inst.slice(-5).reverse().filter(w=>!best.includes(w));
   const seg=(key,opts,cur)=>opts.map(([v,l])=>`<button class="btn sm ${cur===v?'on':''}" data-seg="${key}" data-v="${v}">${l}</button>`).join(' ');
   el.innerHTML=`<div class="note info no-print" style="margin-bottom:16px">Range: ${esc(rangeLabel())} · ${c.length} closed trades. Change it at the top.</div><div class="grid2">
-    <div class="card"><header><h3>Rules</h3></header><div class="body">${statTable(rl,'label','Rule')}<div class="sub" id="capLine" style="margin-top:10px">${S.capDays?`Over-cap days (net below −3R = ${usd(-3*capR)}): ${capD.length} days, net ${usd(capNet)}`:'Daily cap: set R in Settings to check it.'}</div></div></div>
+    <div class="card"><header><h3>Rules</h3></header><div class="body">${statTable(rl,'label','Rule')}<div class="sub" id="capLine" style="margin-top:10px">${S.capDays?`Over-cap days (net below −3R = ${usd(-3*capR)}): ${capD.length} days, net ${usd(capNet)}`:'Daily cap: set R in Settings to check it.'}</div>${holidayStale(S.trades)?`<div class="sub" id="holidayWarn" style="margin-top:6px;color:var(--critical);font-weight:600">Holiday calendar ends ${HOL_LAST_YEAR}, update it: the overnight 0–1 DTE check may miscount.</div>`:''}</div></div>
     <div class="card"><header><h3>By month</h3></header><div class="body">${barChart(months,'label')}${statTable(months,'label','Month')}</div></div>
     <div class="card"><header><h3>Day of week</h3></header><div class="body">${barChart(dow,'label')}${statTable(dow,'label','Day')}</div></div>
     <div class="card"><header><h3>Time of day (ET)</h3><div>${seg('todBy',[['entry','by entry'],['exit','by exit']],todBy)}</div></header><div class="body">${barChart(tod,'label')}${statTable(tod.filter(r=>r.n),'label','Bucket')}</div></div>
