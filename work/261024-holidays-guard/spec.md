@@ -18,11 +18,11 @@ now flagged: GME 2021-11-26 250C (bought Wed 24 Nov 2021, Thanksgiving closed) a
 2026, Labor Day closed).
 
 ## 2. Staleness warning
-`holidayStale(trades)`: true when any trade's entry date or expiry falls in a year after the last year in the list
-(`HOL_LAST_YEAR`, 2027 today). Then the Rules card shows, in the page's critical red: "Holiday calendar ends <year>,
+`holidayStale(trades)`: true when a trade whose expiry is within 7 calendar days of its entry has its entry date or
+expiry in a year after the last year in the list (`HOL_LAST_YEAR`, 2027 today). Long-dated options and stock can't be
+miscounted as 0–1 DTE, so they never raise it (Ty, typed, 24 Oct). Then the Rules card shows, in the page's critical red: "Holiday calendar ends <year>,
 update it: the overnight 0–1 DTE check may miscount." The protocol checks it (rules-check.md invariants).
-Known case (review #23, finding 3): a long-dated option expiring after the list's last year (a LEAP) also triggers the
-warning, though it can't be miscounted as 0–1 DTE. Kept as Ty worded it unless he narrows it.
+(Review #23, finding 3, raised the LEAP case; Ty narrowed the rule to the 7-day window.)
 
 ## 3. build/artifact.html
 The repo keeps the preview fragment committed and rebuilds it whenever index.html changes (CLAUDE.md; earlier specs
@@ -33,6 +33,6 @@ protocol now fails if the committed fragment differs from `tools/build-fragment.
 Steps 1–2 over all history (2020-12-01 → 2026-10-24, R = 100): page = recount on all **ten** Rules rows (8 rules, No rule
 broken 496 / +65,159, Over-cap days 1,324 / −809,281); over-cap line 243 days = recount; trade log "3312 of 4111" = recount
 filtered 3,312; add-down badge sample 1; fixtures at97 true, above97 false, holidayOvernight true (page and recount);
-holiday: stale false, no warning, last year 2027, 70 dates equal to the recount's own list, next-year fixture true.
+holiday: stale false, no warning, last year 2027, 70 dates equal to the recount's own list; fixtures next-year short-dated true, LEAP false, no-expiry false (rerun after the 7-day narrowing, 24 Oct).
 Step 3 `"changedFiles": []`. Step 4 `0 False`. Step 6 `BUILD_MATCH`. Also 19–23 Oct: all rows equal (earlier run).
 Review fix found here: the page fixture's fills had no time, which the add-down-before-10:00 check reads; fills now carry it.

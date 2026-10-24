@@ -40,7 +40,7 @@ All of these must hold:
 - `errors` holds nothing except the 404 for `data/journal.json`, which the page probes on purpose and falls back from (`.pages-allow` notes it).
 - Step 3 prints `"changedFiles": []`.
 - Step 4 prints `0` and `False`.
-- **Holiday calendar current** (step 2's `holiday`): `holidayStale` on the page is false for today's data, the Rules card shows no `#holidayWarn`, and the page's `HOL_LAST_YEAR` is at least the year of the latest trade date and expiry. Fixture: `holidayStale([{entry:'<HOL_LAST_YEAR+1>-01-04T10:00:00',exp:null}])` is true. The page's holiday set (`holiday.dates`) equals the recount's `HOL` exactly (same 70 dates on 24 Oct 2026).
+- **Holiday calendar current** (step 2's `holiday`): `holidayStale` on the page is false for today's data, the Rules card shows no `#holidayWarn`, and the page's `HOL_LAST_YEAR` is at least the year of the latest trade date and expiry. Fixtures: `fxNextYear` (entry 4 Jan of the year after the list, expiry 4 days later) is true; `fxLeap` (entry in the list's last year, expiry 18 Jun of the next: over 7 days away) is false; `fxNoExp` (no expiry, e.g. stock) is false. Only trades whose expiry is within 7 calendar days of entry can raise the warning (Ty, 24 Oct). The page's holiday set (`holiday.dates`) equals the recount's `HOL` exactly (same 70 dates on 24 Oct 2026).
 - **Preview build current:** step 6 prints `BUILD_MATCH`: the committed `build/artifact.html` is the fragment of the committed `index.html`.
 - Step 5 prints `"pass": true` after the merge. On the branch, `served_equals_main` is false by design (Pages still serves `main`) and every other verdict must be true.
 
@@ -101,7 +101,7 @@ const {chromium}=require('playwright');
  await p.screenshot({path:shots+'/trade-log-filtered.png'});
  res.fixture=await p.evaluate(()=>{const fx=p2=>ruleFlags({type:'option',net:1,result:'WIN',dir:'LONG',und:'SPY',entry:'2026-09-08T11:00:00',exit:'2026-09-08T11:01:00',exp:'2026-09-09',hold:60,fills:[{side:'BUY',price:3,t:'2026-09-08T11:00:00'},{side:'BUY',price:p2,t:'2026-09-08T11:00:30'}]}).includes('adddown');return {at97:fx(2.91),above97:fx(2.92),holidayOvernight:ruleFlags({type:'option',net:-1,result:'LOSS',dir:'LONG',und:'SPY',entry:'2026-11-25T15:00:00',exit:'2026-11-27T10:00:00',exp:'2026-11-27',hold:1,fills:[{side:'BUY',price:1,t:'2026-11-25T15:00:00'}]}).includes('overnight')};});
  await p.click('[data-view="reports"]');await p.waitForTimeout(300);
- res.holiday=await p.evaluate(()=>({stale:holidayStale(S.trades),warn:!!document.querySelector('#holidayWarn'),last:HOL_LAST_YEAR,dates:[...MKT_HOLIDAYS].sort(),fxNextYear:holidayStale([{entry:(HOL_LAST_YEAR+1)+'-01-04T10:00:00',exp:null}])}));
+ res.holiday=await p.evaluate(()=>({stale:holidayStale(S.trades),warn:!!document.querySelector('#holidayWarn'),last:HOL_LAST_YEAR,dates:[...MKT_HOLIDAYS].sort(),fxNextYear:holidayStale([{entry:(HOL_LAST_YEAR+1)+'-01-04T10:00:00',exp:(HOL_LAST_YEAR+1)+'-01-08'}]),fxLeap:holidayStale([{entry:HOL_LAST_YEAR+'-01-04T10:00:00',exp:(HOL_LAST_YEAR+1)+'-06-18'}]),fxNoExp:holidayStale([{entry:(HOL_LAST_YEAR+1)+'-01-04T10:00:00',exp:null}])}));
  res.errors=errs;console.log(JSON.stringify(res,null,1));await b.close();
 })();
 ```

@@ -526,7 +526,7 @@ const MKT_HOLIDAYS=new Set([ // NYSE full-day closures, journal start (2020-12-1
   '2026-01-01','2026-01-19','2026-02-16','2026-04-03','2026-05-25','2026-06-19','2026-07-03','2026-09-07','2026-11-26','2026-12-25',
   '2027-01-01','2027-01-18','2027-02-15','2027-03-26','2027-05-31','2027-06-18','2027-07-05','2027-09-06','2027-11-25','2027-12-24']);
 const HOL_LAST_YEAR=Math.max(...[...MKT_HOLIDAYS].map(d=>+d.slice(0,4)));
-function holidayStale(ts){return ts.some(t=>+t.entry.slice(0,4)>HOL_LAST_YEAR||(t.exp&&+t.exp.slice(0,4)>HOL_LAST_YEAR));}
+function holidayStale(ts){return ts.some(t=>t.exp&&(new Date(t.exp+'T12:00:00Z')-new Date(t.entry.slice(0,10)+'T12:00:00Z'))<=7*864e5&&(+t.entry.slice(0,4)>HOL_LAST_YEAR||+t.exp.slice(0,4)>HOL_LAST_YEAR));} // only short-dated trades (expiry within 7 calendar days of entry) can be miscounted as 0–1 DTE
 function bdaysTo(from,to){let n=0,d=new Date(from+'T12:00:00Z');const e=new Date(to+'T12:00:00Z');while(d<e){d.setUTCDate(d.getUTCDate()+1);const w=d.getUTCDay();if(w&&w<6&&!MKT_HOLIDAYS.has(d.toISOString().slice(0,10)))n++;}return n;}
 function givebackFrom(ts){const by={},out={};closedOf(ts).filter(t=>t.type==='option').forEach(t=>{const d=t.exit.slice(0,10);(by[d]=by[d]||[]).push(t);});
   for(const d in by){let cum=0,pk=0;for(const t of by[d].sort((a,b)=>a.exit.localeCompare(b.exit))){cum+=t.net;if(cum>pk)pk=cum;if(pk>=GIVEBACK_MIN&&cum<=(1-GIVEBACK_PCT)*pk){out[d]=t.exit;break;}}}return out;}
