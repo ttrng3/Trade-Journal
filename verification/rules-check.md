@@ -13,17 +13,19 @@ Run on the Mac. You need `node` and Playwright (`npm i playwright` in a scratch 
 
 ## Steps
 
-1. **Recount.** From the scratch folder, run `node recount.js ~/Projects/Trade-Journal 2024-12-10 2026-10-02 100` (script below). It prints the count and net per rule, "No rule broken", the over-cap days and their net, and the size of the filtered trade log.
-2. **Page.** Serve the page with `python3 -m http.server 8765` in the repo, or use https://ttrng3.github.io/Trade-Journal/ after a merge. Then run `node page.js <url> 100 2024-12-10 2026-10-02 <out-dir>` (script below). In a fresh profile it does the following:
+1. **Recount.** From the scratch folder, run `node recount.js ~/Projects/Trade-Journal 2020-12-01 <today> 100` (all history; the holiday list starts at the first trade, 2020-12-18) (script below). It prints the count and net per rule, "No rule broken", the over-cap days and their net, and the size of the filtered trade log.
+2. **Page.** Serve the page with `python3 -m http.server 8765` in the repo, or use https://ttrng3.github.io/Trade-Journal/ after a merge. Then run `node page.js <url> 100 2020-12-01 <today> <out-dir>` (script below). In a fresh profile it does the following:
    - reads the over-cap line before R is set;
    - sets R = 100 in Settings and saves;
    - sets the custom range;
    - reads the Rules card;
    - turns on "Rule breaks only" and reads the trade-log count;
-   - saves two screenshots.
+   - saves two screenshots;
+   - reads the holiday calendar: `holidayStale` on the data, `#holidayWarn`, `HOL_LAST_YEAR`, the page's 70-date set, and the next-year fixture.
 3. **Data untouched.** `node tools/sync.js --csv-dir <empty dir> --check`.
 4. **R not in the repo.** `git grep -nE '"R"[[:space:]]*:[[:space:]]*[0-9]' | wc -l` over the whole tree (an R key holding a number; the spec's own wording of this check doesn't match), and check `'R' in meta` of `data/index.json`.
 5. **The journal protocol.** `verification/journal.md` step 1.
+6. **Preview build current.** `python3 tools/build-fragment.py /tmp/frag.html && cmp /tmp/frag.html build/artifact.html && echo BUILD_MATCH` (the script takes the output path as its argument and leaves the committed file alone).
 
 ## Invariants
 
@@ -38,8 +40,8 @@ All of these must hold:
 - `errors` holds nothing except the 404 for `data/journal.json`, which the page probes on purpose and falls back from (`.pages-allow` notes it).
 - Step 3 prints `"changedFiles": []`.
 - Step 4 prints `0` and `False`.
-- **Holiday calendar current:** `holidayStale` on the page is false for today's data, the Rules card shows no `#holidayWarn`, and the page's `HOL_LAST_YEAR` is at least the year of the latest trade date and expiry. Fixture: `holidayStale([{entry:'<HOL_LAST_YEAR+1>-01-04T10:00:00',exp:null}])` is true. The page's holiday set equals the recount's `HOL` exactly (same 70 dates on 24 Oct 2026).
-- **Preview build current:** `python3 tools/build-fragment.py /tmp/frag.html` then `cmp /tmp/frag.html build/artifact.html` prints nothing: the committed `build/artifact.html` is the fragment of the committed `index.html`.
+- **Holiday calendar current** (step 2's `holiday`): `holidayStale` on the page is false for today's data, the Rules card shows no `#holidayWarn`, and the page's `HOL_LAST_YEAR` is at least the year of the latest trade date and expiry. Fixture: `holidayStale([{entry:'<HOL_LAST_YEAR+1>-01-04T10:00:00',exp:null}])` is true. The page's holiday set (`holiday.dates`) equals the recount's `HOL` exactly (same 70 dates on 24 Oct 2026).
+- **Preview build current:** step 6 prints `BUILD_MATCH`: the committed `build/artifact.html` is the fragment of the committed `index.html`.
 - Step 5 prints `"pass": true` after the merge. On the branch, `served_equals_main` is false by design (Pages still serves `main`) and every other verdict must be true.
 
 Measured on 2026-10-03 on branch `work/rules-check` (local server): 322 / −$6,309, 28 / −$529, 32 / −$1,598, 144 / −$3,523, 87 / −$3,450, 118 / +$1,962; 16 over-cap days (130 trades), −$11,136; 411 of 532. These pass only as long as the data is unchanged. New fills inside the range move them, so compare the page against the recount, never against these figures.
@@ -97,7 +99,9 @@ const {chromium}=require('playwright');
  res.tradeLogTitle=await p.textContent('#view-trades h3');
  res.addDownBadgeSample=await p.$$eval('#tt tr.row',rs=>rs.filter(r=>/2026-09-08/.test(r.innerText)&&/SPY260909C00768000/.test(r.innerText)&&/add-down/.test(r.innerText)).length);
  await p.screenshot({path:shots+'/trade-log-filtered.png'});
- res.fixture=await p.evaluate(()=>{const fx=p2=>ruleFlags({type:'option',net:1,result:'WIN',dir:'LONG',und:'SPY',entry:'2026-09-08T11:00:00',exp:'2026-09-09',hold:60,fills:[{side:'BUY',price:3},{side:'BUY',price:p2}]}).includes('adddown');return {at97:fx(2.91),above97:fx(2.92)};});
+ res.fixture=await p.evaluate(()=>{const fx=p2=>ruleFlags({type:'option',net:1,result:'WIN',dir:'LONG',und:'SPY',entry:'2026-09-08T11:00:00',exit:'2026-09-08T11:01:00',exp:'2026-09-09',hold:60,fills:[{side:'BUY',price:3,t:'2026-09-08T11:00:00'},{side:'BUY',price:p2,t:'2026-09-08T11:00:30'}]}).includes('adddown');return {at97:fx(2.91),above97:fx(2.92),holidayOvernight:ruleFlags({type:'option',net:-1,result:'LOSS',dir:'LONG',und:'SPY',entry:'2026-11-25T15:00:00',exit:'2026-11-27T10:00:00',exp:'2026-11-27',hold:1,fills:[{side:'BUY',price:1,t:'2026-11-25T15:00:00'}]}).includes('overnight')};});
+ await p.click('[data-view="reports"]');await p.waitForTimeout(300);
+ res.holiday=await p.evaluate(()=>({stale:holidayStale(S.trades),warn:!!document.querySelector('#holidayWarn'),last:HOL_LAST_YEAR,dates:[...MKT_HOLIDAYS].sort(),fxNextYear:holidayStale([{entry:(HOL_LAST_YEAR+1)+'-01-04T10:00:00',exp:null}])}));
  res.errors=errs;console.log(JSON.stringify(res,null,1));await b.close();
 })();
 ```
@@ -117,7 +121,7 @@ const {chromium}=require('playwright');
 
 - The JSON from steps 1 and 2.
 - `rules-card.png` and `trade-log-filtered.png`.
-- The outputs of steps 3–5.
+- The outputs of steps 3–6.
 
 ## Not covered
 

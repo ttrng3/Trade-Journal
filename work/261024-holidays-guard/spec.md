@@ -1,7 +1,7 @@
 # Holiday calendar for the whole journal, a staleness warning, and a current preview build (24 Oct 2026)
 
-Status: built and verified on `work/261024-holidays-guard`; ships on Ty's phrase after he sees the recount. Source: Ty's
-follow-ups to PR #22 (by paste, 24 Oct).
+Status: **DRAFT, not approved.** Built on `work/261024-holidays-guard`. Source: Ty's follow-ups to PR #22 (by paste,
+24 Oct; see intent.md). Approval and the ship wait for his own words after he sees the recount.
 
 ## 1. Holiday list (`MKT_HOLIDAYS` in index.html)
 Every NYSE full-day closure from the journal's first trade (2020-12-18) through 2027: 70 dates. Checked against the
@@ -27,8 +27,10 @@ The repo keeps the preview fragment committed and rebuilds it whenever index.htm
 do it in the ship turn). It had fallen behind index.html (PR #22 and earlier). Regenerated from this index.html, and the
 protocol now fails if the committed fragment differs from `tools/build-fragment.py`'s output.
 
-## Check (24 Oct, local server, this branch)
-Protocol recount (as committed) = page Rules card on all nine rows for all history (2020-12-01 → 2026-12-31) and for
-2026-10-19 → 23. Page: `holidayStale` false, no warning shown, `HOL_LAST_YEAR` 2027, 70 dates, fixture for 2028 true,
-trading days 2021-11-24→26 = 1 and 2026-09-04→08 = 1. `cmp` fragment vs build/artifact.html: equal. `sync.js --check`:
-`"changedFiles": []`.
+## Check (24 Oct, local server, this branch): verification/rules-check.md run as committed
+Steps 1–2 over all history (2020-12-01 → 2026-10-24, R = 100): page = recount on all **ten** Rules rows (8 rules, No rule
+broken 496 / +65,159, Over-cap days 1,324 / −809,281); over-cap line 243 days = recount; trade log "3312 of 4111" = recount
+filtered 3,312; add-down badge sample 1; fixtures at97 true, above97 false, holidayOvernight true (page and recount);
+holiday: stale false, no warning, last year 2027, 70 dates equal to the recount's own list, next-year fixture true.
+Step 3 `"changedFiles": []`. Step 4 `0 False`. Step 6 `BUILD_MATCH`. Also 19–23 Oct: all rows equal (earlier run).
+Review fix found here: the page fixture's fills had no time, which the add-down-before-10:00 check reads; fills now carry it.
