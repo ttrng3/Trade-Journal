@@ -30,7 +30,7 @@ Run on the Mac. You need `node` and Playwright (`npm i playwright` in a scratch 
 All of these must hold:
 
 - `capLineBeforeR` reads "Daily cap: set R in Settings to check it."
-- For every Rules row (add-down, early 0DTE, late 0DTE, long hold, SPXW, No rule broken, Over-cap days), the page's Trades and Net P&L equal the recount's `n` and `net` (rounded to whole dollars).
+- For every Rules row (add-down, add-down before 10:00, late 0DTE, long hold, SPXW, SPX after 12:00, overnight 0–1 DTE, after 30% giveback, No rule broken, Over-cap days), the page's Trades and Net P&L equal the recount's `n` and `net` (rounded to whole dollars).
 - The over-cap line's day count and net, and the Over-cap days row's trades and net, equal the recount's `capDays` (`days`, `n`, `net`).
 - The trade-log title shows `<filtered> of <total>`, where `<filtered>` equals the recount's `filtered`.
 - `addDownBadgeSample` (the add-down trade entered 2026-09-08 in `SPY260909C00768000`) is at least 1.
@@ -111,3 +111,10 @@ const {chromium}=require('playwright');
 
 - Whether the rules are good trading rules. That's the paper-trading gate, not this page.
 - Whether the Cowork preview's copy behaves the same. Its R is stored in its own database, and the preview is rebuilt from the same `index.html` in the ship turn.
+
+## Extension, 24 Oct 2026 (work/261024-personal-rules)
+"early 0DTE" became "add-down before 10:00", and three rows were added: "SPX after 12:00", "overnight 0–1 DTE" and
+"after 30% giveback". Definitions in `work/261024-personal-rules/spec.md`. The recount for them, used for the 24 Oct run,
+adds to `rules`: add-down AND entry before 10:00; SPXW AND entry ≥ 12:00; exit date after entry date AND expiry ≤ 1
+business day after entry; entry after the day's giveback time (first exit where the day's peak realized net ≥ $300 and
+net ≤ 70% of peak). Page and recount must agree on n and net for each row, as for the original five.
