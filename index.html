@@ -516,19 +516,20 @@ function rebuild(){
 const RULES=[['adddown','add-down'],['earlyadd','add-down before 10:00'],['late0','late 0DTE'],['longhold','long hold'],['spxw','SPXW'],['spxpm','SPX after 12:00'],['overnight','overnight 0–1 DTE'],['giveback','after 30% giveback']];
 /* personal rules (work/261024-personal-rules): giveback threshold in $, business days to expiry that count as 0–1 DTE */
 const GIVEBACK_MIN=300,GIVEBACK_PCT=0.30;
-function bdaysTo(from,to){let n=0,d=new Date(from+'T12:00:00Z');const e=new Date(to+'T12:00:00Z');while(d<e){d.setUTCDate(d.getUTCDate()+1);const w=d.getUTCDay();if(w&&w<6)n++;}return n;}
-function givebackFrom(ts){const by={},out={};closedOf(ts).forEach(t=>{const d=t.exit.slice(0,10);(by[d]=by[d]||[]).push(t);});
-  for(const d in by){let cum=0,pk=0;for(const t of by[d].sort((a,b)=>a.exit<b.exit?-1:1)){cum+=t.net;if(cum>pk)pk=cum;if(pk>=GIVEBACK_MIN&&cum<=(1-GIVEBACK_PCT)*pk){out[d]=t.exit;break;}}}return out;}
+const MKT_HOLIDAYS=new Set(['2026-11-26','2026-12-25','2027-01-01','2027-01-18','2027-02-15','2027-03-26','2027-05-31','2027-06-18','2027-07-05','2027-09-06','2027-11-25','2027-12-24']); // NYSE full closures; extend each year
+function bdaysTo(from,to){let n=0,d=new Date(from+'T12:00:00Z');const e=new Date(to+'T12:00:00Z');while(d<e){d.setUTCDate(d.getUTCDate()+1);const w=d.getUTCDay();if(w&&w<6&&!MKT_HOLIDAYS.has(d.toISOString().slice(0,10)))n++;}return n;}
+function givebackFrom(ts){const by={},out={};closedOf(ts).filter(t=>t.type==='option').forEach(t=>{const d=t.exit.slice(0,10);(by[d]=by[d]||[]).push(t);});
+  for(const d in by){let cum=0,pk=0;for(const t of by[d].sort((a,b)=>a.exit.localeCompare(b.exit))){cum+=t.net;if(cum>pk)pk=cum;if(pk>=GIVEBACK_MIN&&cum<=(1-GIVEBACK_PCT)*pk){out[d]=t.exit;break;}}}return out;}
 const RULE_LBL=Object.fromEntries(RULES);
 function ruleFlags(t){
   if(t.type!=='option'||t.net==null||t.result==='OPEN'||t.result==='UNKNOWN')return [];
   const r=[],buys=t.fills.filter(f=>f.side==='BUY'),hm=t.entry.slice(11,16),zero=t.exp===t.entry.slice(0,10);
   if(t.dir==='LONG'&&buys.slice(1).some(f=>f.price*100<=buys[0].price*97+1e-6))r.push('adddown');
-  if(r.includes('adddown')&&hm<'10:00')r.push('earlyadd');
+  if(t.dir==='LONG'&&buys.slice(1).some(f=>f.price*100<=buys[0].price*97+1e-6&&f.t.slice(11,16)<'10:00'))r.push('earlyadd');
   if(zero&&hm>='14:00'&&hm<'15:00')r.push('late0');
   if(zero&&t.hold>600)r.push('longhold');
   if(t.und==='SPXW')r.push('spxw');
-  if(t.und==='SPXW'&&hm>='12:00')r.push('spxpm');
+  if((t.und==='SPXW'||t.und==='SPX')&&hm>='12:00')r.push('spxpm');
   if(t.exp&&t.exit&&t.exit.slice(0,10)>t.entry.slice(0,10)&&bdaysTo(t.entry.slice(0,10),t.exp)<=1)r.push('overnight');
   return r;
 }

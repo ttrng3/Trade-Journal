@@ -2,7 +2,7 @@
 
 ## Promise
 
-The Rules card in Reports, the rule badges and the "Rule breaks only" filter in the trade log, and the over-cap line agree exactly with an independent recount of the same definitions from `data/`. The definitions are in `work/261003-rules-check/spec.md`, Requirements 1–2. Setting R changes nothing in `data/`, and R is never written to the repo.
+The Rules card in Reports, the rule badges and the "Rule breaks only" filter in the trade log, and the over-cap line agree exactly with an independent recount of the same definitions from `data/`. The definitions are in `work/261003-rules-check/spec.md`, Requirements 1–2, and `work/261024-personal-rules/spec.md` (add-down before 10:00, SPX after 12:00, overnight 0–1 DTE, after 30% giveback). Setting R changes nothing in `data/`, and R is never written to the repo.
 
 ## Clean state
 
@@ -34,7 +34,7 @@ All of these must hold:
 - The over-cap line's day count and net, and the Over-cap days row's trades and net, equal the recount's `capDays` (`days`, `n`, `net`).
 - The trade-log title shows `<filtered> of <total>`, where `<filtered>` equals the recount's `filtered`.
 - `addDownBadgeSample` (the add-down trade entered 2026-09-08 in `SPY260909C00768000`) is at least 1.
-- The boundary fixture: in both the recount and the page, `at97` is true (3.00 then 2.91 is an add-down) and `above97` is false (3.00 then 2.92 is not).
+- The boundary fixture: in both the recount and the page, `at97` is true (3.00 then 2.91 is an add-down) and `above97` is false (3.00 then 2.92 is not). `holidayOvernight` is true (bought Wed 25 Nov 2026, expiry Fri 27 Nov, Thanksgiving closed: 1 trading day).
 - `errors` holds nothing except the 404 for `data/journal.json`, which the page probes on purpose and falls back from (`.pages-allow` notes it).
 - Step 3 prints `"changedFiles": []`.
 - Step 4 prints `0` and `False`.
@@ -50,16 +50,26 @@ const idx=JSON.parse(fs.readFileSync(R+'/data/index.json'));let fills=[];
 for(const s of idx.shards)fills.push(...Object.values(JSON.parse(fs.readFileSync(`${R}/data/fills/${s}.json`))).map(f=>P.hydrate({...f})));
 const all=P.buildTrades(fills,{feeC:0,feeS:0,longOnly:true});
 const closed=all.filter(t=>t.net!=null&&t.result!=='OPEN'&&t.result!=='UNKNOWN');
+const HOL=new Set(['2026-11-26','2026-12-25','2027-01-01','2027-01-18','2027-02-15','2027-03-26','2027-05-31','2027-06-18','2027-07-05','2027-09-06','2027-11-25','2027-12-24']);
+const bd=(a,b)=>{let n=0;for(let d=new Date(a+'T12:00:00Z');d<new Date(b+'T12:00:00Z');){d.setUTCDate(d.getUTCDate()+1);const k=d.toISOString().slice(0,10);if(d.getUTCDay()%6&&!HOL.has(k))n++;}return n;};
+const gb={},by={};closed.filter(t=>t.type==='option').forEach(t=>(by[t.exit.slice(0,10)]=by[t.exit.slice(0,10)]||[]).push(t));
+for(const d in by){let c=0,p=0;for(const t of by[d].sort((x,y)=>x.exit.localeCompare(y.exit))){c+=t.net;p=Math.max(p,c);if(p>=300&&c<=0.7*p){gb[d]=t.exit;break;}}}
+const low=(f,b0)=>Math.round(f.price*1e6)*100<=Math.round(b0.price*1e6)*97;
 const rules=t=>{if(t.type!=='option')return[];const r=[],b=t.fills.filter(f=>f.side==='BUY'),hm=t.entry.slice(11,16),z=t.exp===t.entry.slice(0,10);
- if(t.dir==='LONG'&&b.slice(1).some(f=>Math.round(f.price*1e6)*100<=Math.round(b[0].price*1e6)*97))r.push('add-down');if(z&&hm<'10:00')r.push('early 0DTE');if(z&&hm>='14:00'&&hm<'15:00')r.push('late 0DTE');if(z&&t.hold>600)r.push('long hold');if(t.und==='SPXW')r.push('SPXW');return r;};
-const day={};closed.forEach(t=>day[t.date]=(day[t.date]||0)+t.net);const cap=new Set(Object.keys(day).filter(d=>day[d]<-3*riskR));
+ if(t.dir==='LONG'&&b.slice(1).some(f=>low(f,b[0])))r.push('add-down');
+ if(t.dir==='LONG'&&b.slice(1).some(f=>low(f,b[0])&&f.t.slice(11,16)<'10:00'))r.push('add-down before 10:00');
+ if(z&&hm>='14:00'&&hm<'15:00')r.push('late 0DTE');if(z&&t.hold>600)r.push('long hold');if(t.und==='SPXW')r.push('SPXW');
+ if((t.und==='SPXW'||t.und==='SPX')&&hm>='12:00')r.push('SPX after 12:00');
+ if(t.exp&&t.exit.slice(0,10)>t.entry.slice(0,10)&&bd(t.entry.slice(0,10),t.exp)<=1)r.push('overnight 0–1 DTE');
+ if(gb[t.entry.slice(0,10)]&&t.entry>gb[t.entry.slice(0,10)])r.push('after 30% giveback');return r;};
+const day={};closed.forEach(t=>day[t.date]=(day[t.date]||0)+t.net);const cap=new Set(Object.keys(day).filter(d=>riskR>0&&day[d]<-3*riskR));
 const inR=closed.filter(t=>t.date>=from&&t.date<=to);const sum=a=>Math.round(a.reduce((x,t)=>x+t.net,0));
-const out={};['add-down','early 0DTE','late 0DTE','long hold','SPXW'].forEach(k=>{const a=inR.filter(t=>rules(t).includes(k));out[k]={n:a.length,net:sum(a)}});
+const out={};['add-down','add-down before 10:00','late 0DTE','long hold','SPXW','SPX after 12:00','overnight 0–1 DTE','after 30% giveback'].forEach(k=>{const a=inR.filter(t=>rules(t).includes(k));out[k]={n:a.length,net:sum(a)}});
 const clean=inR.filter(t=>t.type==='option'&&!rules(t).length&&!cap.has(t.date));out['No rule broken']={n:clean.length,net:sum(clean)};
 const capT=inR.filter(t=>cap.has(t.date));out.capDays={days:new Set(capT.map(t=>t.date)).size,n:capT.length,net:sum(capT)};
 out.filtered=inR.filter(t=>rules(t).length||cap.has(t.date)).length;
-const fx=(p2)=>rules({type:'option',dir:'LONG',und:'SPY',entry:'2026-09-08T11:00:00',exp:'2026-09-09',hold:60,fills:[{side:'BUY',price:3},{side:'BUY',price:p2}]}).includes('add-down');
-out.fixture={at97:fx(2.91),above97:fx(2.92)};
+const fx=(p2)=>rules({type:'option',dir:'LONG',und:'SPY',entry:'2026-09-08T11:00:00',exit:'2026-09-08T11:01:00',exp:'2026-09-09',hold:60,fills:[{side:'BUY',price:3,t:'2026-09-08T11:00:00'},{side:'BUY',price:p2,t:'2026-09-08T11:00:30'}]}).includes('add-down');
+out.fixture={at97:fx(2.91),above97:fx(2.92),holidayOvernight:rules({type:'option',dir:'LONG',und:'SPY',entry:'2026-11-25T15:00:00',exit:'2026-11-27T10:00:00',exp:'2026-11-27',hold:1,fills:[{side:'BUY',price:1,t:'2026-11-25T15:00:00'}]}).includes('overnight 0–1 DTE')};
 console.log(JSON.stringify(out));
 ```
 
@@ -114,7 +124,4 @@ const {chromium}=require('playwright');
 
 ## Extension, 24 Oct 2026 (work/261024-personal-rules)
 "early 0DTE" became "add-down before 10:00", and three rows were added: "SPX after 12:00", "overnight 0–1 DTE" and
-"after 30% giveback". Definitions in `work/261024-personal-rules/spec.md`. The recount for them, used for the 24 Oct run,
-adds to `rules`: add-down AND entry before 10:00; SPXW AND entry ≥ 12:00; exit date after entry date AND expiry ≤ 1
-business day after entry; entry after the day's giveback time (first exit where the day's peak realized net ≥ $300 and
-net ≤ 70% of peak). Page and recount must agree on n and net for each row, as for the original five.
+"after 30% giveback". The recount above carries all of them; "No rule broken" and `filtered` use the full set.
