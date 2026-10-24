@@ -5,6 +5,26 @@ re-entering the same strike several times. Expiry day leaves no room for a posit
 decided by entry timing and by how many times a losing strike is re-entered.
 
 ## Evidence
+- **2026-10-23: the best 0DTE session compiled, +$967.00 over eleven strikes, the day after the worst.** Eight of
+  the eleven were green, 71 contracts in all, and the swing from **-$806.00** to **+$967.00** in one session is
+  **$1,773.00** — larger in magnitude than any single session's result before it. The book went from **-$552.00**
+  to **+$415.00**, the fifth consecutive update on which the sign of that total has changed.
+  (Verified: raw/2026-10-23.json; computed over raw/2026-10-07…raw/2026-10-23)
+- **2026-10-23: the heaviest strike won again, and this time so did the second heaviest.** TSLA 375C took **15**
+  contracts for **+$540.00**, the day's best, and SPY 761C took **14** for **-$54.00**. Across every compiled
+  session the five heaviest 0DTE strikes are now 22, 20, 19, 16 and 15 contracts returning **-$45.00**,
+  **+$79.00**, **+$411.00**, **+$188.00** and **+$540.00**: four green, one flat, and no relationship between
+  size and magnitude. Size has now failed to predict the result in both directions often enough that it should be
+  dropped as a read. (Verified: computed over raw/2026-10-07…raw/2026-10-23)
+- **2026-10-23: re-entry count did not pick the loser.** The two most re-entered strikes, 15 and 14 contracts,
+  returned +$540.00 and -$54.00, while the day's worst, TSLA 372.5C at **-$281.00**, took five contracts and was
+  closed in a single exit six minutes after the last buy. The 2026-10-07 and 2026-10-08 shape — heavy re-entry on
+  the losers — has now failed on five of the last six sessions. (Verified: raw/2026-10-23.json)
+- **2026-10-23: the same-day book spread across five underlyings, the widest compiled.** TSLA four strikes, SPY
+  three, SPXW two, META one, NVDA one. The TSLA book made **+$598.00** and the SPY book lost **-$136.00**; SPXW
+  returned **+$285.00** and the two single-strike names **+$220.00** between them. All eleven were opened and
+  closed inside the session. The session's sixth underlying, AAPL, was a 10-30 contract and is not in this book.
+  (Verified: raw/2026-10-23.json)
 - **2026-10-22: the worst 0DTE session compiled, -$806.00 over six strikes, and the first SPX-heavy one.** Five
   SPXW strikes returned **-$885.00** and the one SPY strike **+$79.00**. It ends the five-session green run and it
   is larger than 2026-10-07's **-$729.00**. (Verified: raw/2026-10-22.json)
@@ -71,13 +91,16 @@ decided by entry timing and by how many times a losing strike is re-entered.
   offer no comparison yet. (Verified: raw/2026-10-07.json)
 
 ## Count so far
-Seen on 8 of 12 compiled days. Counting only same-day strikes bought and sold in equal size: **25 strikes, 178
-contracts, 13 green, -$552.00**. By day those round trips returned **-$729.00, +$118.00, +$21.00, +$127.00,
-+$188.00, +$462.00, +$67.00 and -$806.00** — the book went positive on 2026-10-20 and back negative on 2026-10-22,
-and the **-$806.00** gave back five sixths of the **+$983.00** the six green sessions had built. Two strikes are excluded because they closed
-or left a carried position rather than round-tripping — TSLA 10-07 385C and TSLA 10-16 377.5C. The four sessions
-2026-10-12 to 2026-10-15 contribute nothing: their raw days were frozen with no fills.
-(Verified: computed over raw/2026-10-07…raw/2026-10-22)
+Seen on 9 of 13 compiled days. Counting only same-day strikes bought and sold in equal size: **36 strikes, 249
+contracts, 21 green, +$415.00**. By day those round trips returned **-$729.00, +$118.00, +$21.00, +$127.00,
++$188.00, +$462.00, +$67.00, -$806.00 and +$967.00** — the single largest session either way is the last one, and
+it alone carries the book from **-$552.00** to **+$415.00**. The sign of this total has now changed on five
+consecutive updates, so the number to read is the strike count: **21 green of 36**, and the win rate has sat
+between 52% and 59% since 2026-10-20 while the net swung by $1,773.00 in one session. Two strikes are excluded
+because they closed or left a carried position rather than round-tripping — TSLA 10-07 385C and TSLA 10-16 377.5C
+— and a third, TSLA 10-23 387.5C, closed Thursday's carry on 2026-10-23 and belongs to
+[[setups/later-expiry-swing]]. The four sessions 2026-10-12 to 2026-10-15 contribute nothing: their raw days were
+frozen with no fills. (Verified: computed over raw/2026-10-07…raw/2026-10-23)
 
 ## What to do about it
 Proposals only. The number to carry forward is round trips per strike against result per strike, because on this day

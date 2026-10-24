@@ -6,6 +6,34 @@ went wrong in the window the post-exit candles cover, so the exit cannot be faul
 normally carries. Only the settlement price shows the cost.
 
 ## Evidence
+- **2026-10-23: the two strikes that settled in the money are exactly the two where holding won, and the candles
+  said so both times.** Twelve same-day strikes with a settlement price: ten settled worthless and exiting took
+  **$7,677.00** that holding would have returned as nothing, while SPY 762P cost **$780.00** and TSLA 370C
+  **$207.00**. The day's net is **+$6,690.00**. What makes the session useful is not the net but that the two
+  wrong exits were both visible at the time — the post-exit candles went the trade's way in both cases — which is
+  the opposite of the 2026-10-16 case the page opens with.
+  (Verified: raw/2026-10-23.json; computed over raw/2026-10-07…raw/2026-10-23)
+- **2026-10-23: SPY 762P is the cleanest counter-case compiled — both measures said hold and the exit was taken
+  anyway.** The session's only put: seven contracts bought 11:43:39 to 12:04:24 for **$835.00**, six sold at
+  12:00:12 at 0.96 and one at 12:05:23 at 1.07 for **$683.00**, **-$152.00**. SPY **fell** after both exits,
+  **-1.22** and **-0.58** over the next 30 minutes, which is the put's direction, and closed at **759.91**, so the
+  put settled **$2.09** in the money. Held, the seven were worth **$1,463.00**: **+$628.00** instead of -$152.00,
+  **$780.00** forgone. The page's own framing — "nothing went wrong in the window the post-exit candles cover" —
+  does not apply here. (Verified: raw/2026-10-23.json)
+- **2026-10-23 makes the put asymmetry the most interesting thing on this page.** Split the 39 strikes by side:
+  **33 calls** return **+$21,276.00** with exiting right on 26 of them, while **6 puts** return **-$5,564.00**
+  with exiting right on only 2. Puts are 6 of 39 strikes but **4 of the 11 misses**, and those four carry
+  **-$6,326.00** of cost — including the three largest put misses, which are the first, third and fourth largest
+  misses overall: **-$4,304.00** (QQQ 720P, 2026-10-16), **-$906.00** (QQQ 753P, 2026-10-08) and **-$780.00**
+  (SPY 762P, 2026-10-23). Six strikes is a small sample and the two profitable put exits are real, so this is a
+  question, not a finding: it is the first split of this ledger that does not reverse every session.
+  (Verified: computed over raw/2026-10-07…raw/2026-10-23)
+- **2026-10-23: the day the morning TSLA exits were right, which reverses Thursday.** TSLA 375C, fifteen contracts
+  for **$1,547.00** sold for **$2,087.00** in nine exits inside 25 minutes: TSLA was **lower** 30 minutes later
+  after 7 of the 9 and closed **$2.78** below the strike, so the whole position settled worthless. On 2026-10-22
+  the same morning pattern on the same underlying was followed by rallies of **+11.72**, **+8.91** and **+5.37**
+  and looked wrong all day. Same trade shape, same symbol, opposite answer one session apart.
+  (Verified: raw/2026-10-23.json, raw/2026-10-22.json)
 - **2026-10-22 is the first session where every same-day strike agreed, and it broke the aggregate.** Six same-day
   strikes, all six settled worthless: five SPXW calls at 7670–7710 against a **7639.70** proxy close, and SPY 767C
   against **763.97**. Holding the six would have cost the full **$9,841.00** of premium they carried; exiting
@@ -58,13 +86,15 @@ normally carries. Only the settlement price shows the cost.
   **$378.00**. One rule, two opposite outcomes, one day. (Verified: raw/2026-10-16.json)
 
 ## Count so far
-Seen on 8 compiled days, over **27 same-day strikes** with a settlement price. Exiting beat holding on **18** of
-them and cost money on **9**, and the net is **+$9,022.00** — after reading **-$13.00** one session earlier and
-**+$449.00** the session before that. The distribution is still the whole story, and the net is now visibly
-worthless as a statistic: it has read **-$2,937.00**, **+$449.00**, **-$13.00** and **+$9,022.00** on consecutive
-updates. The two largest single entries are **-$4,304.00** (2026-10-16) and **+$3,580.00** (2026-10-22), and one
-session of six agreeing strikes moved the total by **$9,035.00**.
-(Verified: computed over raw/2026-10-07…raw/2026-10-22)
+Seen on 9 compiled days, over **39 same-day strikes** with a settlement price. Exiting beat holding on **28** of
+them and cost money on **11**, and the net is **+$15,712.00**. The distribution is still the whole story and the
+net is still worthless as a statistic: it has read **-$2,937.00**, **+$449.00**, **-$13.00**, **+$9,022.00** and
+**+$15,712.00** on consecutive updates, changing sign on three of the five. The two largest single entries are
+**-$4,304.00** (2026-10-16) and **+$3,580.00** (2026-10-22). What has become stable is the *count*: exiting has
+been right on **28 of 39** strikes, **71.8%**, and the eleven misses carry the money — the four largest are
+**-$4,304.00**, **-$1,059.00**, **-$906.00** and **-$780.00**, three of them puts. Split by side, calls are
+**+$21,276.00** over 33 strikes and puts **-$5,564.00** over 6.
+(Verified: computed over raw/2026-10-07…raw/2026-10-23)
 
 ## What to do about it
 Proposals only; Ty decides.
@@ -97,3 +127,15 @@ Proposals only; Ty decides.
    +$449.00, -$13.00 and +$9,022.00 on four consecutive updates. Report the count of strikes each way and the two
    tails, and nothing else, until the sample is large enough that one session cannot move it by $9,035.00.
    (Verified: computed over raw/2026-10-07…raw/2026-10-22)
+
+8. **Added 2026-10-23: split this ledger by call and put before anything else.** It is the only cut that has not
+   reversed on the next session: 33 calls **+$21,276.00** with exiting right 26 times, 6 puts **-$5,564.00** with
+   exiting right twice, and three of the four largest misses are puts. The action is to keep the two counts
+   separately from here on, not to change an exit rule on six strikes. If the put side still reads this way at
+   fifteen or twenty strikes, the question becomes whether a falling underlying is being treated as a reason to
+   close a put. (Verified: computed over raw/2026-10-07…raw/2026-10-23)
+9. **Added 2026-10-23: the candles are not always the alibi.** The page opens by saying the post-exit window
+   cannot fault these exits. On both of this session's misses the window went the trade's way and the close went
+   further, so both were visible without the settlement price. Record, per miss, whether the 10-candle window
+   agreed with the exit or not — that separates the misses that were knowable at the time from the ones only
+   settlement reveals. (Verified: raw/2026-10-23.json)

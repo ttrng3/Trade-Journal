@@ -5,6 +5,12 @@ committee. The committee gate is on every veto, so the question is never whether
 came with it, and whether that combination blocked setups that would have worked.
 
 ## Evidence
+- **2026-10-23 makes it ten consecutive sessions with no bot record — a full fortnight of trading.** The bundle is
+  present, `holiday` false, 12 symbols of one-minute bars, collected 2026-10-24T03:30:24Z, and carries **0 v7
+  records** and **0 skips**. The last session with any bot record is 2026-10-09. The collector has now delivered a
+  complete bundle on ten consecutive sessions while the bots have produced nothing, which is as clean a separation
+  of the two faults as the data can give.
+  (Verified: raw/2026-10-23.json; computed over raw/2026-10-12…raw/2026-10-23)
 - **2026-10-22 makes it nine consecutive sessions with no v7 record, and names the sweep side explicitly.** The
   bundle is present, `holiday` false, 12 symbols of one-minute bars, collected 2026-10-23T03:30:22Z, and its own
   `sources` block reads **`v7: 0`** and **`sweep: false`** — not an empty log but **no sweep log found at all**.
@@ -34,10 +40,10 @@ came with it, and whether that combination blocked setups that would have worked
   structure the least at 23.8%. (Verified: raw/2026-10-07.json)
 
 ## Count so far
-Seen on 3 of 12 compiled days, and on none since 2026-10-09. Across 166 resolved skips, taking them all would have
+Seen on 3 of 13 compiled days, and on none since 2026-10-09. Across 166 resolved skips, taking them all would have
 returned **-48.83R**: -41.46R on 2026-10-07, +1.61R on 2026-10-08 and -8.98R on 2026-10-09. The veto is net
-protective over those three days, but it was net costly on one of them, and the **nine** sessions since have added
-no evidence either way. (Verified: computed over raw/2026-10-07…raw/2026-10-22)
+protective over those three days, but it was net costly on one of them, and the **ten** sessions since have added
+no evidence either way. (Verified: computed over raw/2026-10-07…raw/2026-10-23)
 
 ## What to do about it
 Proposals only, for the Friday tune. The proposal carried out of 2026-10-07 was to watch whether the per-gate
@@ -64,6 +70,12 @@ sessions on samples of 1 to 13 resolved skips per gate. Reading a ranking off a 
    thing to check than "are the bots running". Start with whether the bots' output files exist at the paths
    `tools/bot-collect.py` reads on the Mac. Nine sessions is long enough that this should precede any gate work.
    (Verified: raw/2026-10-22.json; computed over raw/2026-10-12…raw/2026-10-22)
+7. **Added 2026-10-23: ten sessions, and the question is no longer a gate question at all.** Two full trading
+   weeks with a complete bundle every day and not one v7 record or skip. Nothing on this page can move until the
+   bots write something, so the gate work should be closed as blocked rather than carried forward each session as
+   an open item. The single check that unblocks it is the one from 2026-10-22: whether the files
+   `tools/bot-collect.py` reads exist on the Mac at all.
+   (Verified: computed over raw/2026-10-12…raw/2026-10-23)
 
 See [[what-ifs/coin-skips]] for the one symbol where the veto already looks wrong, and
 [[what-ifs/cancelled-sweep-orders]] for the sweep bot, where cancellation rather than a vote is what prevented the

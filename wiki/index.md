@@ -4,7 +4,7 @@ Compiled every trading day from the Webull fills and the bots' session, by conce
 is written once; these pages are the compiled output. Numbers carry their source.
 
 ## Latest weekly report
-- [[weekly/2026-W43]]: four of five sessions compiled, +$689.00, and Thursday is the first losing session of the month
+- [[weekly/2026-W43]]: the full week, +$1,705.00, and Friday's +$1,016.00 is the best same-day session compiled
 - [[weekly/2026-W42]]: the week traded 75 fills; only Friday's 21 are compiled, and one exit gave up $4,304.00
 - [[weekly/2026-W41]]: the week realized -$195.00, and all of the loss is in same-day expiry
 
@@ -12,6 +12,7 @@ is written once; these pages are the compiled output. Numbers carry their source
 - [[hypothesis-ledger]]: every bot, agent and tune tested, and what happened
 
 ## Days
+- [[days/2026-10-23]]
 - [[days/2026-10-22]]
 - [[days/2026-10-21]]
 - [[days/2026-10-20]]
@@ -21,7 +22,6 @@ is written once; these pages are the compiled output. Numbers carry their source
 - [[days/2026-10-14]]
 - [[days/2026-10-13]]
 - [[days/2026-10-12]]
-- [[days/2026-10-09]]
 
 ## Mistakes
 - [[mistakes/stop-inside-the-noise]]
@@ -36,5 +36,6 @@ is written once; these pages are the compiled output. Numbers carry their source
 - [[what-ifs/cancelled-sweep-orders]]
 
 ## Rules
+- [[rules/spx-after-1200]]
 - [[rules/committee-veto]]
 - [[rules/1550-flat]]

@@ -5,6 +5,17 @@ closed on a later session. It is the opposite trade to [[setups/zero-dte-scalp]]
 for a while, so the result turns on the move rather than on entry timing within one session.
 
 ## Evidence
+- **2026-10-23: the carry closed two seconds after the bell, and it was the right exit.** The eight TSLA 10-23
+  387.5 calls left open on 2026-10-22 for **$789.00** were sold in one fill at **09:30:02** at 0.18 for
+  **$144.00**. TSLA closed at **372.22**, **$15.28** below the strike, so holding any longer returned nothing: the
+  **-$645.00** was already lost at Thursday's bell and the opening exit recovered what was left. The cost belongs
+  to the decision to carry, not to the exit. (Verified: raw/2026-10-23.json; carry cost raw/2026-10-22.json)
+- **2026-10-23: AAPL 10-30 350C was scalped intraday, not swung.** Two contracts bought at 14:32:06 and 14:47:43
+  for **$548.00** and both sold at 15:02:50 and 15:15:22 for **$597.00**, **+$49.00**, a week before expiry. As
+  with the two SPY next-day calls on 2026-10-22 and the TSLA 400C on 2026-10-19 and 2026-10-20, a later-dated
+  contract opened and closed inside one session is not this setup and the result belongs to the day. It was also
+  the only later-dated contract traded that session and the last position closed.
+  (Verified: raw/2026-10-23.json)
 - **2026-10-22 to 2026-10-23: TSLA 10-23 387.5C, the third completed swing and the worst.** Twenty-two contracts
   were bought across the whole of 2026-10-22, 09:30:48 to 15:59:32, at 0.75–2.05 for **$3,059.00**; fourteen were
   sold the same session for **$2,530.00**, **+$260.00** on their FIFO cost. The **eight** left open at the bell
@@ -55,7 +66,9 @@ together. The one carried leg of the third cost **-$645.00** on its own. **No po
 month after 2026-10-23. Against the three, same-day strikes round-tripped in equal size now return **-$552.00**
 over 25 strikes, and 2 near-dated contracts -$333.00. The later-expiry book is still ahead of the 0DTE book, but
 only on the single large winner of 2026-10-09, and the two since have both lost.
-(Verified: computed over raw/2026-10-07…raw/2026-10-22; whole-life and open positions computed over
+Confirmed again on 2026-10-23: no position is open in the month once that session's fills are in, and the only
+later-dated contract it traded, AAPL 10-30 350C, was closed the same day.
+(Verified: computed over raw/2026-10-07…raw/2026-10-23; whole-life and open positions computed over
 data/fills/2026-10.json)
 
 ## What to do about it
