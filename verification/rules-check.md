@@ -25,7 +25,7 @@ Run on the Mac. You need `node` and Playwright (`npm i playwright` in a scratch 
 3. **Data untouched.** `node tools/sync.js --csv-dir <empty dir> --check`.
 4. **R not in the repo.** `git grep -nE '"R"[[:space:]]*:[[:space:]]*[0-9]' | wc -l` over the whole tree (an R key holding a number; the spec's own wording of this check doesn't match), and check `'R' in meta` of `data/index.json`.
 5. **The journal protocol.** `verification/journal.md` step 1.
-6. **Preview build current.** `python3 tools/build-fragment.py /tmp/frag.html && cmp /tmp/frag.html build/artifact.html && echo BUILD_MATCH` (the script takes the output path as its argument and leaves the committed file alone).
+6. **Preview build current.** `rm -f /tmp/frag.html && python3 tools/build-fragment.py /tmp/frag.html && cmp /tmp/frag.html build/artifact.html && echo BUILD_MATCH` (the script's own usage line, `tools/build-fragment.py` line 15: `python3 tools/build-fragment.py [out]`, default build/artifact.html; with an argument it writes there and leaves the committed file alone. Delete `/tmp/frag.html` first so a stale copy can't pass).
 
 ## Invariants
 

@@ -21,6 +21,8 @@ now flagged: GME 2021-11-26 250C (bought Wed 24 Nov 2021, Thanksgiving closed) a
 `holidayStale(trades)`: true when any trade's entry date or expiry falls in a year after the last year in the list
 (`HOL_LAST_YEAR`, 2027 today). Then the Rules card shows, in the page's critical red: "Holiday calendar ends <year>,
 update it: the overnight 0–1 DTE check may miscount." The protocol checks it (rules-check.md invariants).
+Known case (review #23, finding 3): a long-dated option expiring after the list's last year (a LEAP) also triggers the
+warning, though it can't be miscounted as 0–1 DTE. Kept as Ty worded it unless he narrows it.
 
 ## 3. build/artifact.html
 The repo keeps the preview fragment committed and rebuilds it whenever index.html changes (CLAUDE.md; earlier specs
