@@ -5,6 +5,22 @@ closed on a later session. It is the opposite trade to [[setups/zero-dte-scalp]]
 for a while, so the result turns on the move rather than on entry timing within one session.
 
 ## Evidence
+- **2026-10-22 to 2026-10-23: TSLA 10-23 387.5C, the third completed swing and the worst.** Twenty-two contracts
+  were bought across the whole of 2026-10-22, 09:30:48 to 15:59:32, at 0.75–2.05 for **$3,059.00**; fourteen were
+  sold the same session for **$2,530.00**, **+$260.00** on their FIFO cost. The **eight** left open at the bell
+  carried **$789.00** of cost and were sold on 2026-10-23 at 0.18 for **$144.00**: the overnight carry returned
+  **-$645.00**, two and a half times the **+$260.00** the intraday round trips made. TSLA closed 2026-10-22 at
+  **374.57**, already **$12.93** below the strike. (Verified: raw/2026-10-22.json; carry computed over
+  data/fills/2026-10.json)
+- **2026-10-22: holding was wrong here and the morning said otherwise for hours.** The three exits in the first ten
+  minutes were each followed by TSLA rallying **+11.72**, **+8.91** and **+5.37** over the next 30 minutes, so the
+  carry looked vindicated all morning; the strike was never reached. This is the mirror of the 2026-10-20 case on
+  the 400C, where the post-exit rally was real and the close confirmed it.
+  (Verified: raw/2026-10-22.json)
+- **2026-10-22: two SPY next-day calls were scalped intraday, not swung.** SPY 10-23 768C, 18 contracts for
+  **+$80.00**, and SPY 10-23 766C, 5 contracts for **+$142.00**, both opened and closed inside the session. As with
+  the 400C on 2026-10-19 and 2026-10-20, a later-dated contract traded inside one session is not this setup; both
+  results belong to the day. (Verified: raw/2026-10-22.json)
 - 2026-10-13 to 2026-10-19: **TSLA 10-23 410C closed, and it was not the first one's result.** The strike ran for
   five sessions, 14 contracts bought for **$2,256.00** and 14 sold for **$2,216.00**: **-$40.00** over its whole
   life. The leg that was actually carried over a weekend — four contracts bought 2026-10-15 and 2026-10-16 for
@@ -33,11 +49,13 @@ for a while, so the result turns on the move rather than on entry timing within 
   (Verified: computed over raw/2026-10-07…2026-10-09)
 
 ## Count so far
-Seen twice on 10 compiled days, and **both are now closed**: TSLA 10-16 400C **+$753.00** and TSLA 10-23 410C
-**-$40.00** over its whole life, so **1 winner of 2** and **+$713.00** together. **No position is open** after
-2026-10-20. Against the two, same-day strikes round-tripped in equal size now return **+$187.00** over 18 strikes,
-and 2 near-dated contracts -$333.00. The later-expiry book is still ahead, but on a single large winner.
-(Verified: computed over raw/2026-10-07…raw/2026-10-20; whole-life and open position computed over
+Seen three times on 12 compiled days, and **all three are now closed**: TSLA 10-16 400C **+$753.00**, TSLA 10-23
+410C **-$40.00** and TSLA 10-23 387.5C **-$385.00** over their whole lives, so **1 winner of 3** and **+$328.00**
+together. The one carried leg of the third cost **-$645.00** on its own. **No position is open** anywhere in the
+month after 2026-10-23. Against the three, same-day strikes round-tripped in equal size now return **-$552.00**
+over 25 strikes, and 2 near-dated contracts -$333.00. The later-expiry book is still ahead of the 0DTE book, but
+only on the single large winner of 2026-10-09, and the two since have both lost.
+(Verified: computed over raw/2026-10-07…raw/2026-10-22; whole-life and open positions computed over
 data/fills/2026-10.json)
 
 ## What to do about it

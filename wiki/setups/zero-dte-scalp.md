@@ -5,6 +5,20 @@ re-entering the same strike several times. Expiry day leaves no room for a posit
 decided by entry timing and by how many times a losing strike is re-entered.
 
 ## Evidence
+- **2026-10-22: the worst 0DTE session compiled, -$806.00 over six strikes, and the first SPX-heavy one.** Five
+  SPXW strikes returned **-$885.00** and the one SPY strike **+$79.00**. It ends the five-session green run and it
+  is larger than 2026-10-07's **-$729.00**. (Verified: raw/2026-10-22.json)
+- **2026-10-22: the loss is turnover, not direction.** The five SPX strikes carried **$7,260.00** of premium and
+  gave back **-$885.00** — a 12% bleed on money that was in the market for minutes. The worst, 7690C, was bought
+  across four minutes and closed 15 minutes later for **-$505.00**; 7680C's last buy at 14:02:05 was followed by
+  its first sell 16 seconds later. Re-entering the same expiring strike at a worse price is the mechanism.
+  (Verified: raw/2026-10-22.json)
+- **2026-10-22 breaks the "heaviest strike wins" reading of 2026-10-19 and 2026-10-20.** The two heaviest 0DTE
+  strikes ever compiled are now this session's SPXW 7710C at **22** contracts for **-$45.00** and SPY 767C at
+  **20** contracts for **+$79.00** — both within $80 of flat. The four heaviest are 22, 20, 19 and 16 contracts
+  returning **-$45.00**, **+$79.00**, **+$411.00** and **+$188.00**, so size now predicts neither sign nor
+  magnitude. Both the 2026-10-07 claim and its 2026-10-19 counterclaim are dead.
+  (Verified: computed over raw/2026-10-07…raw/2026-10-22)
 - 2026-10-21: one same-day strike, green, **+$67.00** on two contracts of SPY 769C, bought and sold inside 21
   minutes. The smallest session compiled, and the fifth green one in a row. (Verified: raw/2026-10-21.json)
 - 2026-10-21: size and result moved together again, in the other direction — the smallest position of the five
@@ -57,13 +71,13 @@ decided by entry timing and by how many times a losing strike is re-entered.
   offer no comparison yet. (Verified: raw/2026-10-07.json)
 
 ## Count so far
-Seen on 7 of 11 compiled days. Counting only same-day strikes bought and sold in equal size: **19 strikes, 108
-contracts, 11 green, +$254.00**. By day those round trips returned **-$729.00, +$118.00, +$21.00, +$127.00,
-+$188.00, +$462.00 and +$67.00** — the book turned positive on 2026-10-20, and every session after 2026-10-07 has
-been green, five in a row. Two strikes are excluded because they closed or left a carried position rather than
-round-tripping — TSLA 10-07 385C and TSLA 10-16 377.5C; counting net cash on every same-day strike instead gives
-**+$776.00**. The four sessions 2026-10-12 to 2026-10-15 contribute nothing: their raw days were frozen with no
-fills. (Verified: computed over raw/2026-10-07…raw/2026-10-21)
+Seen on 8 of 12 compiled days. Counting only same-day strikes bought and sold in equal size: **25 strikes, 178
+contracts, 13 green, -$552.00**. By day those round trips returned **-$729.00, +$118.00, +$21.00, +$127.00,
++$188.00, +$462.00, +$67.00 and -$806.00** — the book went positive on 2026-10-20 and back negative on 2026-10-22,
+and the **-$806.00** gave back five sixths of the **+$983.00** the six green sessions had built. Two strikes are excluded because they closed
+or left a carried position rather than round-tripping — TSLA 10-07 385C and TSLA 10-16 377.5C. The four sessions
+2026-10-12 to 2026-10-15 contribute nothing: their raw days were frozen with no fills.
+(Verified: computed over raw/2026-10-07…raw/2026-10-22)
 
 ## What to do about it
 Proposals only. The number to carry forward is round trips per strike against result per strike, because on this day

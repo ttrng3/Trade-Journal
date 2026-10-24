@@ -6,6 +6,23 @@ went wrong in the window the post-exit candles cover, so the exit cannot be faul
 normally carries. Only the settlement price shows the cost.
 
 ## Evidence
+- **2026-10-22 is the first session where every same-day strike agreed, and it broke the aggregate.** Six same-day
+  strikes, all six settled worthless: five SPXW calls at 7670–7710 against a **7639.70** proxy close, and SPY 767C
+  against **763.97**. Holding the six would have cost the full **$9,841.00** of premium they carried; exiting
+  returned **$9,035.00** more than holding. That single session took the running total from **-$13.00** to
+  **+$9,022.00**. (Verified: raw/2026-10-22.json; computed over raw/2026-10-07…raw/2026-10-22)
+- **2026-10-22 shows what the aggregate is worth.** One ordinary session moved it by **$9,035.00**, from
+  **-$13.00** to **+$9,022.00**, on a sample of 27 strikes. The proposal added 2026-10-21 said to stop reporting
+  the net; this is the demonstration, and it happens to point the other way from the 2026-10-16 tail.
+  (Verified: computed over raw/2026-10-07…raw/2026-10-22)
+- **2026-10-22: the clean case where the candles and the close agreed 15 times out of 15.** SPY 10-22 767C, twenty
+  contracts for **$2,581.00** sold for **$2,660.00**, **+$79.00**. SPY was lower 30 minutes after **every one of
+  the 15 exits**, by **0.15** to **3.77**, and closed **$3.03** below the strike. The usual defence of an exit and
+  the usual refutation of it are both absent: nothing here argues for holding. (Verified: raw/2026-10-22.json)
+- **2026-10-22: the largest single pro-exit entry so far.** SPXW 10-22 7710C, 22 contracts carrying **$3,625.00**,
+  sold for **$3,580.00** across 14 exits, then settled **70.30** out of the money. Holding returned **-$3,625.00**,
+  so exiting beat it by **$3,580.00** — second only in magnitude to the **-$4,304.00** of 2026-10-16, and opposite
+  in sign. The two tails now face each other. (Verified: raw/2026-10-22.json)
 - **2026-10-21 erased the reversal with two contracts.** SPY 10-21 769C, two contracts bought for **$291.00** and
   both sold for **$358.00**, **+$67.00**. SPY closed at **773.10**, so the call settled **$4.10** in the money,
   **$410.00** a contract. Held, the two were worth **$820.00**: **+$529.00** instead of +$67.00, so exiting cost
@@ -41,12 +58,13 @@ normally carries. Only the settlement price shows the cost.
   **$378.00**. One rule, two opposite outcomes, one day. (Verified: raw/2026-10-16.json)
 
 ## Count so far
-Seen on 8 compiled days, over **21 same-day strikes** with a settlement price. Exiting beat holding on **12** of
-them and cost money on **9**, and the net is **-$13.00** — dead even, after reading **+$449.00** one session
-earlier. The distribution is the whole story, not the net: the two largest single entries are **+$2,030.00**
-(2026-10-19) and **-$4,304.00** (2026-10-16), so a single strike still moves the total by more than every other
-strike combined, and a 2-contract strike on 2026-10-21 moved it $462.00.
-(Verified: computed over raw/2026-10-07…raw/2026-10-21)
+Seen on 8 compiled days, over **27 same-day strikes** with a settlement price. Exiting beat holding on **18** of
+them and cost money on **9**, and the net is **+$9,022.00** — after reading **-$13.00** one session earlier and
+**+$449.00** the session before that. The distribution is still the whole story, and the net is now visibly
+worthless as a statistic: it has read **-$2,937.00**, **+$449.00**, **-$13.00** and **+$9,022.00** on consecutive
+updates. The two largest single entries are **-$4,304.00** (2026-10-16) and **+$3,580.00** (2026-10-22), and one
+session of six agreeing strikes moved the total by **$9,035.00**.
+(Verified: computed over raw/2026-10-07…raw/2026-10-22)
 
 ## What to do about it
 Proposals only; Ty decides.
@@ -70,3 +88,12 @@ Proposals only; Ty decides.
    strikes. Report the per-strike distribution and the two tails; leave the aggregate out of the weekly until the
    sample is large enough that one strike cannot flip it.
    (Verified: computed over raw/2026-10-07…raw/2026-10-21)
+6. **Added 2026-10-22: separate the proxy-settled strikes from the rest.** Five of the six strikes this session
+   were SPXW, and the collector carries no SPX bars, so their settlement check is the **SPY × 10** proxy. Here the
+   margin was 30 to 70 points and the answer is safe either way, but a strike within a few points of the proxy
+   close is not decidable and should be recorded as undecided rather than counted in this ledger.
+   (Verified: raw/2026-10-22.json)
+7. **Added 2026-10-22: the net is now confirmed useless and proposal 5 stands.** It has read -$2,937.00,
+   +$449.00, -$13.00 and +$9,022.00 on four consecutive updates. Report the count of strikes each way and the two
+   tails, and nothing else, until the sample is large enough that one session cannot move it by $9,035.00.
+   (Verified: computed over raw/2026-10-07…raw/2026-10-22)
