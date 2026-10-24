@@ -13,17 +13,19 @@ Run on the Mac. You need `node` and Playwright (`npm i playwright` in a scratch 
 
 ## Steps
 
-1. **Recount.** From the scratch folder, run `node recount.js ~/Projects/Trade-Journal 2024-12-10 2026-10-02 100` (script below). It prints the count and net per rule, "No rule broken", the over-cap days and their net, and the size of the filtered trade log.
-2. **Page.** Serve the page with `python3 -m http.server 8765` in the repo, or use https://ttrng3.github.io/Trade-Journal/ after a merge. Then run `node page.js <url> 100 2024-12-10 2026-10-02 <out-dir>` (script below). In a fresh profile it does the following:
+1. **Recount.** From the scratch folder, run `node recount.js ~/Projects/Trade-Journal 2020-12-01 <today> 100` (all history; the holiday list starts at the first trade, 2020-12-18) (script below). It prints the count and net per rule, "No rule broken", the over-cap days and their net, and the size of the filtered trade log.
+2. **Page.** Serve the page with `python3 -m http.server 8765` in the repo, or use https://ttrng3.github.io/Trade-Journal/ after a merge. Then run `node page.js <url> 100 2020-12-01 <today> <out-dir>` (script below). In a fresh profile it does the following:
    - reads the over-cap line before R is set;
    - sets R = 100 in Settings and saves;
    - sets the custom range;
    - reads the Rules card;
    - turns on "Rule breaks only" and reads the trade-log count;
-   - saves two screenshots.
+   - saves two screenshots;
+   - reads the holiday calendar: `holidayStale` on the data, `#holidayWarn`, `HOL_LAST_YEAR`, the page's 70-date set, and the next-year fixture.
 3. **Data untouched.** `node tools/sync.js --csv-dir <empty dir> --check`.
 4. **R not in the repo.** `git grep -nE '"R"[[:space:]]*:[[:space:]]*[0-9]' | wc -l` over the whole tree (an R key holding a number; the spec's own wording of this check doesn't match), and check `'R' in meta` of `data/index.json`.
 5. **The journal protocol.** `verification/journal.md` step 1.
+6. **Preview build current.** `rm -f /tmp/frag.html && python3 tools/build-fragment.py /tmp/frag.html && cmp /tmp/frag.html build/artifact.html && echo BUILD_MATCH` (the script's own usage line, `tools/build-fragment.py` line 15: `python3 tools/build-fragment.py [out]`, default build/artifact.html; with an argument it writes there and leaves the committed file alone. Delete `/tmp/frag.html` first so a stale copy can't pass).
 
 ## Invariants
 
@@ -38,6 +40,8 @@ All of these must hold:
 - `errors` holds nothing except the 404 for `data/journal.json`, which the page probes on purpose and falls back from (`.pages-allow` notes it).
 - Step 3 prints `"changedFiles": []`.
 - Step 4 prints `0` and `False`.
+- **Holiday calendar current** (step 2's `holiday`): `holidayStale` on the page is false for today's data, the Rules card shows no `#holidayWarn`, and the page's `HOL_LAST_YEAR` is at least the year of the latest trade date and expiry. Fixtures: `fxNextYear` (entry 4 Jan of the year after the list, expiry 4 days later) is true; `fxLeap` (entry in the list's last year, expiry 18 Jun of the next: over 7 days away) is false; `fxNoExp` (no expiry, e.g. stock) is false. Only trades whose expiry is within 7 calendar days of entry can raise the warning (Ty, 24 Oct). The page's holiday set (`holiday.dates`) equals the recount's `HOL` exactly (same 70 dates on 24 Oct 2026).
+- **Preview build current:** step 6 prints `BUILD_MATCH`: the committed `build/artifact.html` is the fragment of the committed `index.html`.
 - Step 5 prints `"pass": true` after the merge. On the branch, `served_equals_main` is false by design (Pages still serves `main`) and every other verdict must be true.
 
 Measured on 2026-10-03 on branch `work/rules-check` (local server): 322 / −$6,309, 28 / −$529, 32 / −$1,598, 144 / −$3,523, 87 / −$3,450, 118 / +$1,962; 16 over-cap days (130 trades), −$11,136; 411 of 532. These pass only as long as the data is unchanged. New fills inside the range move them, so compare the page against the recount, never against these figures.
@@ -50,7 +54,7 @@ const idx=JSON.parse(fs.readFileSync(R+'/data/index.json'));let fills=[];
 for(const s of idx.shards)fills.push(...Object.values(JSON.parse(fs.readFileSync(`${R}/data/fills/${s}.json`))).map(f=>P.hydrate({...f})));
 const all=P.buildTrades(fills,{feeC:0,feeS:0,longOnly:true});
 const closed=all.filter(t=>t.net!=null&&t.result!=='OPEN'&&t.result!=='UNKNOWN');
-const HOL=new Set(['2026-11-26','2026-12-25','2027-01-01','2027-01-18','2027-02-15','2027-03-26','2027-05-31','2027-06-18','2027-07-05','2027-09-06','2027-11-25','2027-12-24']);
+const HOL=new Set(['2020-12-25','2021-01-01','2021-01-18','2021-02-15','2021-04-02','2021-05-31','2021-07-05','2021-09-06','2021-11-25','2021-12-24','2022-01-17','2022-02-21','2022-04-15','2022-05-30','2022-06-20','2022-07-04','2022-09-05','2022-11-24','2022-12-26','2023-01-02','2023-01-16','2023-02-20','2023-04-07','2023-05-29','2023-06-19','2023-07-04','2023-09-04','2023-11-23','2023-12-25','2024-01-01','2024-01-15','2024-02-19','2024-03-29','2024-05-27','2024-06-19','2024-07-04','2024-09-02','2024-11-28','2024-12-25','2025-01-01','2025-01-09','2025-01-20','2025-02-17','2025-04-18','2025-05-26','2025-06-19','2025-07-04','2025-09-01','2025-11-27','2025-12-25','2026-01-01','2026-01-19','2026-02-16','2026-04-03','2026-05-25','2026-06-19','2026-07-03','2026-09-07','2026-11-26','2026-12-25','2027-01-01','2027-01-18','2027-02-15','2027-03-26','2027-05-31','2027-06-18','2027-07-05','2027-09-06','2027-11-25','2027-12-24']); // copied from the NYSE/ICE sources named in work/261024-holidays-guard/spec.md, not from index.html
 const bd=(a,b)=>{let n=0;for(let d=new Date(a+'T12:00:00Z');d<new Date(b+'T12:00:00Z');){d.setUTCDate(d.getUTCDate()+1);const k=d.toISOString().slice(0,10);if(d.getUTCDay()%6&&!HOL.has(k))n++;}return n;};
 const gb={},by={};closed.filter(t=>t.type==='option').forEach(t=>(by[t.exit.slice(0,10)]=by[t.exit.slice(0,10)]||[]).push(t));
 for(const d in by){let c=0,p=0;for(const t of by[d].sort((x,y)=>x.exit.localeCompare(y.exit))){c+=t.net;p=Math.max(p,c);if(p>=300&&c<=0.7*p){gb[d]=t.exit;break;}}}
@@ -95,7 +99,9 @@ const {chromium}=require('playwright');
  res.tradeLogTitle=await p.textContent('#view-trades h3');
  res.addDownBadgeSample=await p.$$eval('#tt tr.row',rs=>rs.filter(r=>/2026-09-08/.test(r.innerText)&&/SPY260909C00768000/.test(r.innerText)&&/add-down/.test(r.innerText)).length);
  await p.screenshot({path:shots+'/trade-log-filtered.png'});
- res.fixture=await p.evaluate(()=>{const fx=p2=>ruleFlags({type:'option',net:1,result:'WIN',dir:'LONG',und:'SPY',entry:'2026-09-08T11:00:00',exp:'2026-09-09',hold:60,fills:[{side:'BUY',price:3},{side:'BUY',price:p2}]}).includes('adddown');return {at97:fx(2.91),above97:fx(2.92)};});
+ res.fixture=await p.evaluate(()=>{const fx=p2=>ruleFlags({type:'option',net:1,result:'WIN',dir:'LONG',und:'SPY',entry:'2026-09-08T11:00:00',exit:'2026-09-08T11:01:00',exp:'2026-09-09',hold:60,fills:[{side:'BUY',price:3,t:'2026-09-08T11:00:00'},{side:'BUY',price:p2,t:'2026-09-08T11:00:30'}]}).includes('adddown');return {at97:fx(2.91),above97:fx(2.92),holidayOvernight:ruleFlags({type:'option',net:-1,result:'LOSS',dir:'LONG',und:'SPY',entry:'2026-11-25T15:00:00',exit:'2026-11-27T10:00:00',exp:'2026-11-27',hold:1,fills:[{side:'BUY',price:1,t:'2026-11-25T15:00:00'}]}).includes('overnight')};});
+ await p.click('[data-view="reports"]');await p.waitForTimeout(300);
+ res.holiday=await p.evaluate(()=>({stale:holidayStale(S.trades),warn:!!document.querySelector('#holidayWarn'),last:HOL_LAST_YEAR,dates:[...MKT_HOLIDAYS].sort(),fxNextYear:holidayStale([{entry:(HOL_LAST_YEAR+1)+'-01-04T10:00:00',exp:(HOL_LAST_YEAR+1)+'-01-08'}]),fxLeap:holidayStale([{entry:HOL_LAST_YEAR+'-01-04T10:00:00',exp:(HOL_LAST_YEAR+1)+'-06-18'}]),fxNoExp:holidayStale([{entry:(HOL_LAST_YEAR+1)+'-01-04T10:00:00',exp:null}])}));
  res.errors=errs;console.log(JSON.stringify(res,null,1));await b.close();
 })();
 ```
@@ -115,7 +121,7 @@ const {chromium}=require('playwright');
 
 - The JSON from steps 1 and 2.
 - `rules-card.png` and `trade-log-filtered.png`.
-- The outputs of steps 3–5.
+- The outputs of steps 3–6.
 
 ## Not covered
 
