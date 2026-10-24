@@ -6,10 +6,10 @@ review of 19–23 Oct, relayed by paste (orb-options ledger R132); see `intent.m
 ## What changes (index.html, `RULES` and `ruleFlags` only)
 | Flag | Rule (Ty) | How the page checks it |
 |---|---|---|
-| `earlyadd` "add-down before 10:00" | replaces "early 0DTE": flag adding to a losing position, or entering with no stop, before 10:00 | a later buy ≥ 3% below the first buy, **made before 10:00 ET** (the time of the add, not of the entry; Chose this because the rule reads "adding … before 10:00"). The "no stop" half is **not built**: see Not built |
+| `earlyadd` "add-down before 10:00" | replaces "early 0DTE": flag adding to a losing position, or entering with no stop, before 10:00 | a later buy ≥ 3% below the first buy, **made before 10:00 ET** (the time of the add, not of the entry; confirmed by Ty, 24 Oct). The "no stop" half is **not built**: see Not built |
 | `spxpm` "SPX after 12:00" | no SPX entries after 12:00 (two-week trial, then a P&L-by-time review) | underlying SPXW or SPX, entry at or after 12:00 ET. Trial 23 Oct – 6 Nov 2026; review Sat 7 Nov (P&L by time bucket), then Ty decides. The older all-day "SPXW" flag (3 Oct) stays; Chose keep because the new rule narrows nothing Ty asked to remove |
 | `overnight` "overnight 0–1 DTE" | no overnight holds on 0–1 DTE | exit on a later date than entry, and expiry at most 1 trading day after the entry date (weekends and NYSE full closures skipped; list in `MKT_HOLIDAYS`, through 2027) |
-| `giveback` "after 30% giveback" | once up $300 on the day, stop after giving back 30% of the peak | per exit day, realized net of **option** trades in exit order (stock excluded: Chose this because the journal and the rule are about options); the first exit where the peak is ≥ $300 and net ≤ 70% of peak sets the stop time; every option trade entered that day after it is flagged |
+| `giveback` "after 30% giveback" | once up $300 on the day, stop after giving back 30% of the peak | per exit day, realized net of **option** trades in exit order (stock excluded; confirmed by Ty, 24 Oct); the first exit where the peak is ≥ $300 and net ≤ 70% of peak sets the stop time; every option trade entered that day after it is flagged |
 
 Unchanged: add-down, late 0DTE, long hold, SPXW, the −3R cap. `data/` is not touched.
 
