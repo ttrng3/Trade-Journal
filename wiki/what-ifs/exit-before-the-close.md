@@ -6,6 +6,33 @@ went wrong in the window the post-exit candles cover, so the exit cannot be faul
 normally carries. Only the settlement price shows the cost.
 
 ## Evidence
+- **2026-10-26 is the first session where every same-day strike settled in the money and exiting still beat
+  holding on all of them — and it is the margin that does it, not the direction.** Two strikes, both settled in:
+  SPY 764C by **$1.29** against a **765.29** close and NVDA 215C by **$0.97** against **215.97**. Held, the
+  fifteen SPY calls were worth **$1,935.00** against the **$2,205.00** taken and the two NVDA calls **$194.00**
+  against **$219.00**, so exiting beat holding by **$270.00** and **$25.00**. Average exit premiums were
+  **$1.47** and **$1.10** against intrinsics of **$1.29** and **$0.97** — 18 and 12.5 cents a contract of time
+  value that the settlement did not pay for. Across the nine earlier sessions 13 same-day strikes settled in the
+  money and exiting beat holding on just **2**; this session takes that to **4 of 15**.
+  (Verified: raw/2026-10-26.json; computed over raw/2026-10-07…raw/2026-10-26)
+- **2026-10-26 refutes the page's own framing from the other side: the candles said hold 20 times out of 21 and
+  holding would have lost.** SPY rose over the following 30 minutes after **all nineteen** SPY exits, by
+  **1.12** to **2.50**, and the close went further the same way on the 0DTE strike; NVDA rose after one of its
+  two exits. The page opens by saying the post-exit window cannot fault an exit. Here the window *endorsed*
+  holding, unanimously on SPY, and the settlement still favoured the exit. The window is no better as evidence
+  for holding than against it: half an hour of favourable movement says nothing about an expiry four hours out.
+  This is the mirror of 2026-10-21, where both measures said hold and holding won.
+  (Verified: raw/2026-10-26.json, raw/2026-10-21.json)
+- **2026-10-26 is the quietest update this ledger has had, which is proposal 5's demonstration.** Two strikes
+  moved the net by **+$295.00**, from **+$15,712.00** to **+$16,007.00** — the smallest single-session move of
+  the ten, against **+$9,035.00** on 2026-10-22 and **-$3,780.00** on 2026-10-16. The count moved usefully and
+  the net did not: exiting is now right on **30 of 41** strikes, **73.2%**, after **71.8%** and **66.7%** on the
+  two sessions before. (Verified: computed over raw/2026-10-07…raw/2026-10-26)
+- **2026-10-26: NVDA 215C is the narrowest call this ledger holds.** Two contracts, **$141.00** of cost for
+  **$219.00**, and exiting beat holding by **$25.00** — against a next-narrowest of **$113.00** on 2026-10-08.
+  A strike this close is the undecidable case proposal 6 asked to be recorded as undecided rather than counted;
+  it is counted here, and it is worth noting that it could go either way on a cent of settlement.
+  (Verified: raw/2026-10-26.json; computed over raw/2026-10-07…raw/2026-10-26)
 - **2026-10-23: the two strikes that settled in the money are exactly the two where holding won, and the candles
   said so both times.** Twelve same-day strikes with a settlement price: ten settled worthless and exiting took
   **$7,677.00** that holding would have returned as nothing, while SPY 762P cost **$780.00** and TSLA 370C
@@ -86,15 +113,22 @@ normally carries. Only the settlement price shows the cost.
   **$378.00**. One rule, two opposite outcomes, one day. (Verified: raw/2026-10-16.json)
 
 ## Count so far
-Seen on 9 compiled days, over **39 same-day strikes** with a settlement price. Exiting beat holding on **28** of
-them and cost money on **11**, and the net is **+$15,712.00**. The distribution is still the whole story and the
-net is still worthless as a statistic: it has read **-$2,937.00**, **+$449.00**, **-$13.00**, **+$9,022.00** and
-**+$15,712.00** on consecutive updates, changing sign on three of the five. The two largest single entries are
-**-$4,304.00** (2026-10-16) and **+$3,580.00** (2026-10-22). What has become stable is the *count*: exiting has
-been right on **28 of 39** strikes, **71.8%**, and the eleven misses carry the money — the four largest are
-**-$4,304.00**, **-$1,059.00**, **-$906.00** and **-$780.00**, three of them puts. Split by side, calls are
-**+$21,276.00** over 33 strikes and puts **-$5,564.00** over 6.
-(Verified: computed over raw/2026-10-07…raw/2026-10-23)
+Seen on 10 compiled days, over **41 same-day strikes** with a settlement price. Exiting beat holding on **30** of
+them and cost money on **11**, and the net is **+$16,007.00**. The distribution is still the whole story and the
+net is still worthless as a statistic: it has read **-$2,937.00**, **+$449.00**, **-$13.00**, **+$9,022.00**,
+**+$15,712.00** and **+$16,007.00** on consecutive updates, changing sign on three of the six. The two largest
+single entries are **-$4,304.00** (2026-10-16) and **+$3,580.00** (2026-10-22); the smallest is **$25.00**
+(2026-10-26). What has become stable is the *count*: exiting has been right on **30 of 41** strikes, **73.2%**,
+rising through **57.1%**, **66.7%** and **71.8%** over the three sessions before, and the eleven misses still
+carry the money — the four largest are **-$4,304.00**, **-$1,059.00**, **-$906.00** and **-$780.00**, three of
+them puts. Split by side, calls are **+$21,571.00** over 35 strikes and puts **-$5,564.00** over 6; no put has
+been traded since 2026-10-23, so that side has not moved.
+
+The cut that 2026-10-26 added is **settlement margin**. Of the 41 strikes, **15** settled in the money and
+**26** settled worthless; exiting was right on **26 of 26** of the worthless ones by construction and on only
+**4 of 15** of the rest. So the whole of this ledger's risk sits in the in-the-money tail, and within that tail
+what separates the 4 from the 11 is how far past the strike the close landed relative to the premium taken.
+(Verified: computed over raw/2026-10-07…raw/2026-10-26)
 
 ## What to do about it
 Proposals only; Ty decides.
@@ -139,3 +173,16 @@ Proposals only; Ty decides.
    further, so both were visible without the settlement price. Record, per miss, whether the 10-candle window
    agreed with the exit or not — that separates the misses that were knowable at the time from the ones only
    settlement reveals. (Verified: raw/2026-10-23.json)
+10. **Added 2026-10-26: split this ledger on settlement margin, not on in-the-money or not.** All 26 strikes that
+    settled worthless favoured exiting by construction, and only **4 of the 15** that settled in the money did,
+    so the only question this ledger really asks is what happens in that tail. The measurable version is
+    intrinsic-at-settlement minus average exit premium, per contract: on 2026-10-26 it was **-$0.18** and
+    **-$0.125** and exiting won, on 2026-10-16 it was **+$8.61** on the QQQ put and holding won by $4,304.00.
+    Record that one number per strike and the 11 misses should separate from the 4 cleanly, which neither the net
+    nor the 10-candle window does. (Verified: computed over raw/2026-10-07…raw/2026-10-26)
+11. **Added 2026-10-26: drop the 10-candle window as evidence either way.** Proposal 9 asked whether the window
+    agreed with each miss. Run on this session it agreed with holding on 20 of 21 exits and holding lost on both
+    settled strikes, so the window has now been wrong in both directions — it hid the cost completely on
+    2026-10-16 and it argued for a hold that would have lost on 2026-10-26. Keep recording it, because it is what
+    a decision could actually see at the time, but stop treating agreement or disagreement with it as evidence
+    about the exit. (Verified: raw/2026-10-26.json, raw/2026-10-16.json)

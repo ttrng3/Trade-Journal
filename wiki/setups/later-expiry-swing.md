@@ -5,6 +5,20 @@ closed on a later session. It is the opposite trade to [[setups/zero-dte-scalp]]
 for a while, so the result turns on the move rather than on entry timing within one session.
 
 ## Evidence
+- **2026-10-26: SPY 10-28 764C was scalped intraday, not swung, and it ran beside its own 0DTE twin.** Four
+  contracts bought between 09:41:12 and 10:09:36 at 3.66–3.80 for **$1,500.00** and all four sold between
+  09:56:05 and 10:11:02 at 3.94–4.19 for **$1,636.00**, **+$136.00**, two days before expiry. As with AAPL 10-30
+  on 2026-10-23, the two SPY next-day calls on 2026-10-22 and the TSLA 400C on 2026-10-19 and 2026-10-20, a
+  later-dated contract opened and closed inside one session is not this setup and the result belongs to the day.
+  What is new is that the same strike was traded at both expiries at once: the fifteen 0DTE 764 calls returned
+  **+$246.00** and these four **+$136.00**, so the near leg made more on nearly four times the contracts while
+  the later leg returned more per contract — **$34.00** against **$16.40**. One session is not a comparison of
+  the two books, but it is the first time they have been run side by side on one strike.
+  See [[setups/zero-dte-scalp]]. (Verified: raw/2026-10-26.json)
+- **2026-10-26: still nothing open, for the second session running.** Every strike was net flat at the bell and no
+  position opened during the month remains open once this session's fills are in. The three negative net
+  quantities the month shard shows are September positions closed on 2026-10-02, not open risk.
+  (Verified: raw/2026-10-26.json; open positions computed over data/fills/2026-10.json)
 - **2026-10-23: the carry closed two seconds after the bell, and it was the right exit.** The eight TSLA 10-23
   387.5 calls left open on 2026-10-22 for **$789.00** were sold in one fill at **09:30:02** at 0.18 for
   **$144.00**. TSLA closed at **372.22**, **$15.28** below the strike, so holding any longer returned nothing: the
@@ -60,15 +74,20 @@ for a while, so the result turns on the move rather than on entry timing within 
   (Verified: computed over raw/2026-10-07…2026-10-09)
 
 ## Count so far
-Seen three times on 12 compiled days, and **all three are now closed**: TSLA 10-16 400C **+$753.00**, TSLA 10-23
+Seen three times on 14 compiled days, and **all three are now closed**: TSLA 10-16 400C **+$753.00**, TSLA 10-23
 410C **-$40.00** and TSLA 10-23 387.5C **-$385.00** over their whole lives, so **1 winner of 3** and **+$328.00**
 together. The one carried leg of the third cost **-$645.00** on its own. **No position is open** anywhere in the
-month after 2026-10-23. Against the three, same-day strikes round-tripped in equal size now return **-$552.00**
-over 25 strikes, and 2 near-dated contracts -$333.00. The later-expiry book is still ahead of the 0DTE book, but
-only on the single large winner of 2026-10-09, and the two since have both lost.
-Confirmed again on 2026-10-23: no position is open in the month once that session's fills are in, and the only
-later-dated contract it traded, AAPL 10-30 350C, was closed the same day.
-(Verified: computed over raw/2026-10-07…raw/2026-10-23; whole-life and open positions computed over
+month after 2026-10-26, the second consecutive session that has ended flat. Against the three, same-day strikes
+round-tripped in equal size now return **+$739.00** over 38 strikes, and 2 near-dated contracts -$333.00, so the
+0DTE book has overtaken the later-expiry book on realized cash while the latter still rests on the single large
+winner of 2026-10-09 and has lost on both positions since.
+
+Distinct from the three swings, **eight** later-dated contracts have now been opened and closed inside a single
+session — TSLA 10-09 380C, TSLA 10-23 400C twice, MSFT 10-21 532.5C, SPY 10-23 768C and 766C, AAPL 10-30 350C and
+SPY 10-28 764C — returning **-$213.00, +$91.00, +$83.00, +$38.00, +$80.00, +$142.00, +$49.00** and **+$136.00**:
+**+$406.00** over the eight, 7 of 8 green. They are not this setup and each result sits on its day page, but as a
+group they now outnumber the swings and are the only part of the later-dated book that is consistently positive.
+(Verified: computed over raw/2026-10-07…raw/2026-10-26; whole-life and open positions computed over
 data/fills/2026-10.json)
 
 ## What to do about it
