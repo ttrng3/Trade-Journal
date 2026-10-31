@@ -6,6 +6,26 @@ went wrong in the window the post-exit candles cover, so the exit cannot be faul
 normally carries. Only the settlement price shows the cost.
 
 ## Evidence
+- **2026-10-30 is the session this page has been predicting: the net halved and the count did not move.** Six
+  strikes, three of them in-the-money misses, for **-$9,597.00** — the worst day recorded, nearly three times the
+  previous worst. TSLA closed at **399.83** and both same-day TSLA calls settled deep in: 395C sold for
+  **$1,678.00** against **$6,762.00** held, **-$5,084.00**, and 392.5C sold for **$1,546.00** against
+  **$5,864.00**, **-$4,318.00**. SPY 760P added **-$1,040.00**. Those two TSLA entries are now the largest and
+  second largest in the ledger, displacing **-$4,304.00** from 2026-10-16. The running net went from
+  **+$17,880.00** to **+$8,283.00**; the running count went from **33 of 44** to **36 of 50**, **75.0%** to
+  **72.0%**. (Verified: raw/2026-10-30.json; computed over raw/2026-10-07…raw/2026-10-30)
+- **2026-10-30 also sets both new extremes at the small end, and they are carry closes rather than trades.** TSLA
+  10-30 410C and SPY 10-30 770C were sold into the open for **$15.00** and **$16.00** against worthless
+  settlements, the two smallest entries on the page, below the **$25.00** from 2026-10-26. A strike that is left
+  open overnight and closed for pennies registers here as a win, which is worth naming as a limitation of the
+  measure: both were **losses** of **-$371.00** and **-$234.00** on the position.
+  See [[mistakes/overnight-0-1-dte]]. (Verified: raw/2026-10-30.json; carry computed over data/fills/2026-10.json)
+- **2026-10-29: exiting was right on all three settled strikes for +$1,873.00, against $395.00 of cash taken.**
+  QQQ 713P settled **$2.33** worthless and the **$1,568.00** taken was the whole gain; SPY 768P settled worthless
+  for **+$110.00** on a strike that realized **$5.00**; SPY 768C settled **$1.50** in and exiting still won by
+  **$195.00**. The gap between exit margin and cash — **$1,873.00** against **$395.00** — is the widest on any
+  single session, and it is the mirror of 2026-10-30, where the cash was good and the margin catastrophic.
+  (Verified: raw/2026-10-29.json)
 - **2026-10-26 is the first session where every same-day strike settled in the money and exiting still beat
   holding on all of them — and it is the margin that does it, not the direction.** Two strikes, both settled in:
   SPY 764C by **$1.29** against a **765.29** close and NVDA 215C by **$0.97** against **215.97**. Held, the
@@ -113,22 +133,23 @@ normally carries. Only the settlement price shows the cost.
   **$378.00**. One rule, two opposite outcomes, one day. (Verified: raw/2026-10-16.json)
 
 ## Count so far
-Seen on 10 compiled days, over **41 same-day strikes** with a settlement price. Exiting beat holding on **30** of
-them and cost money on **11**, and the net is **+$16,007.00**. The distribution is still the whole story and the
-net is still worthless as a statistic: it has read **-$2,937.00**, **+$449.00**, **-$13.00**, **+$9,022.00**,
-**+$15,712.00** and **+$16,007.00** on consecutive updates, changing sign on three of the six. The two largest
-single entries are **-$4,304.00** (2026-10-16) and **+$3,580.00** (2026-10-22); the smallest is **$25.00**
-(2026-10-26). What has become stable is the *count*: exiting has been right on **30 of 41** strikes, **73.2%**,
-rising through **57.1%**, **66.7%** and **71.8%** over the three sessions before, and the eleven misses still
-carry the money — the four largest are **-$4,304.00**, **-$1,059.00**, **-$906.00** and **-$780.00**, three of
-them puts. Split by side, calls are **+$21,571.00** over 35 strikes and puts **-$5,564.00** over 6; no put has
-been traded since 2026-10-23, so that side has not moved.
+Seen on 12 compiled days, over **50 same-day strikes** with a settlement price. Exiting beat holding on **36** of
+them and cost money on **14**, and the net is **+$8,283.00**. The net is now demonstrably not a statistic: it has
+read **-$2,937.00**, **+$449.00**, **-$13.00**, **+$9,022.00**, **+$15,712.00**, **+$16,007.00**, **+$17,880.00**
+and **+$8,283.00** on consecutive updates, changing sign on three of the eight and **halving** on the last. The
+count is the stable series: **36 of 50**, **72.0%**, having run **57.1%**, **66.7%**, **71.8%**, **73.2%**,
+**75.0%** and **72.0%** — a 17.9-point spread across six updates against a net that has moved by **$9,597.00** in
+one session. The two largest entries are now **-$5,084.00** and **-$4,318.00**, both from 2026-10-30; the largest
+positive is **+$3,580.00** (2026-10-22) and the smallest are **$15.00** and **$16.00** (2026-10-30). Split by
+side, calls are **+$13,209.00** over **41** strikes and puts **-$4,926.00** over **9**; puts are 18% of the
+strikes and **5** of the **14** misses, and the one put traded since 2026-10-23 was a miss.
 
-The cut that 2026-10-26 added is **settlement margin**. Of the 41 strikes, **15** settled in the money and
-**26** settled worthless; exiting was right on **26 of 26** of the worthless ones by construction and on only
-**4 of 15** of the rest. So the whole of this ledger's risk sits in the in-the-money tail, and within that tail
-what separates the 4 from the 11 is how far past the strike the close landed relative to the premium taken.
-(Verified: computed over raw/2026-10-07…raw/2026-10-26)
+The settlement-margin cut added on 2026-10-26 is now the page's firmest finding. Of the 50 strikes, **19** settled
+in the money and **31** settled worthless; exiting was right on **31 of 31** of the worthless ones by construction
+and on only **5 of 19** of the rest. 2026-10-30 added three in-the-money strikes and all three are misses. The
+whole of this ledger's risk sits in the in-the-money tail, and within that tail what separates the 5 from the 14 is
+how far past the strike the close lands relative to the premium taken.
+(Verified: computed over raw/2026-10-07…raw/2026-10-30)
 
 ## What to do about it
 Proposals only; Ty decides.

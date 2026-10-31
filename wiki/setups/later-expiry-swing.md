@@ -5,6 +5,18 @@ closed on a later session. It is the opposite trade to [[setups/zero-dte-scalp]]
 for a while, so the result turns on the move rather than on entry timing within one session.
 
 ## Evidence
+- **2026-10-28 → 2026-10-29: GOOG 11-20 375C is the fourth swing, the longest-dated position compiled, and it
+  lost 87% overnight.** One contract bought 2026-10-28 at 14:46:17 at **1.43** and sold 2026-10-29 at 09:36:16 at
+  **0.19**, **-$124.00**, with **23** days still to run. Distance from expiry cushioned it barely: **87%** of the
+  premium went against **94%** and **96%** on the two 1-DTE carries closed the next morning, so three more weeks of
+  time value bought seven points of protection on a position that still lost almost all of itself overnight. The raw day carries no price path for it — GOOG is outside the collector's symbol list —
+  so there is no post-exit reading. See [[mistakes/overnight-0-1-dte]].
+  (Verified: raw/2026-10-29.json; whole life computed over data/fills/2026-10.json)
+- **2026-10-29 and 2026-10-30: three more later-dated contracts opened and closed inside one session, all green.**
+  SPY 10-30 766P took **10** contracts on 2026-10-29 for **+$64.00** in 43 minutes; TSLA 11-06 410C took **2** on
+  2026-10-30 for **+$144.00**, a **+35.0%** return on premium in fourteen minutes and the best of the group; SPY
+  11-02 765C took **1** for **+$13.00**. None is this setup and each result sits on its day page, but the group
+  keeps extending and keeps winning. (Verified: raw/2026-10-29.json, raw/2026-10-30.json)
 - **2026-10-26: SPY 10-28 764C was scalped intraday, not swung, and it ran beside its own 0DTE twin.** Four
   contracts bought between 09:41:12 and 10:09:36 at 3.66–3.80 for **$1,500.00** and all four sold between
   09:56:05 and 10:11:02 at 3.94–4.19 for **$1,636.00**, **+$136.00**, two days before expiry. As with AAPL 10-30
@@ -74,20 +86,22 @@ for a while, so the result turns on the move rather than on entry timing within 
   (Verified: computed over raw/2026-10-07…2026-10-09)
 
 ## Count so far
-Seen three times on 14 compiled days, and **all three are now closed**: TSLA 10-16 400C **+$753.00**, TSLA 10-23
-410C **-$40.00** and TSLA 10-23 387.5C **-$385.00** over their whole lives, so **1 winner of 3** and **+$328.00**
-together. The one carried leg of the third cost **-$645.00** on its own. **No position is open** anywhere in the
-month after 2026-10-26, the second consecutive session that has ended flat. Against the three, same-day strikes
-round-tripped in equal size now return **+$739.00** over 38 strikes, and 2 near-dated contracts -$333.00, so the
-0DTE book has overtaken the later-expiry book on realized cash while the latter still rests on the single large
-winner of 2026-10-09 and has lost on both positions since.
+Seen four times on 18 compiled days, and **all four are closed**: TSLA 10-16 400C **+$753.00**, TSLA 10-23 410C
+**-$40.00**, TSLA 10-23 387.5C **-$385.00** and GOOG 11-20 375C **-$124.00** over their whole lives, so **1 winner
+of 4** and **+$204.00** together. The page still rests entirely on the single large winner of 2026-10-09 and has
+lost on all three positions since. **No position is open** anywhere in the month after 2026-10-30; the week
+2026-10-26 to 2026-10-30 carried something overnight on three of its five nights and still ended flat.
 
-Distinct from the three swings, **eight** later-dated contracts have now been opened and closed inside a single
-session — TSLA 10-09 380C, TSLA 10-23 400C twice, MSFT 10-21 532.5C, SPY 10-23 768C and 766C, AAPL 10-30 350C and
-SPY 10-28 764C — returning **-$213.00, +$91.00, +$83.00, +$38.00, +$80.00, +$142.00, +$49.00** and **+$136.00**:
-**+$406.00** over the eight, 7 of 8 green. They are not this setup and each result sits on its day page, but as a
-group they now outnumber the swings and are the only part of the later-dated book that is consistently positive.
-(Verified: computed over raw/2026-10-07…raw/2026-10-26; whole-life and open positions computed over
+Distinct from the four swings, **eleven** later-dated contracts have now been opened and closed inside a single
+session — TSLA 10-09 380C, TSLA 10-23 400C twice, MSFT 10-21 532.5C, SPY 10-23 768C and 766C, AAPL 10-30 350C, SPY
+10-28 764C, SPY 10-30 766P, TSLA 11-06 410C and SPY 11-02 765C — returning **+$627.00** over the eleven with **10**
+green. They now outnumber the swings nearly three to one and are the only part of the later-dated book that is
+consistently positive: **+$627.00** scalped against **+$204.00** swung, on far less capital at risk per contract.
+
+Against both, same-day strikes round-tripped in equal size return **+$1,713.00** over 45 strikes, so the 0DTE book
+is now ahead of every later-dated measure on realized cash. Overnight holding of any tenor has cost
+**-$1,694.67** across the month over 23 carry events. See [[mistakes/overnight-0-1-dte]].
+(Verified: computed over raw/2026-10-07…raw/2026-10-30; whole-life, carries and open positions computed over
 data/fills/2026-10.json)
 
 ## What to do about it

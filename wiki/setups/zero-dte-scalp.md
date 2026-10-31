@@ -5,6 +5,21 @@ re-entering the same strike several times. Expiry day leaves no room for a posit
 decided by entry timing and by how many times a losing strike is re-entered.
 
 ## Evidence
+- **2026-10-30: four strikes, four green, +$579.00, and the deepest add-down compiled.** Fourteen TSLA 395 calls
+  were bought in **5m 28s** down a ladder from 1.73 to **0.65** for **$1,473.00** and all fourteen sold for
+  **$1,678.00**, **+$205.00**; eight TSLA 392.5 calls returned **+$267.00**, SPY 761C **+$61.00** and SPY 760P
+  **+$46.00**. The whole book was opened and closed between 09:30:50 and 10:51:50. It is the sixth session of
+  twelve in which every same-day strike was green, and the second running.
+  (Verified: raw/2026-10-30.json; computed over raw/2026-10-07…raw/2026-10-30)
+- **2026-10-30: the add-down reading finally has a counterweight, and it is not on the round trip.** The
+  fourteen-contract ladder made money on the scalp and lost **-$5,084.00** against the settlement, because TSLA
+  ran to **399.83** and left the strike **$4.83** in the money. Add-down has still never lost on a round trip in
+  the compiled set; what the ladder selects for is strikes that keep running after the exit, which this page
+  cannot see and [[what-ifs/exit-before-the-close]] can. (Verified: raw/2026-10-30.json)
+- **2026-10-29: three strikes, three green, +$395.00, all closed by 11:07.** QQQ 713P **+$329.00** over nine
+  contracts in **42 minutes**, SPY 768C **+$61.00** over four and SPY 768P **+$5.00** over one. The session's
+  losses were all in next-day expiry, not here, and the two strikes that lost were the two that were not flat at
+  the bell. See [[mistakes/overnight-0-1-dte]]. (Verified: raw/2026-10-29.json)
 - **2026-10-26: two strikes, both green, +$324.00, and the narrowest book compiled.** Seventeen contracts across
   SPY 764C (**+$246.00** on 15) and NVDA 215C (**+$78.00** on 2), on two underlyings against Friday's five. It is
   the fifth session of the ten in which every same-day strike was green, and the first since 2026-10-21 on which
@@ -113,15 +128,20 @@ decided by entry timing and by how many times a losing strike is re-entered.
   offer no comparison yet. (Verified: raw/2026-10-07.json)
 
 ## Count so far
-Seen on 10 of 14 compiled days. Counting only same-day strikes bought and sold in equal size: **38 strikes, 266
-contracts, 23 green, +$739.00**. By day those round trips returned **-$729.00, +$118.00, +$21.00, +$127.00,
-+$188.00, +$462.00, +$67.00, -$806.00, +$967.00 and +$324.00** — the single largest session either way remains
-2026-10-23. The number to read is still the strike count: **23 green of 38**, **60.5%**, and that rate has moved
-52.0% → 58.3% → 60.5% over the last three sessions while the net went -$552.00 → +$415.00 → +$739.00, changing
-sign once. Two strikes are excluded because they closed or left a carried position rather than round-tripping —
-TSLA 10-07 385C and TSLA 10-16 377.5C — and a third, TSLA 10-23 387.5C, closed Thursday's carry on 2026-10-23 and
-belongs to [[setups/later-expiry-swing]]. The four sessions 2026-10-12 to 2026-10-15 contribute nothing: their raw
-days were frozen with no fills. (Verified: computed over raw/2026-10-07…raw/2026-10-26)
+Seen on 12 of 18 compiled days. Counting only same-day strikes bought and sold in equal size: **45 strikes, 311
+contracts, 30 green, +$1,713.00**. By day those round trips returned **-$729.00, +$118.00, +$21.00, +$127.00,
++$188.00, +$462.00, +$67.00, -$806.00, +$967.00, +$324.00, +$395.00** and **+$579.00** — the net has now risen on
+four consecutive sessions and more than doubled over the last two. The strike count is still the steadier reading:
+**30 green of 45**, **66.7%**, moving 52.0% → 58.3% → 60.5% → 63.4% → 66.7% over the last five sessions, a rise
+every time, while the net changed sign once in the same stretch. The seven strikes added by 2026-10-29 and
+2026-10-30 were **all** green, the longest clean run on the page.
+
+Two strikes are excluded because they closed or left a carried position rather than round-tripping — TSLA 10-07
+385C and TSLA 10-16 377.5C — and a third, TSLA 10-23 387.5C, closed Thursday's carry on 2026-10-23 and belongs to
+[[setups/later-expiry-swing]]. The four sessions 2026-10-12 to 2026-10-15 contribute nothing: their raw days were
+frozen with no fills, as were 2026-10-27 and 2026-10-28, whose **63** fills reached the repo after those days were
+already written. (Verified: computed over raw/2026-10-07…raw/2026-10-30; late fill counts computed over
+data/fills/2026-10.json)
 
 ## What to do about it
 Proposals only. The number to carry forward is round trips per strike against result per strike, because on this day
