@@ -5,6 +5,28 @@ closed on a later session. It is the opposite trade to [[setups/zero-dte-scalp]]
 for a while, so the result turns on the move rather than on entry timing within one session.
 
 ## Evidence
+- **2026-11-02: four more later-dated contracts opened and closed inside one session, all green, and together
+  they out-earned the eleven before them.** TSLA 11-06 425C took **10** contracts for **+$450.00**, TSLA 11-13
+  430C **6** for **+$415.00**, SPY 11-03 760C **8** for **+$325.00** and TSLA 11-04 412.5C **1** for
+  **+$155.00** — **+$1,345.00** on **25** contracts carrying **$6,773.00**, a **+19.9%** return on premium. The
+  eleven earlier intraday later-dated positions returned **+$627.00** in total, so one session more than doubled
+  the group. None is this setup and each result sits on its day page, but the group keeps extending and keeps
+  winning. (Verified: raw/2026-11-02.json; computed over raw/2026-10-07…raw/2026-11-02)
+- **2026-11-02: the later-dated book is now ahead of the same-day book on realized cash, which reverses this
+  page's own reading.** Intraday later-dated positions stand at **+$1,972.00** over **15** and completed swings at
+  **+$204.00** over **4**, while same-day strikes round-tripped in equal size stand at **-$154.00** over **53**.
+  Through 2026-10-30 this page recorded the opposite — the 0DTE book ahead of every later-dated measure — and a
+  single session changed both sides of it. See [[setups/zero-dte-scalp]].
+  (Verified: computed over raw/2026-10-07…raw/2026-11-02)
+- **2026-11-02: TSLA 11-04 412.5C is the best return on premium the group holds.** One contract bought at
+  **09:55:41** at 2.55 and sold at **10:11:57** at **4.10**: **+$155.00**, **+60.8%** in sixteen minutes, against
+  the **+35.0%** of TSLA 11-06 410C on 2026-10-30. The smallest position of the session returned the most per
+  dollar committed, and it was two days from expiry — the shortest later-dated tenor traded that session.
+  (Verified: raw/2026-11-02.json, raw/2026-10-30.json)
+- **2026-11-02: the whole later-dated book was closed by 10:16:11, before the session's losses began.** All four
+  positions were opened between 09:33:07 and 09:55:41 and every one was out by **10:16:11**; every strike opened
+  after that time lost, seven of them for **-$1,931.00**. Holding days rather than hours is this page's premise,
+  and on this session none of the four used it. (Verified: raw/2026-11-02.json)
 - **2026-10-28 → 2026-10-29: GOOG 11-20 375C is the fourth swing, the longest-dated position compiled, and it
   lost 87% overnight.** One contract bought 2026-10-28 at 14:46:17 at **1.43** and sold 2026-10-29 at 09:36:16 at
   **0.19**, **-$124.00**, with **23** days still to run. Distance from expiry cushioned it barely: **87%** of the
@@ -86,23 +108,28 @@ for a while, so the result turns on the move rather than on entry timing within 
   (Verified: computed over raw/2026-10-07…2026-10-09)
 
 ## Count so far
-Seen four times on 18 compiled days, and **all four are closed**: TSLA 10-16 400C **+$753.00**, TSLA 10-23 410C
+Seen four times on 19 compiled days, and **all four are closed**: TSLA 10-16 400C **+$753.00**, TSLA 10-23 410C
 **-$40.00**, TSLA 10-23 387.5C **-$385.00** and GOOG 11-20 375C **-$124.00** over their whole lives, so **1 winner
-of 4** and **+$204.00** together. The page still rests entirely on the single large winner of 2026-10-09 and has
-lost on all three positions since. **No position is open** anywhere in the month after 2026-10-30; the week
-2026-10-26 to 2026-10-30 carried something overnight on three of its five nights and still ended flat.
+of 4** and **+$204.00** together. No fifth swing has been opened. The page still rests entirely on the single large
+winner of 2026-10-09 and has lost on all three positions since. **No position is open** anywhere in October after
+2026-10-30 or in November after 2026-11-02, so nothing has been held overnight since the week of 2026-10-26.
 
-Distinct from the four swings, **eleven** later-dated contracts have now been opened and closed inside a single
+Distinct from the four swings, **fifteen** later-dated contracts have now been opened and closed inside a single
 session — TSLA 10-09 380C, TSLA 10-23 400C twice, MSFT 10-21 532.5C, SPY 10-23 768C and 766C, AAPL 10-30 350C, SPY
-10-28 764C, SPY 10-30 766P, TSLA 11-06 410C and SPY 11-02 765C — returning **+$627.00** over the eleven with **10**
-green. They now outnumber the swings nearly three to one and are the only part of the later-dated book that is
-consistently positive: **+$627.00** scalped against **+$204.00** swung, on far less capital at risk per contract.
+10-28 764C, SPY 10-30 766P, TSLA 11-06 410C, SPY 11-02 765C, SPY 11-03 760C, TSLA 11-04 412.5C, TSLA 11-06 425C and
+TSLA 11-13 430C — returning **+$1,972.00** over the fifteen with **14** green. They outnumber the swings nearly
+four to one and are the only part of the later-dated book that is consistently positive: **+$1,972.00** scalped
+against **+$204.00** swung, on far less capital at risk per contract. **Seven** of the fifteen are TSLA and
+**six** SPY; the TSLA seven carry **+$1,125.00** of the **+$1,972.00**, and three of those seven are from
+2026-11-02 alone.
 
-Against both, same-day strikes round-tripped in equal size return **+$1,713.00** over 45 strikes, so the 0DTE book
-is now ahead of every later-dated measure on realized cash. Overnight holding of any tenor has cost
-**-$1,694.67** across the month over 23 carry events. See [[mistakes/overnight-0-1-dte]].
-(Verified: computed over raw/2026-10-07…raw/2026-10-30; whole-life, carries and open positions computed over
-data/fills/2026-10.json)
+Against both, same-day strikes round-tripped in equal size now return **-$154.00** over 53 strikes, so as of
+2026-11-02 the intraday later-dated book is ahead of the 0DTE book on realized cash for the first time — the
+reverse of what this section recorded through 2026-10-30. Overnight holding of any tenor cost **-$1,694.67**
+across October over 23 carry events; November has recorded none.
+See [[mistakes/overnight-0-1-dte]].
+(Verified: computed over raw/2026-10-07…raw/2026-11-02; whole-life and carries computed over
+data/fills/2026-10.json; open positions computed over data/fills/2026-10.json and data/fills/2026-11.json)
 
 ## What to do about it
 Proposals only, for the Friday tune. **One position is not a strategy** and the sample here is a single contract in a
@@ -115,3 +142,13 @@ dominated by the one trade that was not 0DTE, which the same-day totals hide.
    the net move across the four was -0.85. (Verified: raw/2026-10-09.json)
 3. Do not read this as "hold longer" applied to the 0DTE book: those contracts expire the same day, so the choice is
    not available to them. The question is which book gets the size, and three days cannot answer it.
+4. **Added 2026-11-02: give the intraday later-dated book its own page or its own count, because it is no longer
+   a footnote.** Fifteen positions, **14** green, **+$1,972.00**, against four swings at **+$204.00** and a 0DTE
+   book at **-$154.00**. It is described here as "not this setup" and its results are sent to the day pages, which
+   means the one consistently positive part of the book has no page of its own.
+   (Verified: computed over raw/2026-10-07…raw/2026-11-02)
+5. **Added 2026-11-02: separate tenor from holding time before crediting either.** All four of this session's
+   later-dated winners were closed inside **43 minutes** and none was held overnight, so what they share with the
+   0DTE losers is the holding period and what differs is the expiry. The testable number is result per contract
+   against days-to-expiry at first fill, holding time held constant, which proposal 1 already asks for and
+   fifteen positions can now start to answer. (Verified: raw/2026-11-02.json)

@@ -5,6 +5,39 @@ re-entering the same strike several times. Expiry day leaves no room for a posit
 decided by entry timing and by how many times a losing strike is re-entered.
 
 ## Evidence
+- **2026-11-02: the worst 0DTE session compiled, -$1,867.00 over eight strikes, and the heaviest same-day book.**
+  Only **1** of the eight was green. **93** contracts went through the book — more than the 71 of 2026-10-23 and
+  the 70 of 2026-10-22, the two previous heaviest — carrying **$12,366.00** of cost for **$10,499.00** of
+  proceeds, a **15%** bleed. It is **2.3×** the previous worst session, **-$806.00** on 2026-10-22, and it ends a
+  four-session green run. (Verified: raw/2026-11-02.json; computed over raw/2026-10-07…raw/2026-11-02)
+- **2026-11-02: this session turned the page's whole compiled history negative.** The running net went
+  **+$1,713.00** → **-$154.00**, the first sign change in six sessions, and the green rate fell **66.7%** →
+  **58.5%** after five consecutive rises. One session removed **$1,867.00** from a total that had taken twelve
+  sessions to build to $1,713.00, which puts this book's net in the same position
+  [[what-ifs/exit-before-the-close]] reached on 2026-10-21: not a statistic at this sample size.
+  (Verified: computed over raw/2026-10-07…raw/2026-11-02)
+- **2026-11-02: the loss is the clock, not the strike.** Every same-day strike opened after **10:16:11** lost —
+  SPY 763C **-$227.00**, SPXW 7680C **-$430.00**, SPY 761C **-$349.00**, SPXW 7675C **-$125.00**, SPXW 7660C
+  **-$120.00**, QQQ 693C **-$335.00**, SPXW 7645C **-$345.00**, seven for **-$1,931.00** — while the one strike
+  opened in the first three minutes, SPY 760C, returned **+$64.00** over two and a half hours and **30** fills.
+  The five positions opened before 10:16:11 were all green for **+$1,409.00**, four of them later-dated. Entry
+  time has not been separated from result on this page before and it cuts this session completely.
+  (Verified: raw/2026-11-02.json)
+- **2026-11-02: the SPX book is over half the loss and the second SPX-heavy session is as bad as the first.**
+  Four SPXW strikes returned **-$1,020.00** of the **-$1,867.00** on **31** contracts, against **-$885.00** over
+  five strikes on 2026-10-22. SPXW 7680C, **-$430.00** on eleven contracts bought 10:52:14–11:10:44 and closed
+  by 11:23:06, is the session's largest single loss and a **32%** give-back on premium held for minutes. Both
+  SPX-heavy sessions compiled are among the three worst on this page. See [[rules/spx-after-1200]].
+  (Verified: raw/2026-11-02.json, raw/2026-10-22.json)
+- **2026-11-02: re-entry failed as a tell for the seventh session running, and in the most direct way yet.** The
+  single green strike, SPY 760C, took **10** buy fills after its own first exit — the most re-entered position of
+  the session — while SPXW 7675C took **none**, was closed in one fill four contracts at a time, and lost
+  **-$125.00**. The 2026-10-07 and 2026-10-08 shape, heavy re-entry on the losers, has now failed on six of the
+  last seven sessions. (Verified: raw/2026-11-02.json)
+- **2026-11-02: size still predicts nothing, now across six readings.** The heaviest same-day strikes compiled are
+  **22**, **20**, **19**, **19**, **16** and **16** contracts returning **-$45.00**, **+$79.00**, **+$411.00**,
+  **+$64.00**, **+$188.00** and **-$349.00** — three green, one near flat, two red, and this session supplied both
+  a 19-contract winner and a 16-contract loser. (Verified: computed over raw/2026-10-07…raw/2026-11-02)
 - **2026-10-30: four strikes, four green, +$579.00, and the deepest add-down compiled.** Fourteen TSLA 395 calls
   were bought in **5m 28s** down a ladder from 1.73 to **0.65** for **$1,473.00** and all fourteen sold for
   **$1,678.00**, **+$205.00**; eight TSLA 392.5 calls returned **+$267.00**, SPY 761C **+$61.00** and SPY 760P
@@ -128,19 +161,19 @@ decided by entry timing and by how many times a losing strike is re-entered.
   offer no comparison yet. (Verified: raw/2026-10-07.json)
 
 ## Count so far
-Seen on 12 of 18 compiled days. Counting only same-day strikes bought and sold in equal size: **45 strikes, 311
-contracts, 30 green, +$1,713.00**. By day those round trips returned **-$729.00, +$118.00, +$21.00, +$127.00,
-+$188.00, +$462.00, +$67.00, -$806.00, +$967.00, +$324.00, +$395.00** and **+$579.00** — the net has now risen on
-four consecutive sessions and more than doubled over the last two. The strike count is still the steadier reading:
-**30 green of 45**, **66.7%**, moving 52.0% → 58.3% → 60.5% → 63.4% → 66.7% over the last five sessions, a rise
-every time, while the net changed sign once in the same stretch. The seven strikes added by 2026-10-29 and
-2026-10-30 were **all** green, the longest clean run on the page.
+Seen on 13 of 19 compiled days. Counting only same-day strikes bought and sold in equal size: **53 strikes, 404
+contracts, 31 green, -$154.00**. By day those round trips returned **-$729.00, +$118.00, +$21.00, +$127.00,
++$188.00, +$462.00, +$67.00, -$806.00, +$967.00, +$324.00, +$395.00, +$579.00** and **-$1,867.00** — four
+consecutive rises, then a single session larger in magnitude than any before it, which took the net negative over
+the page's whole history. The strike count moved the same way for the first time: **31 green of 53**, **58.5%**,
+after 52.0% → 58.3% → 60.5% → 63.4% → 66.7%, five rises and then an 8.2-point fall. **93** of the 404 contracts
+belong to this one session, the heaviest same-day book compiled, and **7 of its 8** strikes lost.
 
 Two strikes are excluded because they closed or left a carried position rather than round-tripping — TSLA 10-07
 385C and TSLA 10-16 377.5C — and a third, TSLA 10-23 387.5C, closed Thursday's carry on 2026-10-23 and belongs to
 [[setups/later-expiry-swing]]. The four sessions 2026-10-12 to 2026-10-15 contribute nothing: their raw days were
 frozen with no fills, as were 2026-10-27 and 2026-10-28, whose **63** fills reached the repo after those days were
-already written. (Verified: computed over raw/2026-10-07…raw/2026-10-30; late fill counts computed over
+already written. (Verified: computed over raw/2026-10-07…raw/2026-11-02; late fill counts computed over
 data/fills/2026-10.json)
 
 ## What to do about it
@@ -154,3 +187,16 @@ Three days in, the pattern that survives is size rather than direction: the two 
 ones, 4 and 3 contracts, and the one heavy day, 7 contracts with 3-to-7 re-entry per strike, is the whole of the
 -$615.00. That is still a correlation across three days and not a tested rule.
 (Verified: computed over raw/2026-10-07…2026-10-09)
+
+**Added 2026-11-02: record entry time per strike and read this book on it.** Entry time is the only cut that has
+separated a whole session: every same-day strike opened after **10:16:11** lost, seven for **-$1,931.00**, and the
+five positions opened before it were all green for **+$1,409.00**. Size, re-entry count and underlying have each
+failed as reads across the compiled set; this one has one session behind it and is therefore a measurement to
+start, not a rule to adopt. The number to keep is the time of a strike's first fill against its result.
+(Verified: raw/2026-11-02.json)
+
+**Added 2026-11-02: stop reporting this page's net, as [[what-ifs/exit-before-the-close]] already decided for
+its own.** The total has read **-$275.00**, **+$187.00**, **+$254.00**, **-$552.00**, **+$415.00**, **+$739.00**,
+**+$1,134.00**, **+$1,713.00** and **-$154.00** on nine consecutive updates, changing sign four times, and one
+session has now moved it by **$1,867.00**. Report strikes green of strikes traded and the two tails.
+(Verified: computed over raw/2026-10-07…raw/2026-11-02)

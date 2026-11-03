@@ -6,6 +6,14 @@ can be made. It is distinct from [[setups/later-expiry-swing]], where the hold i
 is left after a scalp was not finished.
 
 ## Evidence
+- **2026-11-02: nothing carried in, nothing carried out, and the first session of November leaves this page
+  empty.** All **12** strikes were net flat and the last fill of the day was at **12:39:28**, three hours and
+  seventeen minutes before the **15:57** session end; the November shard holds **no** open position after the
+  session. October ended flat as well, so no contract of any tenor has been held overnight since the night of
+  2026-10-29 → 2026-10-30. The session still lost **-$522.00**, all of it inside the day, which is the point of
+  separating this page from the scalp: flat at the bell removes this cost and no other.
+  See [[rules/1550-flat]] and [[setups/zero-dte-scalp]]. (Verified: raw/2026-11-02.json; open positions computed
+  over data/fills/2026-11.json)
 - 2026-10-29 → 2026-10-30: **5** contracts, **-$605.00**, the largest carry cost compiled. SPY 10-30 770C, **2**
   contracts at average **1.25**, went out at **0.08** for **-$234.00**; TSLA 10-30 410C, **3** contracts at
   average **1.2867**, went out at 0.07, 0.05 and 0.03 for **-$371.00**. Both were closed inside the first **84
@@ -31,7 +39,7 @@ is left after a scalp was not finished.
   (Verified: computed over data/fills/2026-10.json)
 
 ## Count so far
-**7** carry events this month over **22** contracts, green on **3**, for a net of **-$984.00**. The split is the
+**7** carry events in October over **22** contracts, green on **3**, for a net of **-$984.00**. The split is the
 point: the three winners are **+$131.00**, **+$112.00** and **+$34.00** — **+$277.00** over **8** contracts — and
 the four losers are **-$645.00**, **-$371.00**, **-$234.00** and **-$11.00**, **-$1,261.00** over **14**. No
 winner has exceeded **$131.00** and two losers have exceeded **$230.00**, so the distribution is not symmetric
@@ -43,6 +51,10 @@ Against the other tenors: carries with **2–4** days left are **6** events, **1
 is negative or near zero, and all tenors together are **-$1,694.67** over **23** events — so overnight holding has
 cost money across the month regardless of expiry, and the 0–1 DTE bucket is simply where the single largest hits
 are. (Verified: computed over data/fills/2026-10.json)
+
+**November has recorded no carry of any tenor.** The month's only compiled session, 2026-11-02, ended with every
+strike flat and nothing was carried into it, so the running figures above are still October's.
+(Verified: computed over data/fills/2026-11.json)
 
 ## What to do about it
 Proposals only, for the Friday tune; Ty decides.

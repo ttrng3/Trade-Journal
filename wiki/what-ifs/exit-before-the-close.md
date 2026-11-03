@@ -6,6 +6,36 @@ went wrong in the window the post-exit candles cover, so the exit cannot be faul
 normally carries. Only the settlement price shows the cost.
 
 ## Evidence
+- **2026-11-02 is the largest pro-exit session recorded and the clearest refutation of this page as a measure of
+  the day.** All **eight** same-day strikes settled worthless — SPY at **752.12** against 760, 761 and 763, the
+  SPX proxy at **7521.20** against 7645, 7660, 7675 and 7680, QQQ at **681.13** against 693 — so exiting was
+  right **8 of 8** and the **+$10,499.00** of proceeds is the whole gain against holding, ahead of the
+  **+$9,035.00** of 2026-10-22. The running net went **+$8,283.00** → **+$18,782.00**, a new high, and the count
+  **36 of 50** → **44 of 58**, **72.0%** → **75.9%**, also a new high. The session realized **-$522.00**.
+  (Verified: raw/2026-11-02.json; computed over raw/2026-10-07…raw/2026-11-02)
+- **2026-11-02: the in-the-money tail did not move at all, which is where this page's whole risk lives.** The
+  eight strikes added are all worthless settlements, so the worthless count goes **31** → **39** and stays
+  **right by construction** on every one, while the in-the-money count stands unchanged at **19** with exiting
+  right on **5**. A session that moves the headline net by **$10,499.00** and the tail by **nothing** is the
+  argument for proposal 10 — the only question this ledger asks is what happens in that tail.
+  (Verified: computed over raw/2026-10-07…raw/2026-11-02)
+- **2026-11-02: SPY 11-02 760C is the second largest pro-exit entry the page holds.** Nineteen contracts bought
+  09:33:52–12:03:58 for **$2,904.00** and all nineteen sold 09:41:38–12:08:24 for **$2,968.00**, **+$64.00** on
+  the round trip, against a **$7.88** out-of-the-money settlement — so the margin over holding is the full
+  **$2,968.00**, behind only **+$3,580.00** (SPXW 7710C, 2026-10-22). The strike that beat holding by most this
+  session is also the only same-day strike of the session that made money.
+  (Verified: raw/2026-11-02.json; computed over raw/2026-10-07…raw/2026-11-02)
+- **2026-11-02: the third all-worthless session, and the two multi-strike ones are the two worst 0DTE sessions
+  compiled.** Every same-day strike settled worthless on 2026-10-19 (one strike), 2026-10-22 (six) and
+  2026-11-02 (eight). The 2026-10-19 case was a **+$188.00** session, but 2026-10-22 realized **-$806.00** and
+  this one **-$1,867.00** on the same-day book — the two worst on [[setups/zero-dte-scalp]]. When this page reads
+  unanimously pro-exit across a wide book, the cash has gone the other way both times.
+  (Verified: computed over raw/2026-10-07…raw/2026-11-02)
+- **2026-11-02: the window argued for holding on 34 of 59 exits and holding would have paid nothing on any
+  same-day strike.** TSLA rose after **all 17** of its exits — those were later-dated contracts and the day's
+  only winners — SPXW fell after **9** of 11, and SPY split **14** up and **14** down. Extremes were **-17.55**
+  on the SPX proxy at 12:09:35 and **+7.58** on TSLA at 10:02:39. Third consecutive reading in which the window
+  and the settlement disagree, which is proposal 11 holding. (Verified: raw/2026-11-02.json)
 - **2026-10-30 is the session this page has been predicting: the net halved and the count did not move.** Six
   strikes, three of them in-the-money misses, for **-$9,597.00** — the worst day recorded, nearly three times the
   previous worst. TSLA closed at **399.83** and both same-day TSLA calls settled deep in: 395C sold for
@@ -133,23 +163,25 @@ normally carries. Only the settlement price shows the cost.
   **$378.00**. One rule, two opposite outcomes, one day. (Verified: raw/2026-10-16.json)
 
 ## Count so far
-Seen on 12 compiled days, over **50 same-day strikes** with a settlement price. Exiting beat holding on **36** of
-them and cost money on **14**, and the net is **+$8,283.00**. The net is now demonstrably not a statistic: it has
-read **-$2,937.00**, **+$449.00**, **-$13.00**, **+$9,022.00**, **+$15,712.00**, **+$16,007.00**, **+$17,880.00**
-and **+$8,283.00** on consecutive updates, changing sign on three of the eight and **halving** on the last. The
-count is the stable series: **36 of 50**, **72.0%**, having run **57.1%**, **66.7%**, **71.8%**, **73.2%**,
-**75.0%** and **72.0%** — a 17.9-point spread across six updates against a net that has moved by **$9,597.00** in
-one session. The two largest entries are now **-$5,084.00** and **-$4,318.00**, both from 2026-10-30; the largest
-positive is **+$3,580.00** (2026-10-22) and the smallest are **$15.00** and **$16.00** (2026-10-30). Split by
-side, calls are **+$13,209.00** over **41** strikes and puts **-$4,926.00** over **9**; puts are 18% of the
-strikes and **5** of the **14** misses, and the one put traded since 2026-10-23 was a miss.
+Seen on 13 compiled days, over **58 same-day strikes** with a settlement price. Exiting beat holding on **44** of
+them and cost money on **14**, and the net is **+$18,782.00**. The net is now demonstrably not a statistic: it has
+read **-$2,937.00**, **+$449.00**, **-$13.00**, **+$9,022.00**, **+$15,712.00**, **+$16,007.00**, **+$17,880.00**,
+**+$8,283.00** and **+$18,782.00** on consecutive updates, changing sign on three of the nine, **halving** on the
+eighth and **more than doubling** on the ninth. The count is the stable series: **44 of 58**, **75.9%**, having run
+**57.1%**, **66.7%**, **71.8%**, **73.2%**, **75.0%**, **72.0%** and **75.9%** — an 18.8-point spread across seven
+updates against a net that has moved by **$9,597.00** and then **$10,499.00** in single sessions. The two largest
+entries are still **-$5,084.00** and **-$4,318.00**, both from 2026-10-30; the largest positives are
+**+$3,580.00** (2026-10-22) and **+$2,968.00** (2026-11-02) and the smallest are **$15.00** and **$16.00**
+(2026-10-30). Split by side, calls are **+$23,708.00** over **49** strikes and puts **-$4,926.00** over **9**;
+puts are 15.5% of the strikes and **5** of the **14** misses, and no put has been traded since 2026-10-30.
 
-The settlement-margin cut added on 2026-10-26 is now the page's firmest finding. Of the 50 strikes, **19** settled
-in the money and **31** settled worthless; exiting was right on **31 of 31** of the worthless ones by construction
-and on only **5 of 19** of the rest. 2026-10-30 added three in-the-money strikes and all three are misses. The
-whole of this ledger's risk sits in the in-the-money tail, and within that tail what separates the 5 from the 14 is
-how far past the strike the close lands relative to the premium taken.
-(Verified: computed over raw/2026-10-07…raw/2026-10-30)
+The settlement-margin cut added on 2026-10-26 is now the page's firmest finding, and 2026-11-02 sharpened it by
+adding nothing to it. Of the 58 strikes, **19** settled in the money and **39** settled worthless; exiting was
+right on **39 of 39** of the worthless ones by construction and on only **5 of 19** of the rest. The eight strikes
+added on 2026-11-02 are all worthless settlements, so a session that moved the net by **+$10,499.00** left the
+in-the-money count exactly where 2026-10-30 put it. The whole of this ledger's risk sits in that tail, and within
+it what separates the 5 from the 14 is how far past the strike the close lands relative to the premium taken.
+(Verified: computed over raw/2026-10-07…raw/2026-11-02)
 
 ## What to do about it
 Proposals only; Ty decides.
@@ -207,3 +239,16 @@ Proposals only; Ty decides.
     2026-10-16 and it argued for a hold that would have lost on 2026-10-26. Keep recording it, because it is what
     a decision could actually see at the time, but stop treating agreement or disagreement with it as evidence
     about the exit. (Verified: raw/2026-10-26.json, raw/2026-10-16.json)
+12. **Added 2026-11-02: report this ledger beside the session's realized cash, never alone.** This session scored
+    **8 of 8** pro-exit and **+$10,499.00**, its best ever, on a day the account lost **$522.00** and the same-day
+    book lost **$1,867.00**. The ledger asks only whether the exit beat holding to expiry; it is silent on whether
+    the position should have been opened, and read on its own it endorses the worst 0DTE session compiled. Pair
+    every update with the realized result of the same strikes so a unanimous page cannot be mistaken for a good
+    day. (Verified: raw/2026-11-02.json; computed over raw/2026-10-07…raw/2026-11-02)
+13. **Added 2026-11-02: test the all-worthless signature.** On all three sessions where every same-day strike
+    settled worthless the strikes were bought above a market that fell away, and the two with a wide book are the
+    two worst same-day sessions on record: **-$806.00** over six strikes (2026-10-22) and **-$1,867.00** over
+    eight (2026-11-02). The measurable version is the sign and size of the underlying's move from first entry to
+    settlement, recorded per session. If a unanimous pro-exit reading keeps coinciding with the worst cash, this
+    page is detecting a bad session rather than a good exit.
+    (Verified: computed over raw/2026-10-07…raw/2026-11-02)
