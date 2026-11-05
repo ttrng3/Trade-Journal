@@ -13,6 +13,7 @@ is written once; these pages are the compiled output. Numbers carry their source
 - [[hypothesis-ledger]]: every bot, agent and tune tested, and what happened
 
 ## Days
+- [[days/2026-11-03]]
 - [[days/2026-11-02]]
 - [[days/2026-10-30]]
 - [[days/2026-10-29]]
@@ -22,7 +23,6 @@ is written once; these pages are the compiled output. Numbers carry their source
 - [[days/2026-10-23]]
 - [[days/2026-10-22]]
 - [[days/2026-10-21]]
-- [[days/2026-10-20]]
 
 ## Mistakes
 - [[mistakes/overnight-0-1-dte]]
