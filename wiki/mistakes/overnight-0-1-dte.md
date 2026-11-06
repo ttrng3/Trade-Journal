@@ -52,9 +52,11 @@ is negative or near zero, and all tenors together are **-$1,694.67** over **23**
 cost money across the month regardless of expiry, and the 0–1 DTE bucket is simply where the single largest hits
 are. (Verified: computed over data/fills/2026-10.json)
 
-**November has recorded no carry of any tenor.** The month's only compiled session, 2026-11-02, ended with every
-strike flat and nothing was carried into it, so the running figures above are still October's.
-(Verified: computed over data/fills/2026-11.json)
+**November has recorded no carry of any tenor.** The month's only session with fills, 2026-11-02, ended with every
+strike flat and nothing was carried into it, so the running figures above are still October's. The two sessions
+compiled since, [[days/2026-11-03]] and [[days/2026-11-04]], are frozen with no fills, so neither adds a carry
+event nor rules one out: the shard holds nothing for either day.
+(Verified: computed over data/fills/2026-11.json; raw/2026-11-03.json, raw/2026-11-04.json)
 
 ## What to do about it
 Proposals only, for the Friday tune; Ty decides.
