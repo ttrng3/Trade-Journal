@@ -53,10 +53,12 @@ cost money across the month regardless of expiry, and the 0–1 DTE bucket is si
 are. (Verified: computed over data/fills/2026-10.json)
 
 **November has recorded no carry of any tenor.** The month's only session with fills, 2026-11-02, ended with every
-strike flat and nothing was carried into it, so the running figures above are still October's. The two sessions
-compiled since, [[days/2026-11-03]] and [[days/2026-11-04]], are frozen with no fills, so neither adds a carry
-event nor rules one out: the shard holds nothing for either day.
-(Verified: computed over data/fills/2026-11.json; raw/2026-11-03.json, raw/2026-11-04.json)
+strike flat and nothing was carried into it, so the running figures above are still October's. The **four**
+sessions compiled since — [[days/2026-11-03]], [[days/2026-11-04]], [[days/2026-11-05]] and
+[[days/2026-11-06]] — are all frozen with no fills, so none adds a carry event nor rules one out: the shard holds
+nothing for any of the four. A full week has now been compiled without a single carry event recorded either way.
+(Verified: computed over data/fills/2026-11.json; raw/2026-11-03.json, raw/2026-11-04.json, raw/2026-11-05.json,
+raw/2026-11-06.json)
 
 ## What to do about it
 Proposals only, for the Friday tune; Ty decides.

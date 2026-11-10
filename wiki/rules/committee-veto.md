@@ -5,6 +5,13 @@ committee. The committee gate is on every veto, so the question is never whether
 came with it, and whether that combination blocked setups that would have worked.
 
 ## Evidence
+- **2026-11-06 makes it twenty consecutive sessions with no bot record.** The bundle is present, `holiday` false,
+  12 symbols of one-minute bars, 390 each, collected 2026-11-07T03:30:29Z, and its `sources` block reads
+  **`v7: 0`** and **`sweep: false`** — the twentieth identical reading in a row; 2026-11-05 was the nineteenth, on
+  a bundle collected 2026-11-06T03:30:25Z. The last session with any bot record is 2026-10-09, 28 days ago.
+  Recorded for the count only: per proposal 8 this page stays paused, and the Mac-side check from 2026-10-22 is
+  now eleven compiled sessions old and undone.
+  (Verified: raw/2026-11-05.json, raw/2026-11-06.json; computed over raw/2026-10-12…raw/2026-11-06)
 - **2026-11-04 makes it eighteen consecutive sessions with no bot record.** The bundle is present, `holiday`
   false, 12 symbols of one-minute bars, 390 each, collected 2026-11-05T03:30:25Z, and its `sources` block reads
   **`v7: 0`** and **`sweep: false`** — the eighteenth identical reading in a row. The last session with any bot
@@ -58,10 +65,10 @@ came with it, and whether that combination blocked setups that would have worked
   structure the least at 23.8%. (Verified: raw/2026-10-07.json)
 
 ## Count so far
-Seen on 3 of 21 compiled days, and on none since 2026-10-09. Across 166 resolved skips, taking them all would have
+Seen on 3 of 23 compiled days, and on none since 2026-10-09. Across 166 resolved skips, taking them all would have
 returned **-48.83R**: -41.46R on 2026-10-07, +1.61R on 2026-10-08 and -8.98R on 2026-10-09. The veto is net
-protective over those three days, but it was net costly on one of them, and the **eighteen** sessions since have
-added no evidence either way. (Verified: computed over raw/2026-10-07…raw/2026-11-04)
+protective over those three days, but it was net costly on one of them, and the **twenty** sessions since have
+added no evidence either way. (Verified: computed over raw/2026-10-07…raw/2026-11-06)
 
 ## What to do about it
 Proposals only, for the Friday tune. The proposal carried out of 2026-10-07 was to watch whether the per-gate
