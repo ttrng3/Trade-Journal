@@ -53,12 +53,21 @@ cost money across the month regardless of expiry, and the 0–1 DTE bucket is si
 are. (Verified: computed over data/fills/2026-10.json)
 
 **November has recorded no carry of any tenor.** The month's only session with fills, 2026-11-02, ended with every
-strike flat and nothing was carried into it, so the running figures above are still October's. The **four**
-sessions compiled since — [[days/2026-11-03]], [[days/2026-11-04]], [[days/2026-11-05]] and
-[[days/2026-11-06]] — are all frozen with no fills, so none adds a carry event nor rules one out: the shard holds
-nothing for any of the four. A full week has now been compiled without a single carry event recorded either way.
+strike flat and nothing was carried into it, so the running figures above are still October's. The **five**
+sessions compiled since — [[days/2026-11-03]], [[days/2026-11-04]], [[days/2026-11-05]], [[days/2026-11-06]] and
+[[days/2026-11-09]] — are all frozen with no fills, so none adds a carry event nor rules one out: the shard holds
+nothing for any of the five. A full week and a day have now been compiled without a single carry event recorded
+either way.
 (Verified: computed over data/fills/2026-11.json; raw/2026-11-03.json, raw/2026-11-04.json, raw/2026-11-05.json,
-raw/2026-11-06.json)
+raw/2026-11-06.json, raw/2026-11-09.json)
+
+**Added 2026-11-09: treat those five as unknown, not flat.** Of the eleven zero-manual pages compiled so far,
+**six** have since received fills — **117** in all, including **5** on 2026-10-27 and **58** on 2026-10-28, both
+of which were described as frozen on earlier pages and are not frozen any more. A page frozen blank has a better
+than even record of later turning out to have traded, so the absence of a November carry event is an absence of
+evidence here, not evidence of absence. The nine-day filing gap behind these five is the cause.
+(Verified: computed over data/fills/2026-10.json, data/fills/2026-11.json and raw/2026-10-07…raw/2026-11-09;
+Drive modifiedTime of the Raw Records export, read 2026-11-11)
 
 ## What to do about it
 Proposals only, for the Friday tune; Ty decides.

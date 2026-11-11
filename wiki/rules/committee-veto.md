@@ -5,6 +5,17 @@ committee. The committee gate is on every veto, so the question is never whether
 came with it, and whether that combination blocked setups that would have worked.
 
 ## Evidence
+- **2026-11-09 makes it twenty-one consecutive sessions with no bot record, and the collector missed the next
+  morning.** The bundle is present, `holiday` false, 12 symbols of one-minute bars, 390 each, collected
+  2026-11-10T03:30:25Z, and its `sources` block reads **`v7: 0`** and **`sweep: false`** — the twenty-first
+  identical reading in a row. The last session with any bot record is 2026-10-09, 31 days ago. New, and the reason
+  this line is not just a count: **`Bots/2026-11-10.json` is absent from Drive**, the first missing bundle against
+  24 compiled days that all read `bots_bundle: present`. The complete-bundle-every-day fact was the whole basis
+  for saying the fault sits upstream of `tools/bot-collect.py`; one missed upload weakens it, and 2026-11-10 is
+  uncompilable as a result. Per proposal 8 this page stays paused; the Mac-side check from 2026-10-22 is now
+  fourteen compiled sessions old and undone.
+  (Verified: raw/2026-11-09.json; computed over raw/2026-10-12…raw/2026-11-09; Drive listing of
+  `Raw Records/Bots/`, read 2026-11-11)
 - **2026-11-06 makes it twenty consecutive sessions with no bot record.** The bundle is present, `holiday` false,
   12 symbols of one-minute bars, 390 each, collected 2026-11-07T03:30:29Z, and its `sources` block reads
   **`v7: 0`** and **`sweep: false`** — the twentieth identical reading in a row; 2026-11-05 was the nineteenth, on
@@ -65,10 +76,10 @@ came with it, and whether that combination blocked setups that would have worked
   structure the least at 23.8%. (Verified: raw/2026-10-07.json)
 
 ## Count so far
-Seen on 3 of 23 compiled days, and on none since 2026-10-09. Across 166 resolved skips, taking them all would have
+Seen on 3 of 24 compiled days, and on none since 2026-10-09. Across 166 resolved skips, taking them all would have
 returned **-48.83R**: -41.46R on 2026-10-07, +1.61R on 2026-10-08 and -8.98R on 2026-10-09. The veto is net
-protective over those three days, but it was net costly on one of them, and the **twenty** sessions since have
-added no evidence either way. (Verified: computed over raw/2026-10-07…raw/2026-11-06)
+protective over those three days, but it was net costly on one of them, and the **twenty-one** sessions since have
+added no evidence either way. (Verified: computed over raw/2026-10-07…raw/2026-11-09)
 
 ## What to do about it
 Proposals only, for the Friday tune. The proposal carried out of 2026-10-07 was to watch whether the per-gate
@@ -106,6 +117,15 @@ sessions on samples of 1 to 13 resolved skips per gate. Reading a ranking off a 
    argument for doing that rather than restating it each day. The only thing worth carrying forward is the
    one-line check from 2026-10-22, and until it is done this page should be read as paused, not open.
    (Verified: computed over raw/2026-10-12…raw/2026-10-26)
+
+9. **Added 2026-11-09: the separation this page relied on has a crack in it.** Proposals 4 through 8 all rest on
+   the collector delivering a complete bundle every session while the bots produce nothing, which held for 24
+   compiled days. `Bots/2026-11-10.json` did not arrive, so the next check should cover the collector as well as
+   the bots: whether `tools/bot-collect.py` ran on 2026-11-11 at all (its log is
+   `~/Library/Logs/bot-collect.log`), and whether the bots' own output files exist at the paths it reads. Both are
+   Mac-side and neither can be done from the routine.
+   (Verified: Drive listing of `Raw Records/Bots/`, read 2026-11-11; computed over raw/2026-10-07…raw/2026-11-09;
+   docs/wiki.md, "Mac collector")
 
 See [[what-ifs/coin-skips]] for the one symbol where the veto already looks wrong, and
 [[what-ifs/cancelled-sweep-orders]] for the sweep bot, where cancellation rather than a vote is what prevented the
