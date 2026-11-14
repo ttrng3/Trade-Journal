@@ -4,6 +4,7 @@ Compiled every trading day from the Webull fills and the bots' session, by conce
 is written once; these pages are the compiled output. Numbers carry their source.
 
 ## Latest weekly report
+- [[weekly/2026-W46]]: $0.00 realized on zero fills, one of five sessions compiled, and four sessions lost outright
 - [[weekly/2026-W45]]: -$522.00 realized, one of five sessions traded, and twenty sessions with no bot record
 - [[weekly/2026-W44]]: +$1,769.00 realized, two of five sessions compiled blank, and the worst exit ledger recorded
 - [[weekly/2026-W43]]: the full week, +$1,705.00, and Friday's +$1,016.00 is the best same-day session compiled
