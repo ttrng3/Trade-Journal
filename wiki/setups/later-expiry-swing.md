@@ -5,6 +5,37 @@ closed on a later session. It is the opposite trade to [[setups/zero-dte-scalp]]
 for a while, so the result turns on the move rather than on entry timing within one session.
 
 ## Evidence
+- **2026-11-10 → 2026-11-11: the fifth swing, NVDA 11-18 185C, +$1,112.00 over its whole life and the page's
+  second winner.** Eleven contracts bought 09:37:41–11:57:36 on 2026-11-10 from **3.75** down to **2.62** for
+  **$3,358.00**; two were sold the same day at 3.85 and 4.00 and the remaining **9** were held overnight with
+  **8** days to expiry, then sold 07:54:55–10:40:42 the next morning at 3.70–4.50 for **$3,685.00**. The carry
+  leg alone was **+$937.55** on an average-cost basis. It is the largest swing compiled by contracts and by
+  result, and the first since 2026-10-09 to make money.
+  See [[days/2026-11-10]], [[days/2026-11-11]] and [[mistakes/overnight-0-1-dte]].
+  (Verified: raw/2026-11-10.json, raw/2026-11-11.json; whole life computed over data/fills/2026-11.json)
+- **2026-11-13: three swings opened and still open, 4 contracts, and the first time this page ends a week
+  unresolved.** NVDA 11-18 180C (**2** contracts, 5 DTE), QQQ 11-18 695C (**1**, 5 DTE) and SPCX 11-20 150C
+  (**1**, 7 DTE) were all open at the bell with **-$724.00**, **+$43.00** and **-$175.00** of realized cash
+  behind them. The export this run read ends 2026-11-13T15:51:46, so their outcomes are not in the repo and are
+  excluded from every total on this page. See [[days/2026-11-13]].
+  (Verified: raw/2026-11-13.json; open positions computed over data/fills/2026-11.json)
+- **2026-11-12: five later-dated strikes opened and closed inside the session for +$824.00, the best intraday
+  reading this page has recorded and five of the day's six green strikes.** SPY 11-13 757C **+$265.00**, TSLA
+  11-13 400C **+$243.00**, NVDA 11-18 175C **+$205.00** at **+33.3%** on two contracts, TSLA 11-13 397.5C
+  **+$60.00** and TSLA 11-13 395C **+$51.00**. Four of the five are next-day expiry.
+  See [[days/2026-11-12]]. (Verified: raw/2026-11-12.json)
+- **2026-11-11: two intraday later-dated strikes, both green, +$1,305.00.** SPXW 11-12 7660C **+$770.00** at
+  **+32.9%** on seven contracts, closing with **2** at **5.80** above every buy in its ladder, and TSLA 11-13
+  395C **+$535.00** at **+53.5%** on three. The same add-down shape that lost **-$1,125.00** on the 0DTE strike
+  beside them, held one expiry further out. See [[days/2026-11-11]]. (Verified: raw/2026-11-11.json)
+- **2026-11-13: QQQ 11-18 700C, -$1,925.00, the largest single loss this page has recorded.** Seventeen contracts
+  bought 09:39:57–10:11:30 from 2.94 down to 1.32 for **$3,625.00**, all seventeen sold at **10:26:13** at
+  **1.00**, below every buy. Being further from expiry did not protect it: the loss is **-53.1%** of premium in
+  47 minutes. See [[mistakes/dump-below-the-ladder]]. (Verified: raw/2026-11-13.json)
+- **2026-11-10: SPY 11-12 751C, +$470.00 over 21 contracts and 29 fills, and the morning leg made more than the
+  strike kept.** Six bought 09:37:07–09:50:42 at 3.80–3.30 sold 09:58:32–10:09:21 at 4.20–5.00 for
+  **+$616.00**; two afternoon legs then returned **-$262.00** and **+$116.00**. The one loss of the three is the
+  eight-contract exit at **2.23** at 12:35:01. See [[days/2026-11-10]]. (Verified: raw/2026-11-10.json)
 - **2026-11-02: four more later-dated contracts opened and closed inside one session, all green, and together
   they out-earned the eleven before them.** TSLA 11-06 425C took **10** contracts for **+$450.00**, TSLA 11-13
   430C **6** for **+$415.00**, SPY 11-03 760C **8** for **+$325.00** and TSLA 11-04 412.5C **1** for
@@ -130,6 +161,25 @@ across October over 23 carry events; November has recorded none.
 See [[mistakes/overnight-0-1-dte]].
 (Verified: computed over raw/2026-10-07…raw/2026-11-02; whole-life and carries computed over
 data/fills/2026-10.json; open positions computed over data/fills/2026-10.json and data/fills/2026-11.json)
+
+**Added 2026-11-17, counting 2026-11-10 to 2026-11-13.** The swings become **5**, of which **4 are closed** and
+**2 green**: TSLA 10-16 400C **+$753.00**, TSLA 10-23 410C **-$40.00**, TSLA 10-23 387.5C **-$385.00**, GOOG
+11-20 375C **-$124.00** and NVDA 11-18 185C **+$1,112.00**, together **+$1,316.00**. The page no longer rests on
+the single 2026-10-09 winner, but it now rests on two, and the three losses between them are unchanged. **Three
+further swings are open** as of 2026-11-13 and are excluded.
+
+The intraday later-dated book, still the consistent part, goes to **25** strikes, **195** contracts, **22** green,
+**+$2,347.00**. The ten added this week returned **+$375.00** with **8** green, and the whole of the shortfall
+against the previous reading is one strike: QQQ 11-18 700C at **-$1,925.00**, the first intraday later-dated
+position to lose more than **$220.00**. Without it the ten returned **+$2,300.00**.
+
+Against the same-day book the gap has widened sharply. 0DTE round trips now stand at **-$1,815.00** over **61**
+strikes while intraday later-dated strikes stand at **+$2,347.00** over **25** — a **$4,162.00** spread, against
+the **$2,126.00** spread recorded on 2026-11-02, on roughly a third as many positions. Tenor remains the most
+durable cut this wiki has, and it survived the worst session compiled.
+See [[setups/zero-dte-scalp]] and [[mistakes/overnight-0-1-dte]].
+(Verified: computed over raw/2026-10-07…raw/2026-11-13; whole-life, carries and open positions computed over
+data/fills/2026-10.json and data/fills/2026-11.json)
 
 ## What to do about it
 Proposals only, for the Friday tune. **One position is not a strategy** and the sample here is a single contract in a

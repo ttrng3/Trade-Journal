@@ -6,6 +6,35 @@ went wrong in the window the post-exit candles cover, so the exit cannot be faul
 normally carries. Only the settlement price shows the cost.
 
 ## Evidence
+- **2026-11-13: META 11-13 635C, -$3,762.00, the fourth-largest miss on this page and the first since
+  2026-10-30.** Six contracts were sold at **10:46:24** at **0.72** — below every buy in their own ladder — and
+  META closed at **641.99**, **$6.99** above the strike, so the six were worth **$4,194.00** held to expiry
+  against the **$432.00** taken. The realized loss on the strike was the session's smallest at **-$197.00**; the
+  opportunity cost was its largest by a factor of nineteen. It ranks behind only **-$5,084.00** and
+  **-$4,318.00** (2026-10-30) and **-$4,304.00** (2026-10-16).
+  See [[days/2026-11-13]] and [[mistakes/dump-below-the-ladder]]. (Verified: raw/2026-11-13.json)
+- **2026-11-13: the session entry is -$2,124.00, only the second negative session this page has recorded since
+  2026-10-30.** Four of the five settled strikes were right to exit, for **+$1,638.00** — NVDA 167.5C
+  **+$504.00**, NVDA 165C **+$606.00**, NVDA 162.5C **+$180.00** and SPY 751P **+$348.00** — and the fifth took
+  **-$3,762.00**. One in-the-money settlement outweighed four worthless ones by more than two to one.
+  (Verified: raw/2026-11-13.json)
+- **2026-11-11: +$2,408.00 over three strikes, all three right, and the largest clean session entry since
+  2026-10-23.** NVDA 175C returned **+$1,005.00** against a strike that settled **$1.15** out, SPXW 7635C
+  **+$1,310.00** against **37.10** points out on the proxy, and NVDA 172.5C **+$93.00** — the smallest margin of
+  the month and the one strike of the three that settled in the money, by **$1.35**.
+  See [[days/2026-11-11]]. (Verified: raw/2026-11-11.json)
+- **2026-11-12: SPY 756C, +$315.00, and the page's first entry on a 0DTE strike re-opened in the last hour.**
+  Four contracts across two cycles returned **$795.00** against a **$480.00** settlement value, SPY closing
+  **$1.20** above the strike. Three of the four were bought between 15:06:47 and 15:18:10 and sold at 15:19:11,
+  so the margin was earned in thirteen minutes at the end of the session.
+  See [[days/2026-11-12]]. (Verified: raw/2026-11-12.json)
+- **2026-11-10 adds nothing, because no same-day strike was traded.** The first such session compiled, so the
+  page's day count and its strike count now diverge. (Verified: raw/2026-11-10.json)
+- **2026-11-13: the post-exit window and the settlement disagreed on the same strike again.** META rose only
+  **6.89** in the ten candles after its exit, which reads as a near-miss, while the settlement shows
+  **-$3,762.00**. On 2026-11-11 the disagreement ran the other way: the SPX proxy rose **22.00** points after the
+  SPXW dump and the strike still settled **37.10** points out of the money. Ten candles is not a proxy for
+  expiry, in either direction. (Verified: raw/2026-11-13.json, raw/2026-11-11.json)
 - **2026-11-02 is the largest pro-exit session recorded and the clearest refutation of this page as a measure of
   the day.** All **eight** same-day strikes settled worthless — SPY at **752.12** against 760, 761 and 763, the
   SPX proxy at **7521.20** against 7645, 7660, 7675 and 7680, QQQ at **681.13** against 693 — so exiting was
@@ -182,6 +211,25 @@ added on 2026-11-02 are all worthless settlements, so a session that moved the n
 in-the-money count exactly where 2026-10-30 put it. The whole of this ledger's risk sits in that tail, and within
 it what separates the 5 from the 14 is how far past the strike the close lands relative to the premium taken.
 (Verified: computed over raw/2026-10-07…raw/2026-11-02)
+
+**Added 2026-11-17, counting 2026-11-11 to 2026-11-13.** The ledger stands at **67 same-day strikes** with a
+settlement price, seen on **16** compiled days. Exiting beat holding on **52** and cost money on **15**, and the
+net is **+$19,381.00**. The count series continues its narrow drift — **57.1%**, 66.7%, 71.8%, 73.2%, 75.0%,
+72.0%, 75.9%, **77.6%** — an eight-reading spread of 20.5 points, against a net that has now moved by
+**-$9,597.00**, **+$10,499.00** and **+$599.00** in single sessions. Nine strikes were added for a net of
+**+$599.00**: eight of them right for **+$4,361.00**, one wrong for **-$3,762.00**. The page's own instruction to
+report the count and the two tails rather than the net holds up well here, since the net barely moved while the
+session underneath it was the worst compiled.
+
+The settlement-margin cut is now the firmest finding in the wiki. Of the 67 strikes, **23** settled in the money
+and **44** settled worthless; exiting was right on **44 of 44** worthless by construction and on **8 of 23** of
+the rest, **34.8%**. The four in-the-money strikes added this week split **3** right and **1** wrong, and the one
+wrong is **-$3,762.00** against **+$588.00** from the three right — the same shape as every earlier reading, where
+the in-the-money tail carries all of the risk and most of the magnitude.
+
+Split by side, calls are **+$23,959.00** over **57** strikes and puts **-$4,578.00** over **10**. SPY 11-13 751P
+is the first put traded since 2026-10-30 and was right, by **+$348.00**; puts remain 14.9% of the strikes and
+**5** of the **15** misses. (Verified: computed over raw/2026-10-07…raw/2026-11-13)
 
 ## What to do about it
 Proposals only; Ty decides.

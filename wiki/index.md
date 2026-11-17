@@ -4,7 +4,7 @@ Compiled every trading day from the Webull fills and the bots' session, by conce
 is written once; these pages are the compiled output. Numbers carry their source.
 
 ## Latest weekly report
-- [[weekly/2026-W46]]: $0.00 realized on zero fills, one of five sessions compiled, and four sessions lost outright
+- [[weekly/2026-W46]]: -$1,402.00 realized over 265 fills, the worst session compiled, and ten one-fill dumps
 - [[weekly/2026-W45]]: -$522.00 realized, one of five sessions traded, and twenty sessions with no bot record
 - [[weekly/2026-W44]]: +$1,769.00 realized, two of five sessions compiled blank, and the worst exit ledger recorded
 - [[weekly/2026-W43]]: the full week, +$1,705.00, and Friday's +$1,016.00 is the best same-day session compiled
@@ -15,18 +15,19 @@ is written once; these pages are the compiled output. Numbers carry their source
 - [[hypothesis-ledger]]: every bot, agent and tune tested, and what happened
 
 ## Days
+- [[days/2026-11-13]]
+- [[days/2026-11-12]]
+- [[days/2026-11-11]]
+- [[days/2026-11-10]]
 - [[days/2026-11-09]]
 - [[days/2026-11-06]]
 - [[days/2026-11-05]]
 - [[days/2026-11-04]]
 - [[days/2026-11-03]]
 - [[days/2026-11-02]]
-- [[days/2026-10-30]]
-- [[days/2026-10-29]]
-- [[days/2026-10-28]]
-- [[days/2026-10-27]]
 
 ## Mistakes
+- [[mistakes/dump-below-the-ladder]]
 - [[mistakes/overnight-0-1-dte]]
 - [[mistakes/stop-inside-the-noise]]
 

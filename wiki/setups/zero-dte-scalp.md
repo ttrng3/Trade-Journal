@@ -5,6 +5,42 @@ re-entering the same strike several times. Expiry day leaves no room for a posit
 decided by entry timing and by how many times a losing strike is re-entered.
 
 ## Evidence
+- **2026-11-13: four same-day strikes, one green, -$1,003.00, and every loser closed by a single dump fill.**
+  NVDA 165C **-$360.00** on ten contracts, NVDA 162.5C **-$348.00** on nine, META 635C **-$197.00** on six and
+  SPY 751P **-$98.00** on three; the fifth same-day strike, NVDA 167.5C, closed Thursday's carry and so is not a
+  round trip. All five were sold below every buy in their own ladder. This page has penalised add-down since
+  2026-10-07 without ever finding it losing on a completed round trip, and the separation is now explicit: the
+  ladder is not what loses, the exit taken at the bottom of it is.
+  See [[mistakes/dump-below-the-ladder]] and [[days/2026-11-13]]. (Verified: raw/2026-11-13.json)
+- **2026-11-11: three same-day strikes, two green, -$841.00, and the whole loss is one strike.** SPXW 7635C lost
+  **-$1,125.00** on **19** contracts — the joint third heaviest same-day position compiled — while NVDA 175C
+  returned **+$187.00** on eleven and NVDA 172.5C **+$97.00** on one. The SPXW ladder ran **2.60** down to
+  **0.55**, a **78.8%** fall and the deepest compiled, and **13** of the 19 went out in one fill at **0.60**.
+  The six bought back afterwards at 0.55–0.75 and sold at 0.85–0.90 made **+$150.00**.
+  See [[days/2026-11-11]]. (Verified: raw/2026-11-11.json)
+- **2026-11-11 and 2026-11-12 both break the entry-time cut proposed on 2026-11-02, per session.** On 2026-11-11
+  the one loser of six strikes was opened **09:39:51**, second of the day; on 2026-11-12 the only red line was
+  opened **15:30:47** and was a carry rather than a round trip. The aggregate cut survives and is now the
+  strongest read on this page — across every compiled session strikes first filled **before 10:00** are **34
+  green of 42**, **81.0%**, for **+$2,785.00**; **10:00–11:00** are **14 of 26**, **53.8%**, for **-$966.00**;
+  and **after 11:00** are **8 of 18**, **44.4%**, for **-$1,287.00**. Monotonic in both green rate and net across
+  three buckets and **86** round trips. (Verified: computed over raw/2026-10-07…raw/2026-11-13)
+- **2026-11-12: one same-day strike, green, +$183.00, and the only 0DTE strike compiled that was re-opened in the
+  last hour.** SPY 756C took one contract at 09:34:05 at 1.60 out at 2.73 three minutes later, then three more
+  at 15:06:47–15:18:10 at 1.72–1.30 sold a minute after the last at 1.74. SPY settled **$1.20** in the money, so
+  the four contracts were worth **$480.00** held against **$795.00** taken. See [[days/2026-11-12]].
+  (Verified: raw/2026-11-12.json)
+- **2026-11-10: the first session compiled with no same-day strike at all.** Sixty fills across three strikes, all
+  of them 1, 2 or 8 days out, so this page takes nothing from the session and the four-session gap in its series
+  2026-11-03 to 2026-11-09 is joined by a fifth day that genuinely traded none.
+  See [[days/2026-11-10]]. (Verified: raw/2026-11-10.json)
+- **2026-11-03 to 2026-11-09 were not blank after all, and this page cannot use them.** The export filed on
+  2026-11-15 added **404** fills for 2026-11-03 to 2026-11-06, days whose `raw/` files were frozen with no fills
+  on the runs of 2026-11-04 to 2026-11-09. Those fills are in `data/fills/2026-11.json` and will never reach a
+  day page, so the same-day strikes among them are absent from every count on this page. This is the fourth
+  instance of the freeze-then-file problem, after 2026-10-12 to 2026-10-15 and 2026-10-27 to 2026-10-28.
+  (Verified: computed over data/fills/2026-11.json; raw/2026-11-03.json, raw/2026-11-04.json,
+  raw/2026-11-05.json, raw/2026-11-06.json)
 - **2026-11-02: the worst 0DTE session compiled, -$1,867.00 over eight strikes, and the heaviest same-day book.**
   Only **1** of the eight was green. **93** contracts went through the book — more than the 71 of 2026-10-23 and
   the 70 of 2026-10-22, the two previous heaviest — carrying **$12,366.00** of cost for **$10,499.00** of
@@ -175,6 +211,24 @@ Two strikes are excluded because they closed or left a carried position rather t
 frozen with no fills, as were 2026-10-27 and 2026-10-28, whose **63** fills reached the repo after those days were
 already written. (Verified: computed over raw/2026-10-07…raw/2026-11-02; late fill counts computed over
 data/fills/2026-10.json)
+
+**Added 2026-11-17, counting 2026-11-11 to 2026-11-13.** Same-day strikes bought and sold in equal size now stand
+at **61 strikes, 467 contracts, 34 green, -$1,815.00**, seen on **16** of **28** compiled days. The three new
+sessions returned **-$841.00**, **+$183.00** and **-$1,003.00**, so the net has fallen for a second and third
+consecutive update after 2026-11-02's **-$1,867.00** single-session drop, and the green rate has gone **58.5%** →
+**55.7%**, its second fall and its lowest reading since 2026-10-08. As the page's own 2026-11-02 note says, the
+net is not the number to report; strikes green of strikes traded is, and that series now reads 52.0%, 58.3%,
+60.5%, 63.4%, 66.7%, 58.5%, **55.7%**.
+
+The heaviest same-day strikes compiled are now **22**, **20**, **19**, **19**, **19** and **16** contracts
+returning **-$45.00**, **+$79.00**, **+$411.00**, **+$64.00**, **-$1,125.00** and **+$188.00** — the new
+19-contract entry, SPXW 7635C on 2026-11-11, is the largest loss any heavy strike has produced, which leaves size
+predicting neither sign nor magnitude for the eighth consecutive reading.
+
+**The real finding of this week is not on this page.** Ten exits across 2026-11-10 to 2026-11-13 closed a whole
+add-down position below every buy in it, and all ten lost, for **-$5,440.00** on the legs. That cuts the week far
+more cleanly than size, re-entry count, underlying or tenor ever have, and it is now tracked separately at
+[[mistakes/dump-below-the-ladder]]. (Verified: computed over raw/2026-10-07…raw/2026-11-13)
 
 ## What to do about it
 Proposals only. The number to carry forward is round trips per strike against result per strike, because on this day

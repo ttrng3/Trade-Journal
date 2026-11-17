@@ -5,6 +5,28 @@ committee. The committee gate is on every veto, so the question is never whether
 came with it, and whether that combination blocked setups that would have worked.
 
 ## Evidence
+- **2026-11-13 makes it twenty-five consecutive sessions with no bot record, and the missing-bundle worry of
+  2026-11-09 is resolved: nothing was lost.** `Bots/2026-11-10.json` was absent from Drive when the 2026-11-11
+  run looked, which that run read as the first break in the complete-bundle record. It was not a break. The Mac
+  collector uploaded **2026-11-10**, **2026-11-11**, **2026-11-12**, **2026-11-13** and **2026-11-16** in one
+  catch-up burst between **03:30:29Z** and **03:32:25Z** on 2026-11-17, exactly the behaviour `docs/wiki.md`
+  describes for a Mac that has been asleep. All **28** compiled days now read `bots_bundle: present`, so the
+  basis for saying the fault sits upstream of `tools/bot-collect.py` is restored in full: the collector delivers,
+  and what it delivers contains no v7 records.
+  (Verified: raw/2026-11-10.json, raw/2026-11-11.json, raw/2026-11-12.json, raw/2026-11-13.json; Drive listing of
+  `Raw Records/Bots/`, read 2026-11-17)
+- **2026-11-10 to 2026-11-13: four more identical readings, and the bundles are complete in every respect except
+  the records.** Each has `holiday` false, one-minute bars for **12** symbols, and `sources` reading **`v7: 0`**
+  and **`sweep: false`**. Collected at 2026-11-17T03:30:29Z, 03:30:55Z, 03:31:19Z and 03:31:58Z. The last session
+  with any bot record is still 2026-10-09, now **35** days back, and the Mac-side check named on 2026-10-22 is
+  still undone **16** compiled sessions after the session that named it. Per proposal 8 this page stays paused.
+  (Verified: raw/2026-11-10.json, raw/2026-11-11.json, raw/2026-11-12.json, raw/2026-11-13.json; computed over
+  raw/2026-10-12…raw/2026-11-13)
+- **2026-11-16's bundle is on Drive and its day is not yet compiled.** The collector delivered
+  `Bots/2026-11-16.json` at 03:32:25Z on 2026-11-17, but the Webull export this run read ends 2026-11-13, so the
+  session has no fills in the shard and `tools/postexit.py` deferred it. If its bot records are also empty the
+  streak will read twenty-six when it lands. Nothing is claimed about it here.
+  (Verified: Drive listing of `Raw Records/Bots/`, read 2026-11-17; data/index.json)
 - **2026-11-09 makes it twenty-one consecutive sessions with no bot record, and the collector missed the next
   morning.** The bundle is present, `holiday` false, 12 symbols of one-minute bars, 390 each, collected
   2026-11-10T03:30:25Z, and its `sources` block reads **`v7: 0`** and **`sweep: false`** — the twenty-first

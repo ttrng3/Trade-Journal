@@ -6,6 +6,30 @@ can be made. It is distinct from [[setups/later-expiry-swing]], where the hold i
 is left after a scalp was not finished.
 
 ## Evidence
+- **2026-11-13: four contracts went out over the weekend across three strikes, all 5+ DTE, and the export cannot
+  say what happened.** NVDA 11-18 180C (**2**), QQQ 11-18 695C (**1**) and SPCX 11-20 150C (**1**) were open at
+  the bell. The CSV this run read ends **2026-11-13T15:51:46**, so these are recorded as open, not as resolved,
+  and nothing is claimed about their outcome. See [[days/2026-11-13]].
+  (Verified: raw/2026-11-13.json; open positions computed over data/fills/2026-11.json)
+- **2026-11-12 → 2026-11-13: the month's first 0–1 DTE carry, 1 contract, -$94.00, and the cheapest instance
+  compiled.** NVDA 11-13 167.5C bought at **15:30:47** at **1.50**, twenty-six minutes before the close and with
+  one day to expiry, went out the next morning at **09:41:34** at **0.56** inside the nine-contract dump that
+  opened that session. The strike's whole life was **-$372.00**. It is the eighth event in this bucket and the
+  fifth loser; at one contract it is also the smallest, which is the only reason it cost less than October's.
+  See [[rules/1550-flat]] and [[mistakes/dump-below-the-ladder]].
+  (Verified: raw/2026-11-12.json, raw/2026-11-13.json; whole life computed over data/fills/2026-11.json)
+- **2026-11-10 → 2026-11-11: 9 contracts of NVDA 11-18 185C, the largest carry compiled and the largest winner,
+  +$937.55.** Eleven were bought 09:37:41–11:57:36 on 2026-11-10 from 3.75 down to 2.62; two were sold the same
+  day and the other nine were left on. They were sold out 07:54:55–10:40:42 the next morning at 3.70–4.50,
+  average **4.0944** against the **3.0527** average of the eleven, and the strike's whole life was
+  **+$1,112.00**. The first fill, **2** contracts at **4.50**, came **before the open** and was the best of the
+  nine. At **8** days to expiry this is a 5+ DTE carry and belongs beside [[setups/later-expiry-swing]], not in
+  the 0–1 DTE bucket — the distinction this page has argued for since 2026-10-29 now has its clearest case.
+  (Verified: raw/2026-11-10.json, raw/2026-11-11.json; carry and whole life computed over data/fills/2026-11.json)
+- **2026-11-10: the carry itself was an unfinished ladder, which is the mechanism, not the decision.** Nine of
+  the eleven contracts bought that session were still open at the bell, and the strike was never exited — there
+  is no sell fill on it after 10:09:59. Adding down and then stopping is what produced the position.
+  See [[mistakes/dump-below-the-ladder]]. (Verified: raw/2026-11-10.json)
 - **2026-11-02: nothing carried in, nothing carried out, and the first session of November leaves this page
   empty.** All **12** strikes were net flat and the last fill of the day was at **12:39:28**, three hours and
   seventeen minutes before the **15:57** session end; the November shard holds **no** open position after the
@@ -68,6 +92,28 @@ than even record of later turning out to have traded, so the absence of a Novemb
 evidence here, not evidence of absence. The nine-day filing gap behind these five is the cause.
 (Verified: computed over data/fills/2026-10.json, data/fills/2026-11.json and raw/2026-10-07…raw/2026-11-09;
 Drive modifiedTime of the Raw Records export, read 2026-11-11)
+
+**Added 2026-11-17: November has carries now, and the 2026-11-09 warning on this page was right.** The nine-day
+filing gap closed on 2026-11-15 and brought **669** fills for 2026-11-03 to 2026-11-13. Three carry events fall in
+the new window and **4** contracts are still open, so the earlier line that "November has recorded no carry of any
+tenor" was an absence of evidence, exactly as the 2026-11-09 paragraph above predicted. It is not corrected here by
+deletion but superseded: the shard now holds what those sessions did.
+
+The **0–1 DTE** bucket becomes **8** events over **23** contracts, **3** green, **-$1,078.00** — October's seven
+plus 2026-11-12 → 2026-11-13 at **-$94.00**. The split the page has tracked holds: no winner exceeds **$131.00**
+and the losers now run **-$645.00**, **-$371.00**, **-$234.00**, **-$94.00** and **-$11.00**.
+
+The **5+ DTE** bucket gains its largest and best instance, **+$937.55** on nine contracts, taking it from
+**+$83.33** over 10 events to **+$1,020.88** over **11**, with **3** of 11 green. That bucket is no longer
+"negative or near zero", and it is no longer carried by the single 2026-10-09 event: removing both the +$753.00 of
+2026-10-09 and this one still leaves **-$669.67**, so the tenor reading is that 5+ DTE carries are bimodal — two
+large winners and nine small losers — rather than profitable.
+
+Across all tenors November's two **closed** carries are **+$843.55** over 10 contracts against October's
+**-$1,694.67** over 23 events, which is the first positive month this page has recorded and rests on one event.
+The four open contracts are deliberately excluded from every figure above.
+(Verified: computed over data/fills/2026-10.json and data/fills/2026-11.json; raw/2026-11-10.json,
+raw/2026-11-11.json, raw/2026-11-12.json, raw/2026-11-13.json)
 
 ## What to do about it
 Proposals only, for the Friday tune; Ty decides.
