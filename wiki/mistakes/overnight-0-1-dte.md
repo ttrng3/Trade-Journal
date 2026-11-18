@@ -6,6 +6,15 @@ can be made. It is distinct from [[setups/later-expiry-swing]], where the hold i
 is left after a scalp was not finished.
 
 ## Evidence
+- **2026-11-16: the same four contracts sat through a session the export does not cover, and their tenor halved
+  while nobody was looking.** NVDA 11-18 180C (**2**), QQQ 11-18 695C (**1**) and SPCX 11-20 150C (**1**) are
+  still open in the shard, which ends **2026-11-13T15:51:46**; this Monday added **0** fills, so the position is
+  unchanged on the record. What did change is time: the two 11-18 strikes went from **5** days to expiry when
+  bought to **2** at this session, and SPCX from 7 to **4**. A 5+ DTE carry is only a 5+ DTE carry on the day it
+  is opened, and this page's tenor buckets are keyed on that day — three of these four contracts entered 0–1 DTE
+  territory two sessions later without a single fill to mark it. Nothing is claimed about their outcome: the
+  export for this session has not been filed. See [[days/2026-11-16]] and [[setups/later-expiry-swing]].
+  (Verified: open positions and fill dates computed over data/fills/2026-11.json; raw/2026-11-16.json)
 - **2026-11-13: four contracts went out over the weekend across three strikes, all 5+ DTE, and the export cannot
   say what happened.** NVDA 11-18 180C (**2**), QQQ 11-18 695C (**1**) and SPCX 11-20 150C (**1**) were open at
   the bell. The CSV this run read ends **2026-11-13T15:51:46**, so these are recorded as open, not as resolved,
