@@ -6,6 +6,17 @@ can be made. It is distinct from [[setups/later-expiry-swing]], where the hold i
 is left after a scalp was not finished.
 
 ## Evidence
+- **2026-11-17: the same four contracts sat through a second uncovered session, this one at 1 DTE, and the expiry
+  itself is outside the record.** NVDA 11-18 180C (**2**), QQQ 11-18 695C (**1**) and SPCX 11-20 150C (**1**) are
+  still open in the shard, which ends **2026-11-13T15:51:46**; this Tuesday added **0** fills. The two 11-18
+  strikes stood at **1** day to expiry here, down from **5** when bought, and SPCX at **3**, down from **7** —
+  so three of the four contracts spent their last full session in exactly the tenor this page is about, having
+  been opened outside it. They expired the next session, 2026-11-18, which this run deferred and the next run
+  freezes `--final`. Nothing is claimed about the outcome: no export covers either day, and if none is filed
+  before that run the resolution of **3** of the **4** contracts never reaches a page.
+  See [[days/2026-11-17]] and [[setups/later-expiry-swing]].
+  (Verified: open positions and fill dates computed over data/fills/2026-11.json; raw/2026-11-17.json;
+  docs/wiki.md, "Which day")
 - **2026-11-16: the same four contracts sat through a session the export does not cover, and their tenor halved
   while nobody was looking.** NVDA 11-18 180C (**2**), QQQ 11-18 695C (**1**) and SPCX 11-20 150C (**1**) are
   still open in the shard, which ends **2026-11-13T15:51:46**; this Monday added **0** fills, so the position is
