@@ -6,6 +6,17 @@ can be made. It is distinct from [[setups/later-expiry-swing]], where the hold i
 is left after a scalp was not finished.
 
 ## Evidence
+- **2026-11-18: three of the four contracts expired in this session and the outcome is permanently outside the
+  record.** NVDA 11-18 180C (**2**) and QQQ 11-18 695C (**1**) reached **0** days to expiry here, SPCX 11-20 150C
+  (**1**) reached **2**, and all four are still open in the shard, which still ends **2026-11-13T15:51:46**; this
+  Wednesday added **0** fills. The 2026-11-16 and 2026-11-17 entries below both named this run as the last one
+  that could record the resolution, because the day is written `--final` here. No export arrived — the newest is
+  still **2026-11-15T16:23:09Z**, **107.7** hours before this run's fire time — so the carry that this page has
+  tracked since 2026-11-13 closes with its result unknown rather than measured. It is not counted as a win or a
+  loss in any figure on this page, and it never can be.
+  See [[days/2026-11-18]] and [[setups/later-expiry-swing]].
+  (Verified: open positions and fill dates computed over data/fills/2026-11.json; raw/2026-11-18.json;
+  Drive modifiedTime of the Raw Records exports, read 2026-11-20; docs/wiki.md, "Which day")
 - **2026-11-17: the same four contracts sat through a second uncovered session, this one at 1 DTE, and the expiry
   itself is outside the record.** NVDA 11-18 180C (**2**), QQQ 11-18 695C (**1**) and SPCX 11-20 150C (**1**) are
   still open in the shard, which ends **2026-11-13T15:51:46**; this Tuesday added **0** fills. The two 11-18
@@ -134,6 +145,15 @@ Across all tenors November's two **closed** carries are **+$843.55** over 10 con
 The four open contracts are deliberately excluded from every figure above.
 (Verified: computed over data/fills/2026-10.json and data/fills/2026-11.json; raw/2026-11-10.json,
 raw/2026-11-11.json, raw/2026-11-12.json, raw/2026-11-13.json)
+
+**Added 2026-11-18: one carry event is now uncountable, and the page should say so permanently.** The 2026-11-13
+carry of **4** contracts across three strikes is the only event in the compiled set whose resolution no page will
+ever hold: **3** of the **4** expired in a session frozen `--final` with no export, and the fourth, SPCX 11-20
+150C, expires 2026-11-20. Every bucket figure above therefore describes **23** October events plus November's two
+closed carries and excludes this one, which is a gap in the evidence rather than a neutral result. The cause is
+filing latency, not a trading decision: **107.7** hours between the newest export and this run.
+(Verified: open positions computed over data/fills/2026-11.json; computed over raw/2026-10-07…raw/2026-11-18;
+Drive modifiedTime of the Raw Records exports, read 2026-11-20)
 
 ## What to do about it
 Proposals only, for the Friday tune; Ty decides.

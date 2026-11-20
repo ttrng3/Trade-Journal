@@ -5,6 +5,17 @@ committee. The committee gate is on every veto, so the question is never whether
 came with it, and whether that combination blocked setups that would have worked.
 
 ## Evidence
+- **2026-11-18 makes it twenty-eight consecutive sessions with no bot record, and it is the third identical
+  reading in a row.** The bundle is present and complete — `holiday` **false**, **12** symbols of one-minute bars,
+  **390** each, 09:30 through 15:59, collected **2026-11-19T03:30:26Z** — and `sources` reads **`v7: 0`** and
+  **`sweep: false`**. The last session with any bot record is still 2026-10-09, **40** days back. All **31**
+  compiled days carry a complete bundle, so nothing here changes the reading established on 2026-10-22: the fault
+  is upstream of `tools/bot-collect.py`, and the check that would settle it has not been done.
+  `Bots/2026-11-19.json` is already on Drive, collected **2026-11-20T03:30:27Z**, and reads `v7: 0` and
+  `sweep: false` too, but that day is deferred and nothing is claimed for it here.
+  See [[days/2026-11-18]].
+  (Verified: raw/2026-11-18.json; Drive listing of `Raw Records/Bots/`, read 2026-11-20; computed over
+  raw/2026-10-12…raw/2026-11-18)
 - **2026-11-17 makes it twenty-seven consecutive sessions with no bot record, and it is the reading this page
   called from the bundle a day early.** The 2026-11-16 line said `Bots/2026-11-17.json` was already on Drive and
   read `v7: 0` and `sweep: false`, and the compiled day confirms it: bundle present, `holiday` false, **12**
@@ -119,10 +130,10 @@ came with it, and whether that combination blocked setups that would have worked
   structure the least at 23.8%. (Verified: raw/2026-10-07.json)
 
 ## Count so far
-Seen on 3 of 30 compiled days, and on none since 2026-10-09. Across 166 resolved skips, taking them all would have
+Seen on 3 of 31 compiled days, and on none since 2026-10-09. Across 166 resolved skips, taking them all would have
 returned **-48.83R**: -41.46R on 2026-10-07, +1.61R on 2026-10-08 and -8.98R on 2026-10-09. The veto is net
-protective over those three days, but it was net costly on one of them, and the **twenty-seven** sessions since have
-added no evidence either way. (Verified: computed over raw/2026-10-07…raw/2026-11-17)
+protective over those three days, but it was net costly on one of them, and the **twenty-eight** sessions since have
+added no evidence either way. (Verified: computed over raw/2026-10-07…raw/2026-11-18)
 
 ## What to do about it
 Proposals only, for the Friday tune. The proposal carried out of 2026-10-07 was to watch whether the per-gate
