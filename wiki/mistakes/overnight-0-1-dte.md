@@ -6,6 +6,17 @@ can be made. It is distinct from [[setups/later-expiry-swing]], where the hold i
 is left after a scalp was not finished.
 
 ## Evidence
+- **2026-11-19: the last of the four contracts spent this session at 1 DTE, and the next run decides whether its
+  expiry is recorded at all.** NVDA 11-18 180C (**2**) and QQQ 11-18 695C (**1**) expired in the previous
+  session, frozen `--final` with no export. SPCX 11-20 150C (**1**) stood at **1** day to expiry here, down from
+  **7** when bought on 2026-11-13, and expires 2026-11-20 — the day this run deferred and the next run freezes.
+  All four are still open in the shard, which still ends **2026-11-13T15:51:46**; this Thursday added **0**
+  fills. The gap behind it is **131.7** hours. If no export is filed before the next run, this carry event closes
+  with **4** of **4** contracts unresolved on any page, and the uncountable-event note added on 2026-11-18 below
+  becomes permanent for the whole event rather than three quarters of it.
+  See [[days/2026-11-19]] and [[setups/later-expiry-swing]].
+  (Verified: open positions and fill dates computed over data/fills/2026-11.json; raw/2026-11-19.json;
+  Drive modifiedTime of the Raw Records exports, read 2026-11-21; docs/wiki.md, "Which day")
 - **2026-11-18: three of the four contracts expired in this session and the outcome is permanently outside the
   record.** NVDA 11-18 180C (**2**) and QQQ 11-18 695C (**1**) reached **0** days to expiry here, SPCX 11-20 150C
   (**1**) reached **2**, and all four are still open in the shard, which still ends **2026-11-13T15:51:46**; this
