@@ -5,6 +5,23 @@ closed on a later session. It is the opposite trade to [[setups/zero-dte-scalp]]
 for a while, so the result turns on the move rather than on entry timing within one session.
 
 ## Evidence
+- **2026-11-20: the later-expiry book lost -$3,389.00 in cash while the same-day book made +$194.00, the widest
+  split either way on record.** Eight of the session's twelve strikes had 5 or more days to run and they took
+  **46** of the **61** fills and **$6,660.00** of the **$7,825.00** bought. On closed contracts the split is
+  **-$1,552.00** later against **-$5.00** same-day, and every one of the **18** contracts carried into the
+  weekend — **$3,180.00** of cost — is a later expiry. See [[days/2026-11-20]].
+  (Verified: raw/2026-11-20.json; computed over data/fills/2026-11.json)
+- **2026-11-20: extra time bought nothing on a -12.34% NVDA day.** NVDA 01-15 190C had **56** days left and
+  still lost **-$639.00**, the session's largest, dumped at **0.90** against a ladder built to **1.06** across
+  three sessions. NVDA 11-25 145C and 01-15 175C were never sold at all and finished **$19.19** and **$49.19**
+  out of the money. The usual argument for the longer tenor — that a bad day can be waited out — requires the
+  position to be held, and on this session four later-expiry strikes were dumped and four were held without any
+  exit plan at all. (Verified: raw/2026-11-20.json)
+- **The three largest later-expiry losses on record are the three most recent sessions that traded them.**
+  **-$3,389.00** (2026-11-20), **-$2,781.00** (2026-11-13) and **-$2,402.00** (2026-11-10). Later-expiry cash has
+  been negative on **7** of the **18** compiled sessions and positive on **10**, so the count is not the story;
+  the size is. The three November losses are each larger than the largest later-expiry gain outside
+  2026-11-11's **+$4,990.00**. (Verified: computed over raw/2026-10-07…raw/2026-11-20)
 - **2026-11-10 → 2026-11-11: the fifth swing, NVDA 11-18 185C, +$1,112.00 over its whole life and the page's
   second winner.** Eleven contracts bought 09:37:41–11:57:36 on 2026-11-10 from **3.75** down to **2.62** for
   **$3,358.00**; two were sold the same day at 3.85 and 4.00 and the remaining **9** were held overnight with

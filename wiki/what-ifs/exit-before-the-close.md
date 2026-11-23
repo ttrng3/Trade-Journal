@@ -6,6 +6,16 @@ went wrong in the window the post-exit candles cover, so the exit cannot be faul
 normally carries. Only the settlement price shows the cost.
 
 ## Evidence
+- **2026-11-20: 4 of 4 pro-exit for +$1,359.00, on the second-worst session compiled.** Every same-day strike
+  settled worthless — SPY closed **690.81** against strikes of **714**, **720** and **729**, and SPX closed
+  **6,908.1** by the SPY × 10 proxy against **7,300**. SPY 11-20 720C returned **$674.00**, SPXW 7300C
+  **$500.00**, SPY 714C **$155.00** and SPY 729C **$30.00**; holding any of them to expiry returned **$0.00**.
+  The session's cash was **-$3,195.00**. See [[days/2026-11-20]]. (Verified: raw/2026-11-20.json)
+- **2026-11-20 is the fourth unanimous reading and the clearest case yet for the 2026-11-02 warning.** A page
+  that scores **4 of 4** and **+$1,359.00** is describing a day on which every one of twelve strikes finished out
+  of the money and **18** contracts were carried into the weekend on **$3,180.00** of cost. Exiting was right
+  because the positions were wrong, and the ledger cannot see the difference.
+  (Verified: raw/2026-11-20.json; open positions computed over data/fills/2026-11.json)
 - **2026-11-13: META 11-13 635C, -$3,762.00, the fourth-largest miss on this page and the first since
   2026-10-30.** Six contracts were sold at **10:46:24** at **0.72** — below every buy in their own ladder — and
   META closed at **641.99**, **$6.99** above the strike, so the six were worth **$4,194.00** held to expiry
@@ -211,6 +221,23 @@ added on 2026-11-02 are all worthless settlements, so a session that moved the n
 in-the-money count exactly where 2026-10-30 put it. The whole of this ledger's risk sits in that tail, and within
 it what separates the 5 from the 14 is how far past the strike the close lands relative to the premium taken.
 (Verified: computed over raw/2026-10-07…raw/2026-11-02)
+
+**Added 2026-11-23, counting 2026-11-20.** The ledger stands at **71 same-day strikes** with a settlement
+price, seen on **17** compiled days. Exiting beat holding on **56** and cost money on **15**, and the net is
+**+$20,740.00**. The count series reads **57.1%**, 66.7%, 71.8%, 73.2%, 75.0%, 72.0%, 75.9%, 77.6%, **78.9%** —
+a nine-reading spread of 21.8 points. Four strikes were added, all right, for **+$1,359.00**, the fourth
+unanimous session.
+
+The settlement-margin cut is untouched by this session and that is the point. All four new strikes settled
+worthless, so the split moves to **23** in the money and **48** worthless: right on **48 of 48** worthless by
+construction, and still **8 of 23**, **34.8%**, on the rest. The in-the-money tail last grew at the 2026-11-17
+update, which added **4** of them and with them the **-$3,762.00** miss on META 11-13 635C. It holds every one
+of the **15** misses and both of the two largest entries, **-$5,084.00** and **-$4,318.00**, and it is **32.4%**
+of the ledger carrying **100%** of its downside.
+
+Split by side, calls are **+$25,318.00** over **61** strikes and puts **-$4,578.00** over **10**. No put has been
+traded since 2026-11-13; all four new strikes are calls.
+(Verified: raw/2026-11-20.json; computed over raw/2026-10-07…raw/2026-11-20)
 
 **Added 2026-11-17, counting 2026-11-11 to 2026-11-13.** The ledger stands at **67 same-day strikes** with a
 settlement price, seen on **16** compiled days. Exiting beat holding on **52** and cost money on **15**, and the

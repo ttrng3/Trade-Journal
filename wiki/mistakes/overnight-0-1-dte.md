@@ -6,6 +6,34 @@ can be made. It is distinct from [[setups/later-expiry-swing]], where the hold i
 is left after a scalp was not finished.
 
 ## Evidence
+- **2026-11-20: SPY 11-20 729C, one contract carried into its own expiry day and sold for -84.9%.** Bought
+  2026-11-19 at 12:15:57 at **1.99** and sold the next morning at 09:32:31 at **0.30**, **-$169.00** — the
+  largest proportional loss on [[days/2026-11-20]] and a 1 DTE carry by the page's own definition. SPY closed
+  **690.81** against the **729** strike, so the contract would have settled worthless: the carry cost
+  **-$169.00** and the exit saved the remaining **$30.00**. (Verified: raw/2026-11-20.json; entry date computed
+  over data/fills/2026-11.json)
+- **2026-11-20: NVDA 01-15 190C, 8 contracts carried two nights into a -12.34% session.** The ladder was built
+  2026-11-18 and 2026-11-19 from **2.42** down to **1.43**; one more was added at the open at **1.06** and all
+  **9** were dumped at 09:45:06 at **0.90**, **-$639.00** on the session and **-$608.00** over the strike's whole
+  life. At **56** DTE this is the longest-dated carry the page records, and it shows the 5+ bucket is not safe
+  from the same mechanism — the position was abandoned on the morning after the carry, not held for the tenor it
+  was bought for. See [[mistakes/dump-below-the-ladder]].
+  (Verified: raw/2026-11-20.json; whole life computed over data/fills/2026-11.json)
+- **2026-11-20 carried 18 contracts into the weekend on $3,180.00 of cost, the largest carry the page has
+  recorded.** NVDA 01-15 175C (**4**, $699.00), NVDA 11-25 145C (**4**, $646.00), TSLA 12-04 400C (**4**,
+  $982.00), SPY 11-25 725C (**4**, $655.00) and TSLA 11-25 385C (**2**, $198.00). Four of the five strikes were
+  never sold at all during the session. **10** of the 18 expire 2026-11-25, **4** on 2027-01-15 and **4** on
+  2026-12-04; all were out of the money at the close, by **$19.19** to **$54.01**. The export this run read ends
+  2026-11-20T13:43:47, so no outcome is claimed. (Verified: raw/2026-11-20.json; open positions computed over
+  data/fills/2026-11.json)
+- **The three carries the 2026-11-17 update was waiting on are resolved, and none of them expired.** All three
+  were closed on 2026-11-16, a page frozen blank: NVDA 11-18 180C took **4** more contracts at 1.22 → 1.04 and
+  then **6** went out at **0.90** at 12:14:57; QQQ 11-18 695C's last contract was sold at **0.41** at 10:25:00
+  against a **1.60**–**2.58** ladder; SPCX 11-20 150C took one add at **0.73** and both contracts were sold at
+  **0.66** at 10:26:28, **-$116.00** over its life. [[weekly/2026-W47]] recorded the first two as "expired in a
+  session frozen with no export" and the third as a risk that one run would decide; the export filed 2026-11-21
+  shows all three were closed by hand four days earlier.
+  (Verified: computed over data/fills/2026-11.json; [[weekly/2026-W47]])
 - **2026-11-19: the last of the four contracts spent this session at 1 DTE, and the next run decides whether its
   expiry is recorded at all.** NVDA 11-18 180C (**2**) and QQQ 11-18 695C (**1**) expired in the previous
   session, frozen `--final` with no export. SPCX 11-20 150C (**1**) stood at **1** day to expiry here, down from

@@ -5,6 +5,17 @@ re-entering the same strike several times. Expiry day leaves no room for a posit
 decided by entry timing and by how many times a losing strike is re-entered.
 
 ## Evidence
+- **2026-11-20: the same-day book was the least bad part of the worst-but-one session.** Four same-day strikes
+  realized **-$5.00** on closed contracts and **+$194.00** in session cash, two green and two red, on a day the
+  account gave up **-$3,195.00**. SPY 11-20 720C made **+$139.00**, SPXW 7300C **+$40.00**, SPY 714C lost
+  **-$15.00** and SPY 729C **-$169.00**. All four settled worthless and all four were exited, so none of the
+  loss came from holding to the bell. See [[days/2026-11-20]] and [[setups/later-expiry-swing]].
+  (Verified: raw/2026-11-20.json; computed over data/fills/2026-11.json)
+- **2026-11-20: SPY 11-20 720C is the session's control, and it is the same control 2026-11-13 produced.** Four
+  contracts laddered down 1.49 → 1.17 and sold in **three** separate fills at 1.52, 1.70 and 1.76 for
+  **+$139.00** — the day's only strike sold above its own ladder and its only clear winner. SPY 714C and 729C
+  were same-day calls on the same underlying in the same hour, each closed in one fill below its buy, each red.
+  Same setup, same morning, three exits against one. (Verified: raw/2026-11-20.json)
 - **2026-11-13: four same-day strikes, one green, -$1,003.00, and every loser closed by a single dump fill.**
   NVDA 165C **-$360.00** on ten contracts, NVDA 162.5C **-$348.00** on nine, META 635C **-$197.00** on six and
   SPY 751P **-$98.00** on three; the fifth same-day strike, NVDA 167.5C, closed Thursday's carry and so is not a

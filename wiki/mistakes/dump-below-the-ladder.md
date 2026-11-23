@@ -11,6 +11,29 @@ The test is mechanical: a sell fill that takes at least half the open position, 
 premium of the lots it closes.
 
 ## Evidence
+- **2026-11-20: eight occurrences in one session, all eight red for -$1,888.00, and all eight right.** This is
+  the most instances any compiled session holds, one more than 2026-11-13's seven, over **33** contracts:
+  **$4,958.00** of cost against **$3,070.00** of proceeds, a **38.1%** bleed. NVDA 01-15 190C **9** contracts at
+  **0.90** against a ladder built across three sessions 2.42 → 1.06, **-$639.00**; TSLA 11-25 385C **6** at
+  **1.01** against 2.40 → 1.30, **-$412.00**; NVDA 11-25 149C **6** at **0.95** against 1.85 → 1.11,
+  **-$286.00**, and then **3** more at **0.78** against 0.95 → 0.83, **-$39.00**; SPY 11-25 728C **5** at
+  **1.03** against 1.90 → 1.31, **-$263.00**; SPY 11-20 729C **1** at **0.30** against **1.99**, **-$169.00**;
+  SPXW 11-20 7300C **2** at **0.75** against 1.25 → 0.90, **-$65.00**; SPY 11-20 714C **1** at **1.55** against
+  **1.70**, **-$15.00**. See [[days/2026-11-20]]. (Verified: raw/2026-11-20.json)
+- **2026-11-20 is the page's first counterexample on the exit, and it is unanimous.** On every one of the eight,
+  the underlying was lower at the close than at the moment of the dump — NVDA **140.31 → 125.81**, TSLA
+  **352.94 → 345.99**, SPY **700.46 → 690.81**, SPX **7,094.2 → 6,908.1** by the SPY × 10 proxy — and the three
+  same-day strikes among them all settled worthless. Holding would have lost more in all eight cases. Seventeen
+  of the eighteen instances this page has recorded lost money on the leg; this is the first session where that
+  loss was unavoidable by the time the sell was made, because the position should not have been there.
+  (Verified: raw/2026-11-20.json)
+- **2026-11-20 and 2026-11-13 bound the page from opposite ends.** Both are dump-heavy sessions — eight
+  instances and seven — and both are among the two worst compiled, **-$3,195.00** and **-$4,006.00**. On
+  2026-11-13 the dumps were wrong: META 11-13 635C was sold at 0.72 and settled **$6.99 in the money**,
+  **-$3,762.00** against holding. On 2026-11-20 they were right on all eight. The difference is not the exit
+  method, which is identical, but what the underlying did afterwards. The cost the page measures is paid when
+  the ladder is built downward; whether the sell adds to it or saves money is decided by the tape.
+  (Verified: raw/2026-11-20.json, raw/2026-11-13.json)
 - **2026-11-13: seven occurrences in one session, all seven red, -$3,597.00 on the dumped legs.** QQQ 11-18 700C
   dumped **17** contracts at **1.00** at 10:26:13 against a ladder built 2.94 → 1.32, **-$1,925.00** and the
   largest single instance recorded; NVDA 11-18 180C **12** at **1.43** against 2.02 → 1.56, **-$447.00**; NVDA
@@ -47,7 +70,31 @@ premium of the lots it closes.
   the floor of the ladder is what this page measures. See [[days/2026-11-12]]. (Verified: raw/2026-11-12.json)
 
 ## Count so far
-**10** occurrences across the four sessions 2026-11-10 to 2026-11-13, over **91** contracts: **$13,375.00** of
+
+**Added 2026-11-23, counting 2026-11-20.** **18** occurrences across five sessions, over **124** contracts:
+**$18,333.00** of cost against **$11,005.00** of proceeds, **-$7,328.00** on the dumped legs and a **40.0%**
+bleed. **18 of 18 lost.** Still no instance has made money on the leg itself. The distribution by session is now
+**2**, **1**, **0**, **7**, **8**, and the two heaviest sessions are the last two compiled. By tenor the base has
+shifted decisively away from same-day: the eight new instances are **3** same-day, **4** at 5 DTE and **1** at 56
+DTE, taking the whole page to **9** same-day, **2** at 1 DTE, **6** at 5 DTE and **1** at 56 DTE. The single
+largest instance is still **-$1,925.00** (2026-11-13, 5 DTE); the largest of the new eight is **-$639.00**, and
+it is the longest-dated position the page has ever recorded, a **56 DTE** call laddered across three sessions.
+
+The speed finding weakened. The eight new gaps between last add and dump are **78s**, **295s**, **594s**,
+**895s**, **903s**, **1,705s**, **3,410s** and one of **76,594s** (the SPY 729C bought the previous session),
+against a prior median of **183 seconds**. Only one of the eight landed inside three minutes. The eighteen-instance
+median is now **472 seconds**. "A ladder is completed and then abandoned inside about three minutes" held over
+four sessions from one week and does not survive the fifth; what survives is that the whole position goes in one
+fill, at a price under the floor of its own ladder.
+
+What has changed most is the reading, not the count. Through 2026-11-13 every instance lost on the leg **and**
+the session's exits were a mixed bag against settlement. On 2026-11-20 all eight lost on the leg and all eight
+beat holding. The leg's loss is therefore not evidence that the sell was the error — it is arithmetic, since a
+sell below the ladder floor is a loss by construction. The question the page should be asking is why the ladder
+was built downward **124** times into positions that then had to be abandoned.
+(Verified: computed over raw/2026-11-10…raw/2026-11-20)
+
+**Through 2026-11-13.** **10** occurrences across the four sessions 2026-11-10 to 2026-11-13, over **91** contracts: **$13,375.00** of
 cost against **$7,935.00** of proceeds, **-$5,440.00** on the dumped legs and a **40.7%** bleed. **10 of 10 lost.**
 No instance has yet made money.
 
