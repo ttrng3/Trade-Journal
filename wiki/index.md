@@ -16,6 +16,7 @@ is written once; these pages are the compiled output. Numbers carry their source
 - [[hypothesis-ledger]]: every bot, agent and tune tested, and what happened
 
 ## Days
+- [[days/2026-11-23]]
 - [[days/2026-11-20]]
 - [[days/2026-11-19]]
 - [[days/2026-11-18]]
@@ -25,7 +26,6 @@ is written once; these pages are the compiled output. Numbers carry their source
 - [[days/2026-11-12]]
 - [[days/2026-11-11]]
 - [[days/2026-11-10]]
-- [[days/2026-11-09]]
 
 ## Mistakes
 - [[mistakes/dump-below-the-ladder]]
@@ -38,6 +38,7 @@ is written once; these pages are the compiled output. Numbers carry their source
 
 ## What-ifs
 - [[what-ifs/exit-before-the-close]]
+- [[what-ifs/open-bell-liquidation]]
 - [[what-ifs/coin-skips]]
 - [[what-ifs/cancelled-sweep-orders]]
 

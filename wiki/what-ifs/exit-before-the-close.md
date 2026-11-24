@@ -6,6 +6,19 @@ went wrong in the window the post-exit candles cover, so the exit cannot be faul
 normally carries. Only the settlement price shows the cost.
 
 ## Evidence
+- **2026-11-23: 2 of 3 right for +$2,172.00, and the one miss is the only put on the ledger since
+  2026-11-13.** SPY 11-23 726C took **$2,090.00** over **12** contracts against a **$0.00** settlement — SPY
+  closed **722.42**, **$3.58** below the strike — and SPY 11-23 722C took **$252.00** against **$42.00**, the
+  close landing **$0.42** inside it. TSLA 11-23 387.5P took **$520.00** over four contracts against **$648.00**:
+  TSLA closed **385.88**, **$1.62** inside the strike, so exiting cost **-$128.00**. See [[days/2026-11-23]].
+  (Verified: raw/2026-11-23.json)
+- **2026-11-23 is the session that shows what this ledger cannot see, from the opposite side to 2026-11-02.** It
+  scores **+$2,172.00** on a session that took **+$18,160.00** in cash — and **$14,931.00** of that cash is
+  later-expiry carry this page does not measure at all, because it has no settlement price. The 2026-11-02
+  warning was that a unanimous reading can describe the worst session compiled; the mirror is that on the best
+  session compiled the ledger reads **2 of 3** and accounts for **12.0%** of the day. Same-day settlement is a
+  small corner of this account's outcomes. See [[setups/later-expiry-swing]].
+  (Verified: raw/2026-11-23.json; carry computed over data/fills/2026-11.json)
 - **2026-11-20: 4 of 4 pro-exit for +$1,359.00, on the second-worst session compiled.** Every same-day strike
   settled worthless — SPY closed **690.81** against strikes of **714**, **720** and **729**, and SPX closed
   **6,908.1** by the SPY × 10 proxy against **7,300**. SPY 11-20 720C returned **$674.00**, SPXW 7300C
@@ -202,6 +215,28 @@ normally carries. Only the settlement price shows the cost.
   **$378.00**. One rule, two opposite outcomes, one day. (Verified: raw/2026-10-16.json)
 
 ## Count so far
+
+**Added 2026-11-24, counting 2026-11-23.** The ledger stands at **74 same-day strikes** with a settlement price,
+seen on **18** compiled days. Exiting beat holding on **58** and cost money on **16**, and the net is
+**+$22,912.00**. Three strikes were added, **2** right for **+$2,300.00** and **1** wrong for **-$128.00**. The
+count series reads 57.1%, 66.7%, 71.8%, 73.2%, 75.0%, 72.0%, 75.9%, 77.6%, 78.9%, **78.4%** — ten readings inside
+21.8 points, against a net that has now moved by **+$2,172.00** after **+$1,359.00**, **+$599.00**,
+**+$10,499.00** and **-$9,597.00** on single updates. The count remains the stable series and the net remains
+noise.
+
+The settlement-margin cut takes its first in-the-money addition since 2026-11-17 and splits it. Of the 74
+strikes, **25** settled in the money and **49** worthless: right on **49 of 49** worthless by construction, and
+**9 of 25**, **36.0%**, on the rest, up from **8 of 23** and **34.8%**. Both new in-the-money strikes settled
+within **$1.62** of their strike — SPY 722C **$0.42** inside and right, TSLA 387.5P **$1.62** inside and wrong —
+which is the cut working exactly as the page has stated it since 2026-10-26: what separates the right from the
+wrong is how far past the strike the close lands relative to the premium taken. The in-the-money tail is now
+**33.8%** of the ledger and still carries **all 16** misses.
+
+Split by side, calls go to **+$27,618.00** over **63** strikes and puts to **-$4,706.00** over **11**. The TSLA
+387.5P is the first put traded since 2026-11-13 and the **6th** of the **16** misses; puts are **14.9%** of the
+strikes and **37.5%** of the misses, a ratio that has held across every update since 2026-10-30.
+(Verified: raw/2026-11-23.json; computed over raw/2026-10-07…raw/2026-11-23)
+
 Seen on 13 compiled days, over **58 same-day strikes** with a settlement price. Exiting beat holding on **44** of
 them and cost money on **14**, and the net is **+$18,782.00**. The net is now demonstrably not a statistic: it has
 read **-$2,937.00**, **+$449.00**, **-$13.00**, **+$9,022.00**, **+$15,712.00**, **+$16,007.00**, **+$17,880.00**,

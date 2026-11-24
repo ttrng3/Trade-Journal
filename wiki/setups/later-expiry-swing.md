@@ -5,6 +5,26 @@ closed on a later session. It is the opposite trade to [[setups/zero-dte-scalp]]
 for a while, so the result turns on the move rather than on entry timing within one session.
 
 ## Evidence
+- **2026-11-23: the carry record reverses in one session, +$14,931.00 over 18 contracts.** The five later-expiry
+  positions carried out of 2026-11-20 on **$3,180.00** of cost were sold into Monday's gap for **$18,111.00**,
+  **5.70×** cost: NVDA 11-25 145C **+$7,054.00** (**+1,092%**), TSLA 12-04 400C **+$2,508.00** (**+255%**), NVDA
+  01-15 175C **+$2,181.00** (**+312%**), SPY 11-25 725C **+$1,821.00** (**+278%**) and the two contracts of TSLA
+  11-25 385C that Friday's dump left behind **+$1,367.00** (**+690%**). Before this session, overnight holding of
+  later expiries was **-$1,983.17** over **94** contracts across **16** closing sessions, positive on **5** of
+  them; it is now **+$12,947.83** over **112** across **17**, positive on **6**. See [[days/2026-11-23]].
+  (Verified: raw/2026-11-23.json; carry legs computed over data/fills/2026-10.json and data/fills/2026-11.json)
+- **2026-11-23: the gap did the work, not the tenor.** From Friday's close to the 09:33 candle NVDA went
+  **125.81 → 162.30** (**+29.00%**), TSLA **345.99 → 382.04** (**+10.42%**) and SPY **690.81 → 721.42**
+  (**+4.43%**). Two of the five strikes never came into the money at all — NVDA 01-15 175C closed **$9.81** out
+  and SPY 11-25 725C **$2.58** out — and still returned **+312%** and **+278%**, so most of the result is the
+  underlying's move repriced into time still on the clock, not intrinsic value. The page's standing argument for
+  the longer tenor, that a bad day can be waited out, finally has an instance where the waiting was what paid.
+  (Verified: raw/2026-11-20.json, raw/2026-11-23.json)
+- **2026-11-23: the exposure was unchanged, only the outcome.** The **$3,180.00** went into the weekend as four
+  ladders built downward into a **-12.34%** NVDA session plus two leftovers, with no exit plan recorded on
+  [[days/2026-11-20]]. One contract was carried out of this session: AAPL 12-04 360C, **$195.00**, **11** days to
+  run — **6.1%** of the risk carried the session before. The method that produced **+$14,931.00** here produced
+  **-$3,389.00** of later-expiry cash on Friday. (Verified: raw/2026-11-23.json, raw/2026-11-20.json)
 - **2026-11-20: the later-expiry book lost -$3,389.00 in cash while the same-day book made +$194.00, the widest
   split either way on record.** Eight of the session's twelve strikes had 5 or more days to run and they took
   **46** of the **61** fills and **$6,660.00** of the **$7,825.00** bought. On closed contracts the split is
@@ -156,6 +176,24 @@ for a while, so the result turns on the move rather than on entry timing within 
   (Verified: computed over raw/2026-10-07…2026-10-09)
 
 ## Count so far
+
+**Added 2026-11-24, counting 2026-11-23.** Overnight holding of later expiries, measured as carry legs — a sell
+whose matched buy is from an earlier session, on a contract that has not reached expiry — now stands at
+**+$12,947.83** over **112** contracts and **41** legs across **17** closing sessions, **6** of them positive.
+This session alone is **+$14,931.00** over **18** contracts and **5** legs. Without it the record is
+**-$1,983.17** over **94**, which is what every earlier reading of this page described. A single gap moved the
+cumulative figure by **$14,931.00** and flipped its sign, so the carry's expectancy is not estimable from
+seventeen sessions: the distribution has one leg that is **6.7×** the largest of the other sixteen sessions
+(**+$7,054.00**, NVDA 11-25 145C, against **+$1,057.00**, NVDA 11-18 185C on 2026-11-11), and the worst is **-$2,125.00**
+(TSLA 11-11 425C, 2026-11-04).
+
+The prior counts on this page are not restated here. The swing taxonomy they use — whole-life results per
+strike, counted as five swings of which four closed — was last computed on 2026-11-17 against raw days through
+2026-11-13, and the sessions 2026-11-16 to 2026-11-20 were never folded into it. The carry-leg measure above
+covers every session in both shards and is the one this update extends; re-deriving the whole-life swing count
+over the gap is work for a session with the time for it.
+(Verified: computed over data/fills/2026-10.json and data/fills/2026-11.json)
+
 Seen four times on 19 compiled days, and **all four are closed**: TSLA 10-16 400C **+$753.00**, TSLA 10-23 410C
 **-$40.00**, TSLA 10-23 387.5C **-$385.00** and GOOG 11-20 375C **-$124.00** over their whole lives, so **1 winner
 of 4** and **+$204.00** together. No fifth swing has been opened. The page still rests entirely on the single large

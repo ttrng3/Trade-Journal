@@ -11,6 +11,30 @@ The test is mechanical: a sell fill that takes at least half the open position, 
 premium of the lots it closes.
 
 ## Evidence
+- **2026-11-23 reverses the verdict on 2026-11-20's eight dumps, on the two that can be priced.** Friday's
+  instances were scored against Friday's close and all eight were called right. The next session re-prices two of
+  them. TSLA 11-25 385C: **6** contracts dumped at **1.01** for **$606.00** at 12:03:28 Friday; the **2**
+  contracts of the same strike carried into Monday sold at **5.70** and **9.95**, so those six were worth
+  **$3,420.00 to $5,970.00** at prices actually filled — **$2,814.00 to $5,364.00** given up. NVDA 11-25 149C:
+  **9** contracts dumped at **0.95** and **0.78** for **$804.00**; NVDA closed Monday at **165.19**, putting
+  intrinsic alone at **16.19**, so the nine were worth at least **$14,571.00** — a floor of **$13,767.00** given
+  up. See [[days/2026-11-23]] and [[days/2026-11-20]].
+  (Verified: raw/2026-11-20.json, raw/2026-11-23.json)
+- **The horizon was the whole of the disagreement.** Friday's three same-day dumps settled worthless and nothing
+  changes for them; exiting returned the full premium. The five later-expiry dumps had **5** days or **56** left
+  and were scored as if they expired at Friday's bell. Of those five, two are priced or bounded above and both
+  gave up multiples of what they took; NVDA 01-15 190C, SPY 11-25 728C and SPY 11-20 729C are not traded on
+  2026-11-23 and are out of the money at its close, so **nothing is claimed about them** — the 190C in particular
+  had **53** days left and a 175C of the same expiry fetched **6.05–8.50** that morning. A dump of a position
+  with time left cannot be scored at the session close; it needs the horizon stated with it.
+  (Verified: raw/2026-11-20.json, raw/2026-11-23.json)
+- **2026-11-23: the first full-position one-fill exit compiled that clears its own floor, so the count does not
+  move.** SPY 11-23 726C was laddered **1.55 → 0.74** over five contracts between 11:35:58 and 11:42:32 and all
+  five went out at **11:50:22** at **0.98** — the whole position in one fill, **-$82.00**, **470 seconds** after
+  the last add. At **0.98** the price is above the **0.93** and **0.74** buys, so it fails the page's mechanical
+  test and is **not** an instance. It is the nearest miss recorded and worth keeping: the shape here is the
+  one-fill exit, and what the test isolates is the exit *below the floor*, not the one-fill exit itself.
+  The count stands at **18**. (Verified: raw/2026-11-23.json)
 - **2026-11-20: eight occurrences in one session, all eight red for -$1,888.00, and all eight right.** This is
   the most instances any compiled session holds, one more than 2026-11-13's seven, over **33** contracts:
   **$4,958.00** of cost against **$3,070.00** of proceeds, a **38.1%** bleed. NVDA 01-15 190C **9** contracts at
@@ -70,6 +94,20 @@ premium of the lots it closes.
   the floor of the ladder is what this page measures. See [[days/2026-11-12]]. (Verified: raw/2026-11-12.json)
 
 ## Count so far
+
+**Added 2026-11-24, counting 2026-11-23.** **No new instance.** The count stays at **18** occurrences over
+**124** contracts, **-$7,328.00** on the dumped legs, **18 of 18** red. 2026-11-23 produced one full-position
+one-fill exit that cleared its own ladder floor and is therefore not counted.
+
+What this session changes is the scoring, not the count. The 2026-11-20 block below reads "all eight lost on the
+leg and all eight beat holding", and that second clause is now wrong for at least two of the eight: measured at
+the next session's prices rather than Friday's close, TSLA 11-25 385C gave up **$2,814.00–$5,364.00** and NVDA
+11-25 149C at least **$13,767.00**. Against **-$1,888.00** of realized loss on Friday's eight legs, the two
+priceable later-expiry dumps alone gave up **at least 8.8×** that figure in value that existed one session
+later. The page's conclusion that "the usable rule is about the adds, not the sell" survives for same-day
+strikes and does not survive for strikes with days left on them — for those, the sell is the error too.
+(Verified: raw/2026-11-20.json, raw/2026-11-23.json)
+
 
 **Added 2026-11-23, counting 2026-11-20.** **18** occurrences across five sessions, over **124** contracts:
 **$18,333.00** of cost against **$11,005.00** of proceeds, **-$7,328.00** on the dumped legs and a **40.0%**

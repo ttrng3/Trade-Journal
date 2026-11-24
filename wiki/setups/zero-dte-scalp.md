@@ -5,6 +5,19 @@ re-entering the same strike several times. Expiry day leaves no room for a posit
 decided by entry timing and by how many times a losing strike is re-entered.
 
 ## Evidence
+- **2026-11-23: three strikes, 17 contracts, all three green, +$180.00 — and irrelevant to the session.** The
+  same-day book made **+$180.00** on a day the account took **+$18,160.00** in cash: SPY 11-23 726C **+$97.00**
+  over **12** contracts and seven cycles, SPY 11-23 722C **+$54.00** on one and TSLA 11-23 387.5P **+$29.00** on
+  four. It is the first all-green same-day session since 2026-10-30 and the first put traded since 2026-11-13.
+  All of the session's result is carry. See [[days/2026-11-23]] and [[setups/later-expiry-swing]].
+  (Verified: raw/2026-11-23.json)
+- **2026-11-23: the 726C is the page's cleanest re-entry sequence, and the add-down leg is still the losing
+  half.** Seven one-contract round trips between **10:49:53** and **11:34:50** returned **+$179.00**, every one
+  green. Then five contracts were laddered **1.55 → 0.74** between 11:35:58 and 11:42:32 and taken off together
+  at **11:50:22** at **0.98** for **-$82.00**. Same strike, same hour, same underlying: scalped one at a time it
+  made money seven times out of seven, and laddered downward it lost. The exit price cleared the two cheapest
+  buys, so it is not an instance of [[mistakes/dump-below-the-ladder]] — the first full-position one-fill exit
+  compiled that does. (Verified: raw/2026-11-23.json)
 - **2026-11-20: the same-day book was the least bad part of the worst-but-one session.** Four same-day strikes
   realized **-$5.00** on closed contracts and **+$194.00** in session cash, two green and two red, on a day the
   account gave up **-$3,195.00**. SPY 11-20 720C made **+$139.00**, SPXW 7300C **+$40.00**, SPY 714C lost
@@ -208,6 +221,24 @@ decided by entry timing and by how many times a losing strike is re-entered.
   offer no comparison yet. (Verified: raw/2026-10-07.json)
 
 ## Count so far
+
+**Added 2026-11-24, counting 2026-11-20 and 2026-11-23.** Same-day strikes bought and sold in equal size stand at
+**67 strikes, 492 contracts, 39 green, -$1,471.00**, seen on **18** of **34** compiled days. The two new sessions
+returned **+$164.00** (3 strikes, 8 contracts, 2 green) and **+$180.00** (3 strikes, 17 contracts, 3 green), so
+the net has risen twice after three consecutive falls, and the green rate goes **55.7% → 58.2%**. The series now
+reads 52.0%, 58.3%, 60.5%, 63.4%, 66.7%, 58.5%, 55.7%, **58.2%**, an eight-reading spread of 14.7 points around
+a net that has swung **$1,867.00** in one session. Both new sessions are small: **25** contracts between them
+against **93** in 2026-11-02 alone.
+
+The page's standing finding — that size predicts neither sign nor magnitude — is untouched, and a sharper one
+now sits beside it. On 2026-11-23 the same-day book was **+$180.00** while the later-expiry carry was
+**+$14,931.00**, and on 2026-11-20 it was **+$194.00** in cash while the later-expiry book was **-$3,389.00**.
+Two consecutive sessions where the same-day book is small and roughly flat and the whole result is decided
+elsewhere. The 0DTE book has returned **-$1,471.00** over **34** compiled days; it is not where this account
+makes or loses money, and the attention it gets on these pages is out of proportion to **$1,471.00**.
+See [[setups/later-expiry-swing]].
+(Verified: computed over raw/2026-10-07…raw/2026-11-23)
+
 Seen on 13 of 19 compiled days. Counting only same-day strikes bought and sold in equal size: **53 strikes, 404
 contracts, 31 green, -$154.00**. By day those round trips returned **-$729.00, +$118.00, +$21.00, +$127.00,
 +$188.00, +$462.00, +$67.00, -$806.00, +$967.00, +$324.00, +$395.00, +$579.00** and **-$1,867.00** — four
