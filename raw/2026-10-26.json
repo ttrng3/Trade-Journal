@@ -1,5 +1,4 @@
 {
- "bots": [],
  "day": "2026-10-26",
  "manual": [
   {
@@ -1886,11 +1885,9 @@
    "underlying": "NVDA"
   }
  ],
- "skips": [],
  "sources": {
-  "bots_bundle": "present",
+  "bars": "present",
   "webull_fills": 42
  },
- "unparsed_exits": [],
  "written_utc": "2026-10-27T04:12:37Z"
 }

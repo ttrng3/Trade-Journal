@@ -1,5 +1,4 @@
 {
- "bots": [],
  "day": "2026-11-23",
  "manual": [
   {
@@ -2607,11 +2606,9 @@
    "underlying": "AAPL"
   }
  ],
- "skips": [],
  "sources": {
-  "bots_bundle": "present",
+  "bars": "present",
   "webull_fills": 50
  },
- "unparsed_exits": [],
  "written_utc": "2026-11-24T04:09:15Z"
 }

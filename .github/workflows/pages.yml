@@ -111,6 +111,13 @@ jobs:
           [ "$n" -gt 0 ] || { echo "::error::.pages-allow lists nothing"; exit 1; }
           echo "Staged $n file(s):"; find _site -type f | sort
 
+      - name: Scan (a listed word anywhere refuses the deploy)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -B tools/scan_public.py --dir _site || { echo "::error::scan refused the staged site; nothing deployed"; exit 1; }
+          python3 -B tools/scan_public.py --all || { echo "::error::scan refused a tracked file; nothing deployed"; exit 1; }
+
       - name: Coverage (every tracked file in a watched area is listed)
         id: coverage
         shell: bash

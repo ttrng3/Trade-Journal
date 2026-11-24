@@ -86,7 +86,7 @@ is left after a scalp was not finished.
   one day to expiry, went out the next morning at **09:41:34** at **0.56** inside the nine-contract dump that
   opened that session. The strike's whole life was **-$372.00**. It is the eighth event in this bucket and the
   fifth loser; at one contract it is also the smallest, which is the only reason it cost less than October's.
-  See [[rules/1550-flat]] and [[mistakes/dump-below-the-ladder]].
+  See [[mistakes/dump-below-the-ladder]].
   (Verified: raw/2026-11-12.json, raw/2026-11-13.json; whole life computed over data/fills/2026-11.json)
 - **2026-11-10 → 2026-11-11: 9 contracts of NVDA 11-18 185C, the largest carry compiled and the largest winner,
   +$937.55.** Eleven were bought 09:37:41–11:57:36 on 2026-11-10 from 3.75 down to 2.62; two were sold the same
@@ -106,7 +106,7 @@ is left after a scalp was not finished.
   session. October ended flat as well, so no contract of any tenor has been held overnight since the night of
   2026-10-29 → 2026-10-30. The session still lost **-$522.00**, all of it inside the day, which is the point of
   separating this page from the scalp: flat at the bell removes this cost and no other.
-  See [[rules/1550-flat]] and [[setups/zero-dte-scalp]]. (Verified: raw/2026-11-02.json; open positions computed
+  See [[setups/zero-dte-scalp]]. (Verified: raw/2026-11-02.json; open positions computed
   over data/fills/2026-11.json)
 - 2026-10-29 → 2026-10-30: **5** contracts, **-$605.00**, the largest carry cost compiled. SPY 10-30 770C, **2**
   contracts at average **1.25**, went out at **0.08** for **-$234.00**; TSLA 10-30 410C, **3** contracts at
@@ -118,7 +118,7 @@ is left after a scalp was not finished.
 - 2026-10-29: **the carried contracts were the late ones.** Of the ten TSLA 410 calls bought that session the
   three left on were bought at 15:26:06, 15:36:02 and 15:45:32 at 1.42, 1.26 and 1.18 — the three cheapest fills
   of the ten. The last SPY 770C buy was at **16:01:36**, after the bell, into a position already being closed.
-  Adding down into the close is the mechanism; the carry is the consequence. See [[rules/1550-flat]].
+  Adding down into the close is the mechanism; the carry is the consequence.
   (Verified: raw/2026-10-29.json)
 - 2026-10-27 → 2026-10-28: **1** contract of NVDA 10-28 217.5C bought at **1.66** and sold next morning at
   **2.00**, **+$34.00**. The one 0–1 DTE carry in the compiled set that worked, and the smallest.

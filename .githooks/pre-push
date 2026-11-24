@@ -1,0 +1,4 @@
+#!/bin/sh
+# Refuse a push whose new commits carry a word on the hashed list (nothing listed may reach this public repo).
+# Installed once per checkout: git config core.hooksPath .githooks (docs/wiki.md, "Mac bars collector").
+exec python3 -B "$(git rev-parse --show-toplevel)/tools/scan_public.py" --push

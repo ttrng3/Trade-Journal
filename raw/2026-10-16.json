@@ -1,5 +1,4 @@
 {
- "bots": [],
  "day": "2026-10-16",
  "manual": [
   {
@@ -703,11 +702,9 @@
    "underlying": "TSLA"
   }
  ],
- "skips": [],
  "sources": {
-  "bots_bundle": "present",
+  "bars": "present",
   "webull_fills": 21
  },
- "unparsed_exits": [],
  "written_utc": "2026-10-20T04:33:21Z"
 }
