@@ -7,6 +7,10 @@ The method is Karpathy's LLM wiki: `raw/<day>.json` is the source (written once,
 compiler, and `wiki/` is the compiled output, organised by concept and linked. A new day adds evidence to the
 pages that already exist; it does not only append a dated log.
 
+One exception, by Ty's ruling of 24 Nov 2026: a single clean-up removed fields from the raw days and removed
+some pages so the journal holds his own trades only. Raw days are otherwise written once, and pages and
+evidence lines are never deleted.
+
 ## Which day
 
 The routine fires 11:00 Hanoi, Tuesday to Saturday. The **previous US session** is the run's Hanoi date minus
@@ -61,14 +65,17 @@ Do steps 1–2 for every day this run writes, then compile (steps 3–6) each of
 
 `tools/bars-collect.py` runs on the Mac at 10:30 Hanoi, Tuesday to Saturday (launchd `com.ty.journal-bars`), and
 copies `Raw Records/Bars/<day>.json` to Drive with rclone: one-minute bars for Ty's usual underlyings plus every
-underlying in his newest fills month. It pulls market bars only, from Alpaca, with its own key file
+underlying in his fills for that month and the month before. An underlying traded for the first time on the day
+itself is not covered (its fills sync at 11:00); its exits read "bars missing". It pulls market bars only, from Alpaca, with its own key file
 (`~/.config/trade-journal/alpaca.env`, mode 600), and opens no other project's files. Log:
 `~/Library/Logs/journal-bars.log`. This is the pipeline's one Mac dependency; the routine itself stays cloud-only.
 Each run uploads every weekday of the last 7 days that has no bars file on Drive yet, so a Mac asleep for days
 catches up on wake. A weekday with no bars for any symbol is uploaded with `"holiday": true`.
 
-Install or reinstall, on the Mac, from the main checkout:
+Install or reinstall, on the Mac, from the main checkout. The first install also turns on this repo's pre-push
+scan, and the ship that brings this collector retires the job it replaces (its plist moved aside, never deleted):
 
+    git config core.hooksPath .githooks
     sed -e "s|__HOME__|$HOME|g" tools/com.ty.journal-bars.plist > ~/Library/LaunchAgents/com.ty.journal-bars.plist
     launchctl bootout gui/$(id -u)/com.ty.journal-bars 2>/dev/null; launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.ty.journal-bars.plist
 

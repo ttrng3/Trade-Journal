@@ -56,14 +56,20 @@ def load_keys(path=KEYS):
 
 
 def traded_underlyings(day, fetch=None):
-    """Underlyings Ty traded in the day's month, from the repo's own public fills file."""
-    url = FILLS.format(month=day[:7])
-    try:
-        body = fetch(url) if fetch else urllib.request.urlopen(url, timeout=60).read().decode()
-    except (urllib.error.URLError, OSError):
-        return set()
-    shard = json.loads(body) if body else {}
-    return {re.match(r"[A-Z]+", f["sym"]).group() for f in shard.values() if f.get("sym")}
+    """Underlyings Ty traded in the day's month and the month before, from the repo's own public fills files. The
+    day's own fills are not synced yet at 10:30, so an underlying traded for the first time that day is not covered."""
+    first = dt.date.fromisoformat(day[:8] + "01")
+    months = {day[:7], (first - dt.timedelta(days=1)).isoformat()[:7]}
+    out = set()
+    for month in sorted(months):
+        url = FILLS.format(month=month)
+        try:
+            body = fetch(url) if fetch else urllib.request.urlopen(url, timeout=60).read().decode()
+        except (urllib.error.URLError, OSError):
+            continue
+        shard = json.loads(body) if body else {}
+        out |= {re.match(r"[A-Z]+", f["sym"]).group() for f in shard.values() if f.get("sym")}
+    return out
 
 
 def bars(sym, day, env, feed="sip"):

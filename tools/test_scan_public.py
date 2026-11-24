@@ -107,3 +107,26 @@ def test_postexit_refuses_a_bars_file_carrying_other_fields(tmp_path):
     r = subprocess.run([sys.executable, str(HERE / "postexit.py"), "--day", "2026-11-24", "--bars", str(bad),
                         "--data-dir", str(tmp_path / "data"), "--raw-dir", str(tmp_path / "raw")], capture_output=True, text=True)
     assert r.returncode == 2 and '"refused": true' in r.stdout and not (tmp_path / "raw").exists()
+
+
+
+def test_accents_and_joined_words_are_caught_but_a_version_pin_is_not(tmp_path, table, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "e.md").write_text("zórbläx\n")
+    (tmp_path / "f.md").write_text("mail zorblax@example.invalid and #zorblax\n")
+    assert run(table, "--files", "e.md") == 1 and run(table, "--files", "f.md") == 1
+    pinned = "".join(["v", "7"])                               # built at run time: no listed word in this file
+    assert S.hits_in("uses: actions/checkout@" + pinned, {S.digest(pinned): 1}) == []
+
+
+def test_push_mode_scans_every_new_commit_even_if_a_later_one_removed_the_word(tmp_path, table, monkeypatch):
+    def git(*a):
+        return subprocess.run(["git", *a], cwd=tmp_path, capture_output=True, text=True, check=True).stdout.strip()
+    git("init", "-q", "-b", "main"); git("config", "user.email", "t@example.invalid"); git("config", "user.name", "t")
+    (tmp_path / "a.md").write_text("clean\n"); git("add", "-A"); git("commit", "-q", "-m", "base")
+    base = git("rev-parse", "HEAD")
+    (tmp_path / "a.md").write_text("zorblax\n"); git("commit", "-qam", "bad")
+    (tmp_path / "a.md").write_text("clean again\n"); git("commit", "-qam", "fixed")
+    head = git("rev-parse", "HEAD")
+    found = S.scan_push([f"refs/heads/main {head} refs/heads/main {base}"], S.load(table), tmp_path)
+    assert len(found) == 1 and found[0][0].endswith(":a.md")

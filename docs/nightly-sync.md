@@ -134,6 +134,9 @@ a fractional-second stamp so a future producer cannot break it.
 
 ## Pushing
 
+**Before any write, scan it.** `python3 tools/scan_public.py --files <every file this run changes>`
+must print `scan: 0 hit(s)`. On a hit, write nothing and report the `REFUSED file:line` lines.
+
 **Shell `git push` is the path for any run that changes a month shard.**
 Commit the changed files together and push to `main`. The cloud session
 already has a proxied git credential, so no token is read or written. Every

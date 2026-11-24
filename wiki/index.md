@@ -27,7 +27,6 @@ is written once; these pages are the compiled output. Numbers carry their source
 ## Mistakes
 - [[mistakes/dump-below-the-ladder]]
 - [[mistakes/overnight-0-1-dte]]
-- [[mistakes/stop-inside-the-noise]]
 
 ## Setups
 - [[setups/zero-dte-scalp]]
