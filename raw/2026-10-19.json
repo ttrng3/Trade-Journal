@@ -1,5 +1,4 @@
 {
- "bots": [],
  "day": "2026-10-19",
  "manual": [
   {
@@ -1935,11 +1934,9 @@
    "underlying": "SPY"
   }
  ],
- "skips": [],
  "sources": {
-  "bots_bundle": "present",
+  "bars": "present",
   "webull_fills": 42
  },
- "unparsed_exits": [],
  "written_utc": "2026-10-21T04:21:15Z"
 }

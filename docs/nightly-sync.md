@@ -20,12 +20,12 @@ out of it entirely.
 ## The wiki step
 
 After the data push and **before** the preview step, every run compiles the trading wiki by following
-`docs/wiki.md` (raw day files, the wiki pages, the Saturday weekly report). It runs on quiet nights too, because
-the bots trade even when Ty doesn't. The preview step then also sends `wiki.html` and the `wiki/` files this run
+`docs/wiki.md` (raw day files, the wiki pages, the Saturday weekly report). It runs on quiet nights too, so every
+session has its page. The preview step then also sends `wiki.html` and the `wiki/` files this run
 changed, as `docs/wiki.md` step 7 says. A wiki failure is reported and never blocks or undoes the journal's own
 data push. **On a BLOCKED run** (the data push refused, see "Pushing") the wiki step is skipped and reported as
 skipped: it runs only after a successful data push or a successful heartbeat-only write, so a wiki commit can
-never carry held-back data to `main`, and no raw day is frozen from a month file that isn't on `main`. (Ty, 2026-10-07; `work/261007-bot-trading-wiki/`.)
+never carry held-back data to `main`, and no raw day is frozen from a month file that isn't on `main`. (Ty, 2026-10-07.)
 
 ## Why the snapshot is sharded
 
@@ -138,7 +138,7 @@ a fractional-second stamp so a future producer cannot break it.
 Commit the changed files together and push to `main`. The cloud session
 already has a proxied git credential, so no token is read or written. Every
 fill run since 2026-09-24 went this way: those commits are authored by the
-Claude bot account and change the month shard, `index.json` and `.last-check`
+Claude GitHub account and change the month shard, `index.json` and `.last-check`
 in one commit (e.g. `2663407`, 2026-09-30).
 
 Why not the file tools for the shard: `create_or_update_file` takes the whole

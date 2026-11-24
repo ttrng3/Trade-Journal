@@ -1,6 +1,6 @@
 # Intent: personal rules on the journal's rules check
 
-Status: **relayed by paste, 24 Oct 2026 — not yet accepted in Ty's own words.** (orb-options ledger R132)
+Status: **relayed by paste, 24 Oct 2026 — not yet accepted in Ty's own words.**
 
 1. **What:** flag, on each trade, a break of four personal rules and a narrowed early-entry rule.
 2. **Why:** the 5A review of 19–23 Oct: the first 15 minutes win; the losses come from adding without a stop, trading past the day's peak, SPX in the afternoon and overnight 0–1 DTE holds.

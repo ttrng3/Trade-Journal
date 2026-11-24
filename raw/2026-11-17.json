@@ -1,12 +1,9 @@
 {
- "bots": [],
  "day": "2026-11-17",
  "manual": [],
- "skips": [],
  "sources": {
-  "bots_bundle": "present",
+  "bars": "present",
   "webull_fills": 0
  },
- "unparsed_exits": [],
  "written_utc": "2026-11-19T04:10:10Z"
 }

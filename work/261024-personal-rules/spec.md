@@ -1,7 +1,7 @@
 # Personal rules on the rules check (24 Oct 2026)
 
 Status: **DRAFT, not approved.** Built and verified on branch `work/261024-personal-rules`. Source: Ty's rulings on the 5A
-review of 19–23 Oct, relayed by paste (orb-options ledger R132); see `intent.md`. Approval and merge wait for his own words.
+review of 19–23 Oct, relayed by paste; see `intent.md`. Approval and merge wait for his own words.
 
 ## What changes (index.html, `RULES` and `ruleFlags` only)
 | Flag | Rule (Ty) | How the page checks it |
