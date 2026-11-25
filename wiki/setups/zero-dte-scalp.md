@@ -5,6 +5,20 @@ re-entering the same strike several times. Expiry day leaves no room for a posit
 decided by entry timing and by how many times a losing strike is re-entered.
 
 ## Evidence
+
+- **2026-11-24: three strikes, seven contracts, two green, -$79.00 — and all three exits beat the bell.** SPY
+  11-24 718C **+$99.00** on one contract (**2.07 → 3.06**, 09:34:14 → 09:43:23), QQQ 11-24 635P **+$39.00** on one
+  (**2.28 → 2.67**, bought and sold inside **14 seconds**, the shortest hold compiled), and SPY 11-24 715P
+  **-$217.00** over five, which is the whole of the loss. SPY closed **718.79** and QQQ **638.12**, so both puts
+  settled worthless and the 718C was worth **$79.00** held against the **$306.00** taken: the three strikes took
+  **$1,316.00** against **$79.00** of held-to-close value, **+$1,237.00** for exiting.
+  See [[what-ifs/exit-before-the-close]].
+
+  The 715P is also an instance of [[mistakes/dump-below-the-ladder]] — four contracts bought **2.38** down to
+  **1.72** and sold together at **1.46** — and it is the third consecutive session in which the same-day book is
+  small and roughly flat while the result is decided elsewhere. Here "elsewhere" is one day out: the four NVDA
+  11-25 strikes took **30** contracts for **-$255.00**, four times the same-day book's size.
+  (Verified: raw/2026-11-24.json)
 - **2026-11-23: three strikes, 17 contracts, all three green, +$180.00 — and irrelevant to the session.** The
   same-day book made **+$180.00** on a day the account took **+$18,160.00** in cash: SPY 11-23 726C **+$97.00**
   over **12** contracts and seven cycles, SPY 11-23 722C **+$54.00** on one and TSLA 11-23 387.5P **+$29.00** on
@@ -221,6 +235,23 @@ decided by entry timing and by how many times a losing strike is re-entered.
   offer no comparison yet. (Verified: raw/2026-10-07.json)
 
 ## Count so far
+
+**Added 2026-11-24, counting 2026-11-24.** Same-day strikes bought and sold in equal size stand at **70 strikes,
+499 contracts, 41 green, -$1,550.00**, seen on **19** of **35** compiled days. The new session returned
+**-$79.00** (3 strikes, 7 contracts, 2 green), so the net falls after two rises, and the green rate goes
+**58.2% → 58.6%**, its ninth reading: 52.0%, 58.3%, 60.5%, 63.4%, 66.7%, 58.5%, 55.7%, 58.2%, **58.6%**. Nine
+readings now sit inside **14.7** points and the last four inside **2.9**.
+
+**Three consecutive sessions where this book is small and not where the money is.** 2026-11-20 **+$194.00** in
+cash, 2026-11-23 **+$180.00**, 2026-11-24 **-$79.00** — **$453.00** of range across three sessions whose results
+were **-$3,195.00**, **+$15,175.00** and **+$375.00**. The page's 2026-11-23 note said the attention these pages
+give the 0DTE book is out of proportion to **$1,471.00**; it is now out of proportion to **$1,550.00**.
+
+**What is worth keeping from this session is the tenor boundary, not the 0DTE total.** Seven same-day contracts
+returned **-$79.00** while **30** contracts one day out returned **-$255.00** and **10** contracts 24 and 52 days
+out returned **+$216.00**. The one-day-out book is not on this page and is not a swing either, and on this
+session it was four times the size of the same-day book and three times the loss.
+See [[setups/later-expiry-swing]]. (Verified: computed over raw/2026-10-07…raw/2026-11-24)
 
 **Added 2026-11-24, counting 2026-11-20 and 2026-11-23.** Same-day strikes bought and sold in equal size stand at
 **67 strikes, 492 contracts, 39 green, -$1,471.00**, seen on **18** of **34** compiled days. The two new sessions

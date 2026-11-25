@@ -6,6 +6,18 @@ went wrong in the window the post-exit candles cover, so the exit cannot be faul
 normally carries. Only the settlement price shows the cost.
 
 ## Evidence
+
+- **2026-11-24: three same-day strikes, all three right, +$1,237.00 — the first clean sweep since 2026-11-17.**
+  SPY closed **718.79** and QQQ **638.12**. SPY 11-24 715P took **$743.00** over five contracts and settled
+  worthless; QQQ 11-24 635P took **$267.00** and settled worthless; SPY 11-24 718C took **$306.00** and was worth
+  **$79.00** held, **$0.79** inside the strike. Together **$1,316.00** taken against **$79.00** of held-to-close
+  value.
+
+  The 715P is the interesting one, because the half-hour window and the close disagree in the opposite direction
+  to this page's usual case. SPY was **719.33** when four of the five went out at **1.46** at 10:00:17 and fell to
+  **713.80** by 10:30, **$1.20** inside the strike — so the post-exit candles say the exit was early, and the
+  settlement says it saved **$584.00**. That is the mirror of the shape this page was opened for, and it is also
+  an instance of [[mistakes/dump-below-the-ladder]]. (Verified: raw/2026-11-24.json)
 - **2026-11-23: 2 of 3 right for +$2,172.00, and the one miss is the only put on the ledger since
   2026-11-13.** SPY 11-23 726C took **$2,090.00** over **12** contracts against a **$0.00** settlement — SPY
   closed **722.42**, **$3.58** below the strike — and SPY 11-23 722C took **$252.00** against **$42.00**, the
@@ -215,6 +227,25 @@ normally carries. Only the settlement price shows the cost.
   **$378.00**. One rule, two opposite outcomes, one day. (Verified: raw/2026-10-16.json)
 
 ## Count so far
+
+**Added 2026-11-24, counting 2026-11-24.** The ledger goes to **77 same-day strikes** with a settlement price,
+seen on **19** compiled days. Exiting beat holding on **61** and cost money on **16** — unchanged in absolute
+terms, so the count series rises to 57.1%, 66.7%, 71.8%, 73.2%, 75.0%, 72.0%, 75.9%, 77.6%, 78.9%, 78.4%,
+**79.2%**, its highest reading and eleven readings inside **22.1** points. The net is **+$24,149.00**, moved
+**+$1,237.00** by three small strikes.
+
+**Sixteen misses, and none added in two sessions.** The settlement-margin cut holds: of the 77 strikes, **26**
+settled in the money and **51** worthless, right on **51 of 51** worthless by construction and **10 of 26**,
+**38.5%**, on the rest, up from **9 of 25** and 36.0%. The new in-the-money strike, SPY 718C, settled **$0.79**
+past its strike against **$3.06** of premium taken — the third consecutive in-the-money addition to settle inside
+**$1.62** of the strike, and the second of those three to be right. The in-the-money tail is **33.8%** of the
+ledger and still carries **all 16** misses.
+
+Split by side, calls go to **+$27,845.00** over **64** strikes and puts to **-$3,696.00** over **13**. Both new
+puts are right, which is the first pair of correct puts on this page since 2026-11-13 and cuts the put deficit by
+**$1,010.00** in one session; puts are now **16.9%** of the strikes and **37.5%** of the misses, the ratio this
+page has recorded since 2026-10-30.
+(Verified: raw/2026-11-24.json; computed over raw/2026-10-07…raw/2026-11-24)
 
 **Added 2026-11-24, counting 2026-11-23.** The ledger stands at **74 same-day strikes** with a settlement price,
 seen on **18** compiled days. Exiting beat holding on **58** and cost money on **16**, and the net is

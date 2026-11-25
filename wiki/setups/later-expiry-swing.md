@@ -5,6 +5,24 @@ closed on a later session. It is the opposite trade to [[setups/zero-dte-scalp]]
 for a while, so the result turns on the move rather than on entry timing within one session.
 
 ## Evidence
+
+- **2026-11-24: the carry empties out at +$40.00, and the busiest intraday later-dated session compiled returns
+  +$204.00.** The single contract carried out of 2026-11-23 — AAPL 12-04 360C, basis **1.95** — was sold at
+  **09:38:16** at **2.35**, a **+$40.00** carry leg, and nothing was carried out of this session. The book ended
+  flat for the first time since **2026-11-17**.
+
+  The session's own tenor ladder is the clearest one compiled, because the underlying and the hour are nearly
+  held constant. NVDA was traded at four tenors on the same morning: **11-25** (one day out) **30** contracts for
+  **-$255.00**, **12-18** (24 days) **6** contracts for **+$186.00**, **01-15** (52 days) **4** contracts for
+  **+$30.00**. Add SPY 11-25 725C **+$83.00** and TSLA 11-25 385C **+$160.00**, both one day out and both single
+  contracts, and the intraday later-dated book for the session is **8** strikes, **42** contracts, **5 green**,
+  **+$204.00** — eight strikes being the most in one session on this measure, against a previous high of five
+  (2026-11-12).
+
+  The NVDA 12-18 ladder deserves its own line: six contracts bought down **4.54 → 4.10** and sold in six separate
+  fills at **4.45**, **4.45**, **4.60**, **4.75**, **4.85** and **4.60**, **+$186.00**, the day's largest strike
+  result. It was built exactly like the near-dated ladders that were dumped whole for **-$735.00** and exited
+  nothing like them. See [[mistakes/dump-below-the-ladder]]. (Verified: raw/2026-11-24.json, raw/2026-11-23.json)
 - **2026-11-23: the carry record reverses in one session, +$14,931.00 over 18 contracts.** The five later-expiry
   positions carried out of 2026-11-20 on **$3,180.00** of cost were sold into Monday's gap for **$18,111.00**,
   **5.70×** cost: NVDA 11-25 145C **+$7,054.00** (**+1,092%**), TSLA 12-04 400C **+$2,508.00** (**+255%**), NVDA
@@ -176,6 +194,28 @@ for a while, so the result turns on the move rather than on entry timing within 
   (Verified: computed over raw/2026-10-07…2026-10-09)
 
 ## Count so far
+
+**Added 2026-11-24, counting 2026-11-24, and the gap this page flagged is closed for the intraday measure.**
+
+Carry legs — a sell whose matched buy is from an earlier session, on a contract that has not reached expiry — go
+to **+$12,987.83** over **113** contracts and **42** legs across **18** closing sessions, **7** of them positive.
+This session contributes one leg, one contract, **+$40.00**. Nothing is carried out of it, so the next session
+starts with no carry for the first time since 2026-11-17 and the measure pauses there.
+
+**The intraday later-dated book is now computed over every compiled raw day: 36 strikes, 254 contracts, 28 green,
++$2,027.00.** The 2026-11-17 reading of **25 strikes, 195 contracts, 22 green, +$2,347.00** stopped at
+2026-11-13, and this page has since said that folding 2026-11-16 to 2026-11-20 into it was work for a session
+with the time for it. The three sessions that had positions on this measure are 2026-11-20 **-$588.00** (2
+strikes, 14 contracts, 0 green), 2026-11-23 **+$64.00** (1, 3, 1) and 2026-11-24 **+$204.00** (8, 42, 5). The
+method reproduces the earlier figure exactly at 2026-11-13, so the series is continuous.
+
+The book stays the consistently positive part — **28 green of 36** — but it is **$320.00** below its 2026-11-13
+peak, and both of its losing sessions are in the last three weeks: QQQ 11-18 700C **-$1,925.00** (2026-11-13) and
+the 2026-11-20 pair **-$588.00**. Against the same-day book at **-$1,550.00** over **70** strikes the spread is
+**$3,577.00**, narrower than the **$4,162.00** recorded on 2026-11-13. Tenor remains the most durable cut this
+wiki has; it is no longer widening. See [[setups/zero-dte-scalp]].
+(Verified: computed over raw/2026-10-07…raw/2026-11-24; carry legs computed over data/fills/2026-10.json and
+data/fills/2026-11.json)
 
 **Added 2026-11-24, counting 2026-11-23.** Overnight holding of later expiries, measured as carry legs — a sell
 whose matched buy is from an earlier session, on a contract that has not reached expiry — now stands at

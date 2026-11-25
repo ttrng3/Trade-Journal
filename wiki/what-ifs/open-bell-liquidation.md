@@ -10,6 +10,14 @@ The test uses only prices actually filled that morning: each strike's proceeds a
 would have returned at that strike's own best fill of the session.
 
 ## Evidence
+
+- **2026-11-24: the carried book was one contract, and the measure cannot be taken.** AAPL 12-04 360C, carried
+  out of 2026-11-23 at **1.95**, was sold at **09:38:16** at **2.35** for a **+$40.00** carry leg. One contract in
+  one fill has no first-fill-versus-best-fill spread, and the session did not gap: AAPL opened into **350.33** at
+  09:39 against a **354.19** close. The two contracts of the same strike bought that morning went out at **2.45**
+  and **2.76** by 09:39:15, so the carried contract was sold at the lowest of the three prints its own strike
+  traded that minute — **$0.41** below the best, **$41.00** on one contract. Too small to score, recorded so the
+  session is not missing from the series. (Verified: raw/2026-11-24.json, raw/2026-11-23.json)
 - **2026-11-23: 18 contracts in 22 minutes, and 19.8% of the proceeds left on the table at the day's own
   prices.** Five strikes carried out of 2026-11-20 were sold between **09:30:00** and **09:51:50** for
   **$18,111.00**. Priced at each strike's best fill that morning the same **18** contracts return
@@ -31,6 +39,11 @@ would have returned at that strike's own best fill of the session.
   (Verified: raw/2026-11-23.json)
 
 ## Count so far
+
+**Added 2026-11-24.** Still **one** scorable session. 2026-11-24 carried **1** contract into the session and is
+recorded above but not scored: a single fill has no spread to measure, and the session did not gap. The
+measure therefore stands unchanged at **5** strikes, **18** contracts, **15** fills, **$3,595.00** and **19.8%**,
+and proposal 1 below still needs three or four more gap sessions. (Verified: raw/2026-11-24.json)
 One session, **5** strikes, **18** contracts, **15** fills. Proceeds **$18,111.00**; at each strike's best fill of
 the morning **$21,706.00**; difference **$3,595.00**, **19.8%**. **2** of the 5 strikes improved after their first
 fill and **3** got worse, so the page has no directional finding yet — what it has is a magnitude: the price range

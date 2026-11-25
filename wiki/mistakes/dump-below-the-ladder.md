@@ -11,6 +11,28 @@ The test is mechanical: a sell fill that takes at least half the open position, 
 premium of the lots it closes.
 
 ## Evidence
+
+- **2026-11-24: four instances in 19 minutes, 18 contracts, -$735.00 on the legs — and three of them cannot be
+  scored yet.** Every one of them is a full-position one-fill exit below the floor of the lots it closed, FIFO:
+  NVDA 11-25 165C, **5** contracts at **1.03** at 09:47:04 against a **1.10** floor (**-6.4%**), **-$188.00**;
+  SPY 11-24 715P, **4** at **1.46** at 10:00:17 against **1.72** (**-15.1%**), **-$226.00**; NVDA 11-25 162.5C,
+  **4** at **1.09** at 10:04:07 against **1.37** (**-20.4%**), **-$147.00**; NVDA 11-25 160C, **5** at **1.55**
+  at 10:05:54 against **1.70** (**-8.8%**), **-$174.00**. All four ladders were built down and taken out whole
+  inside the same 19-minute window, and all four lost on the leg.
+
+  The scoring is split by horizon, which is the lesson 2026-11-23 forced onto this page. The SPY put was same-day
+  expiry: SPY fell from **719.33** at the dump to **713.80** by 10:30, **$1.20** inside the strike, so holding
+  half an hour would have helped — but SPY closed **718.79** and it settled worthless, so the dump beat holding to
+  expiry by **$584.00**. The three NVDA legs expire **2026-11-25**, the session after this one. At the
+  2026-11-24 close NVDA was **155.48**, leaving **160.00** and **162.50** and **165.00** out of the money by
+  **$4.52** to **$9.52** with no intrinsic, but that is not their expiry and nothing is claimed about them until
+  the next run prices them.
+
+  The session's own control is on the same underlying in the same hour. NVDA 11-25 157.5C took **10** contracts
+  the same way and was never closed in one fill — six sells of one or two between 10:55:33 and 12:10:05 — and
+  returned **+$199.00**, while the three NVDA strikes that were dumped returned **-$454.00** on the dumped legs.
+  Same underlying, same tenor, same ladder-down entry, opposite exit shape, opposite sign.
+  (Verified: raw/2026-11-24.json)
 - **2026-11-23 reverses the verdict on 2026-11-20's eight dumps, on the two that can be priced.** Friday's
   instances were scored against Friday's close and all eight were called right. The next session re-prices two of
   them. TSLA 11-25 385C: **6** contracts dumped at **1.01** for **$606.00** at 12:03:28 Friday; the **2**
@@ -94,6 +116,22 @@ premium of the lots it closes.
   the floor of the ladder is what this page measures. See [[days/2026-11-12]]. (Verified: raw/2026-11-12.json)
 
 ## Count so far
+
+**Added 2026-11-24, counting 2026-11-24.** The count goes to **22** occurrences over **142** contracts,
+**-$8,063.00** on the dumped legs, **22 of 22** red. The four new instances add **18** contracts and
+**-$735.00**, and the streak is unbroken: no instance of this shape has ever made money on the leg it closed.
+
+Four in one session is the second-heaviest reading compiled, behind the ten of 2026-11-10 to 2026-11-13, and it
+arrived on a session of **88** fills and **+$570.00** of cash — this shape does not need a bad day to appear. The
+discount to the floor ranged **-6.4%** to **-20.4%**, against a prior range on this page that the 2026-11-20
+block put at **-1.0%** to **-28.9%**, so nothing about the depth is new; the clustering is. All four fell in
+**19 minutes**, 09:47:04 to 10:05:54, which is the tightest cluster recorded and the first time four separate
+ladders were taken out inside one.
+
+**Three of the four are unscored by design.** Of the 22 occurrences, **19** have been scored against a horizon
+and **3** are open pending the 2026-11-25 close. That is the first time this page carries unscored instances, and
+it is the direct consequence of 2026-11-23: a verdict without its horizon is not a verdict.
+(Verified: raw/2026-11-24.json; cumulative computed over raw/2026-10-07…raw/2026-11-24)
 
 **Added 2026-11-24, counting 2026-11-23.** **No new instance.** The count stays at **18** occurrences over
 **124** contracts, **-$7,328.00** on the dumped legs, **18 of 18** red. 2026-11-23 produced one full-position

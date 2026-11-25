@@ -6,6 +6,14 @@ can be made. It is distinct from [[setups/later-expiry-swing]], where the hold i
 is left after a scalp was not finished.
 
 ## Evidence
+
+- **2026-11-24: no carry event, and the book went flat.** Twelve strikes were traded and all twelve closed, so
+  nothing of any tenor was carried out — the first flat close since **2026-11-17** and the end of four consecutive
+  sessions that carried risk. The session did hold **30** contracts of one-day-out NVDA calls at once (**11-25**
+  strikes 157.50 to 165.00), which is the largest 0–1 DTE position compiled, and closed every one of them inside
+  the session for **-$255.00**. Had they been carried they would have faced expiry the next day with NVDA at
+  **155.48**, below all four strikes; nothing is claimed about the 2026-11-25 session, which this run cannot
+  price. (Verified: raw/2026-11-24.json; open positions computed over data/fills/2026-11.json)
 - **2026-11-20: SPY 11-20 729C, one contract carried into its own expiry day and sold for -84.9%.** Bought
   2026-11-19 at 12:15:57 at **1.99** and sold the next morning at 09:32:31 at **0.30**, **-$169.00** — the
   largest proportional loss on [[days/2026-11-20]] and a 1 DTE carry by the page's own definition. SPY closed
