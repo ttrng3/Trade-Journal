@@ -13,6 +13,7 @@ is written once; these pages are the compiled output. Numbers carry their source
 - [[weekly/2026-W41]]: the week realized -$195.00, and all of the loss is in same-day expiry
 
 ## Days
+- [[days/2026-11-25]]
 - [[days/2026-11-24]]
 - [[days/2026-11-23]]
 - [[days/2026-11-20]]
@@ -22,9 +23,9 @@ is written once; these pages are the compiled output. Numbers carry their source
 - [[days/2026-11-16]]
 - [[days/2026-11-13]]
 - [[days/2026-11-12]]
-- [[days/2026-11-11]]
 
 ## Mistakes
+- [[mistakes/deep-ladder]]
 - [[mistakes/dump-below-the-ladder]]
 - [[mistakes/overnight-0-1-dte]]
 

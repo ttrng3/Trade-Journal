@@ -1,0 +1,753 @@
+{
+ "day": "2026-11-25",
+ "manual": [
+  {
+   "premium": 1.43,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "NVDA261125C00148000",
+   "t": "09:30:39",
+   "underlying": "NVDA"
+  },
+  {
+   "premium": 1.04,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "NVDA261125C00148000",
+   "t": "09:30:56",
+   "underlying": "NVDA"
+  },
+  {
+   "premium": 2.5,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "NVDA261204C00160000",
+   "t": "09:31:34",
+   "underlying": "NVDA"
+  },
+  {
+   "premium": 1.02,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "NVDA261125C00148000",
+   "t": "09:32:11",
+   "underlying": "NVDA"
+  },
+  {
+   "premium": 2.6,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "NVDA261204C00160000",
+   "t": "09:32:13",
+   "underlying": "NVDA"
+  },
+  {
+   "premium": 1.45,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "TSLA261125C00372500",
+   "t": "09:34:04",
+   "underlying": "TSLA"
+  },
+  {
+   "premium": 0.94,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "NVDA261125C00148000",
+   "t": "09:34:17",
+   "underlying": "NVDA"
+  },
+  {
+   "premium": 1.35,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "TSLA261125C00372500",
+   "t": "09:34:57",
+   "underlying": "TSLA"
+  },
+  {
+   "premium": 1.27,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "TSLA261125C00372500",
+   "t": "09:35:16",
+   "underlying": "TSLA"
+  },
+  {
+   "premium": 0.83,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "NVDA261125C00148000",
+   "t": "09:35:17",
+   "underlying": "NVDA"
+  },
+  {
+   "premium": 2.47,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "NVDA261204C00160000",
+   "t": "09:36:06",
+   "underlying": "NVDA"
+  },
+  {
+   "premium": 1.19,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "TSLA261125C00372500",
+   "t": "09:38:46",
+   "underlying": "TSLA"
+  },
+  {
+   "premium": 1.07,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "TSLA261125C00372500",
+   "t": "09:39:11",
+   "underlying": "TSLA"
+  },
+  {
+   "premium": 0.73,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "NVDA261125C00148000",
+   "t": "09:40:36",
+   "underlying": "NVDA"
+  },
+  {
+   "premium": 0.76,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "TSLA261125C00372500",
+   "t": "09:42:40",
+   "underlying": "TSLA"
+  },
+  {
+   "premium": 0.72,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "TSLA261125C00372500",
+   "t": "09:42:52",
+   "underlying": "TSLA"
+  },
+  {
+   "premium": 1.91,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "NVDA261125C00143000",
+   "t": "09:43:14",
+   "underlying": "NVDA"
+  },
+  {
+   "premium": 1.87,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "NVDA261125C00143000",
+   "t": "09:43:21",
+   "underlying": "NVDA"
+  },
+  {
+   "premium": 0.69,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "TSLA261125C00372500",
+   "t": "09:43:35",
+   "underlying": "TSLA"
+  },
+  {
+   "premium": 0.54,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "NVDA261125C00148000",
+   "t": "09:43:51",
+   "underlying": "NVDA"
+  },
+  {
+   "premium": 2.37,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "NVDA261204C00160000",
+   "t": "09:44:08",
+   "underlying": "NVDA"
+  },
+  {
+   "premium": 2.65,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "TSLA261130C00380000",
+   "t": "09:44:27",
+   "underlying": "TSLA"
+  },
+  {
+   "premium": 2.63,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "TSLA261130C00380000",
+   "t": "09:44:28",
+   "underlying": "TSLA"
+  },
+  {
+   "after": {
+    "missing": "bars missing (no bars file)"
+   },
+   "premium": 0.48125,
+   "qty": 8,
+   "side": "SELL",
+   "sym": "TSLA261125C00372500",
+   "t": "09:45:00",
+   "underlying": "TSLA"
+  },
+  {
+   "premium": 2.4,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "TSLA261130C00380000",
+   "t": "09:45:10",
+   "underlying": "TSLA"
+  },
+  {
+   "premium": 2.42,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "TSLA261130C00380000",
+   "t": "09:45:12",
+   "underlying": "TSLA"
+  },
+  {
+   "after": {
+    "missing": "bars missing (no bars file)"
+   },
+   "premium": 2.85,
+   "qty": 1,
+   "side": "SELL",
+   "sym": "TSLA261130C00380000",
+   "t": "09:46:31",
+   "underlying": "TSLA"
+  },
+  {
+   "after": {
+    "missing": "bars missing (no bars file)"
+   },
+   "premium": 2.85,
+   "qty": 1,
+   "side": "SELL",
+   "sym": "TSLA261130C00380000",
+   "t": "09:46:41",
+   "underlying": "TSLA"
+  },
+  {
+   "after": {
+    "missing": "bars missing (no bars file)"
+   },
+   "premium": 2.38,
+   "qty": 2,
+   "side": "SELL",
+   "sym": "NVDA261125C00143000",
+   "t": "09:49:00",
+   "underlying": "NVDA"
+  },
+  {
+   "after": {
+    "missing": "bars missing (no bars file)"
+   },
+   "premium": 0.73,
+   "qty": 7,
+   "side": "SELL",
+   "sym": "NVDA261125C00148000",
+   "t": "09:49:01",
+   "underlying": "NVDA"
+  },
+  {
+   "after": {
+    "missing": "bars missing (no bars file)"
+   },
+   "premium": 2.64,
+   "qty": 2,
+   "side": "SELL",
+   "sym": "TSLA261130C00380000",
+   "t": "09:49:40",
+   "underlying": "TSLA"
+  },
+  {
+   "after": {
+    "missing": "bars missing (no bars file)"
+   },
+   "premium": 2.67,
+   "qty": 1,
+   "side": "SELL",
+   "sym": "NVDA261204C00160000",
+   "t": "09:50:37",
+   "underlying": "NVDA"
+  },
+  {
+   "premium": 1.94,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "QQQ261125P00603000",
+   "t": "09:52:27",
+   "underlying": "QQQ"
+  },
+  {
+   "premium": 1.84,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "QQQ261125P00603000",
+   "t": "09:52:31",
+   "underlying": "QQQ"
+  },
+  {
+   "premium": 1.8,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "QQQ261125P00603000",
+   "t": "09:53:05",
+   "underlying": "QQQ"
+  },
+  {
+   "premium": 1.7,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "QQQ261125P00603000",
+   "t": "09:53:33",
+   "underlying": "QQQ"
+  },
+  {
+   "premium": 1.6,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "QQQ261125P00603000",
+   "t": "09:53:50",
+   "underlying": "QQQ"
+  },
+  {
+   "after": {
+    "missing": "bars missing (no bars file)"
+   },
+   "premium": 2.73,
+   "qty": 1,
+   "side": "SELL",
+   "sym": "NVDA261204C00160000",
+   "t": "09:53:56",
+   "underlying": "NVDA"
+  },
+  {
+   "premium": 1.51,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "QQQ261125P00603000",
+   "t": "09:54:06",
+   "underlying": "QQQ"
+  },
+  {
+   "premium": 1.43,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "QQQ261125P00603000",
+   "t": "09:54:14",
+   "underlying": "QQQ"
+  },
+  {
+   "premium": 1.24,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "QQQ261125P00603000",
+   "t": "09:54:37",
+   "underlying": "QQQ"
+  },
+  {
+   "after": {
+    "missing": "bars missing (no bars file)"
+   },
+   "premium": 2.8,
+   "qty": 1,
+   "side": "SELL",
+   "sym": "NVDA261204C00160000",
+   "t": "09:55:17",
+   "underlying": "NVDA"
+  },
+  {
+   "after": {
+    "missing": "bars missing (no bars file)"
+   },
+   "premium": 1.07,
+   "qty": 8,
+   "side": "SELL",
+   "sym": "QQQ261125P00603000",
+   "t": "09:55:22",
+   "underlying": "QQQ"
+  },
+  {
+   "premium": 1.78,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "QQQ261125P00610000",
+   "t": "10:01:29",
+   "underlying": "QQQ"
+  },
+  {
+   "premium": 1.71,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "QQQ261125P00610000",
+   "t": "10:01:46",
+   "underlying": "QQQ"
+  },
+  {
+   "after": {
+    "missing": "bars missing (no bars file)"
+   },
+   "premium": 3.05,
+   "qty": 1,
+   "side": "SELL",
+   "sym": "NVDA261204C00160000",
+   "t": "10:02:34",
+   "underlying": "NVDA"
+  },
+  {
+   "premium": 1.69,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "QQQ261125P00610000",
+   "t": "10:03:21",
+   "underlying": "QQQ"
+  },
+  {
+   "premium": 1.64,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "QQQ261125P00610000",
+   "t": "10:03:24",
+   "underlying": "QQQ"
+  },
+  {
+   "premium": 1.52,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "QQQ261125P00610000",
+   "t": "10:04:55",
+   "underlying": "QQQ"
+  },
+  {
+   "after": {
+    "missing": "bars missing (no bars file)"
+   },
+   "premium": 1.87,
+   "qty": 1,
+   "side": "SELL",
+   "sym": "QQQ261125P00610000",
+   "t": "10:07:09",
+   "underlying": "QQQ"
+  },
+  {
+   "after": {
+    "missing": "bars missing (no bars file)"
+   },
+   "premium": 1.94,
+   "qty": 1,
+   "side": "SELL",
+   "sym": "QQQ261125P00610000",
+   "t": "10:07:13",
+   "underlying": "QQQ"
+  },
+  {
+   "after": {
+    "missing": "bars missing (no bars file)"
+   },
+   "premium": 1.9,
+   "qty": 1,
+   "side": "SELL",
+   "sym": "QQQ261125P00610000",
+   "t": "10:07:30",
+   "underlying": "QQQ"
+  },
+  {
+   "after": {
+    "missing": "bars missing (no bars file)"
+   },
+   "premium": 1.94,
+   "qty": 1,
+   "side": "SELL",
+   "sym": "QQQ261125P00610000",
+   "t": "10:07:31",
+   "underlying": "QQQ"
+  },
+  {
+   "after": {
+    "missing": "bars missing (no bars file)"
+   },
+   "premium": 2.07,
+   "qty": 1,
+   "side": "SELL",
+   "sym": "QQQ261125P00610000",
+   "t": "10:07:52",
+   "underlying": "QQQ"
+  },
+  {
+   "premium": 2.5,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "QQQ261125P00611000",
+   "t": "10:12:25",
+   "underlying": "QQQ"
+  },
+  {
+   "premium": 2.53,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "QQQ261125P00611000",
+   "t": "10:12:26",
+   "underlying": "QQQ"
+  },
+  {
+   "after": {
+    "missing": "bars missing (no bars file)"
+   },
+   "premium": 2.92,
+   "qty": 1,
+   "side": "SELL",
+   "sym": "QQQ261125P00611000",
+   "t": "10:14:10",
+   "underlying": "QQQ"
+  },
+  {
+   "after": {
+    "missing": "bars missing (no bars file)"
+   },
+   "premium": 3.53,
+   "qty": 1,
+   "side": "SELL",
+   "sym": "QQQ261125P00611000",
+   "t": "10:16:45",
+   "underlying": "QQQ"
+  },
+  {
+   "premium": 1.69,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "AAPL261218C00370000",
+   "t": "10:22:44",
+   "underlying": "AAPL"
+  },
+  {
+   "premium": 1.59,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "AAPL261204C00360000",
+   "t": "10:22:52",
+   "underlying": "AAPL"
+  },
+  {
+   "premium": 1.47,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "AAPL261204C00360000",
+   "t": "10:25:19",
+   "underlying": "AAPL"
+  },
+  {
+   "premium": 1.56,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "AAPL261218C00370000",
+   "t": "10:25:47",
+   "underlying": "AAPL"
+  },
+  {
+   "premium": 1.38,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "AAPL261204C00360000",
+   "t": "10:27:34",
+   "underlying": "AAPL"
+  },
+  {
+   "premium": 1.48,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "AAPL261218C00370000",
+   "t": "10:27:52",
+   "underlying": "AAPL"
+  },
+  {
+   "premium": 2.69,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "NVDA261204C00160000",
+   "t": "10:29:16",
+   "underlying": "NVDA"
+  },
+  {
+   "premium": 2.5,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "NVDA261204C00160000",
+   "t": "10:40:07",
+   "underlying": "NVDA"
+  },
+  {
+   "premium": 2.85,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "TSLA261204C00400000",
+   "t": "10:46:04",
+   "underlying": "TSLA"
+  },
+  {
+   "premium": 2.42,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "NVDA261204C00160000",
+   "t": "10:46:30",
+   "underlying": "NVDA"
+  },
+  {
+   "premium": 1.3,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "AAPL261204C00360000",
+   "t": "10:47:30",
+   "underlying": "AAPL"
+  },
+  {
+   "premium": 1.43,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "AAPL261218C00370000",
+   "t": "10:47:40",
+   "underlying": "AAPL"
+  },
+  {
+   "premium": 2.7,
+   "qty": 1,
+   "side": "BUY",
+   "sym": "TSLA261204C00400000",
+   "t": "11:11:57",
+   "underlying": "TSLA"
+  },
+  {
+   "after": {
+    "missing": "bars missing (no bars file)"
+   },
+   "premium": 1.8,
+   "qty": 1,
+   "side": "SELL",
+   "sym": "AAPL261218C00370000",
+   "t": "11:24:22",
+   "underlying": "AAPL"
+  },
+  {
+   "after": {
+    "missing": "bars missing (no bars file)"
+   },
+   "premium": 1.73,
+   "qty": 1,
+   "side": "SELL",
+   "sym": "AAPL261204C00360000",
+   "t": "11:24:32",
+   "underlying": "AAPL"
+  },
+  {
+   "after": {
+    "missing": "bars missing (no bars file)"
+   },
+   "premium": 1.79,
+   "qty": 1,
+   "side": "SELL",
+   "sym": "AAPL261204C00360000",
+   "t": "11:25:01",
+   "underlying": "AAPL"
+  },
+  {
+   "after": {
+    "missing": "bars missing (no bars file)"
+   },
+   "premium": 2.05,
+   "qty": 1,
+   "side": "SELL",
+   "sym": "AAPL261204C00360000",
+   "t": "11:59:42",
+   "underlying": "AAPL"
+  },
+  {
+   "after": {
+    "missing": "bars missing (no bars file)"
+   },
+   "premium": 2,
+   "qty": 1,
+   "side": "SELL",
+   "sym": "AAPL261218C00370000",
+   "t": "11:59:42",
+   "underlying": "AAPL"
+  },
+  {
+   "after": {
+    "missing": "bars missing (no bars file)"
+   },
+   "premium": 2.75,
+   "qty": 1,
+   "side": "SELL",
+   "sym": "NVDA261204C00160000",
+   "t": "12:00:54",
+   "underlying": "NVDA"
+  },
+  {
+   "after": {
+    "missing": "bars missing (no bars file)"
+   },
+   "premium": 3.3,
+   "qty": 2,
+   "side": "SELL",
+   "sym": "TSLA261204C00400000",
+   "t": "12:01:16",
+   "underlying": "TSLA"
+  },
+  {
+   "after": {
+    "missing": "bars missing (no bars file)"
+   },
+   "premium": 2.03,
+   "qty": 2,
+   "side": "SELL",
+   "sym": "AAPL261218C00370000",
+   "t": "12:13:31",
+   "underlying": "AAPL"
+  },
+  {
+   "after": {
+    "missing": "bars missing (no bars file)"
+   },
+   "premium": 3.15,
+   "qty": 1,
+   "side": "SELL",
+   "sym": "NVDA261204C00160000",
+   "t": "12:13:33",
+   "underlying": "NVDA"
+  },
+  {
+   "after": {
+    "missing": "bars missing (no bars file)"
+   },
+   "premium": 2.57,
+   "qty": 1,
+   "side": "SELL",
+   "sym": "AAPL261204C00360000",
+   "t": "12:16:52",
+   "underlying": "AAPL"
+  },
+  {
+   "after": {
+    "missing": "bars missing (no bars file)"
+   },
+   "premium": 3.1,
+   "qty": 1,
+   "side": "SELL",
+   "sym": "NVDA261204C00160000",
+   "t": "12:23:06",
+   "underlying": "NVDA"
+  }
+ ],
+ "sources": {
+  "bars": "missing",
+  "webull_fills": 82
+ },
+ "written_utc": "2026-11-26T04:10:14Z"
+}

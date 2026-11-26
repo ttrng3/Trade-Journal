@@ -12,6 +12,39 @@ premium of the lots it closes.
 
 ## Evidence
 
+- **2026-11-25: two instances, 16 contracts, -$915.00, and the two fastest gaps the page has recorded.** Both are
+  full-position one-fill exits below the floor of their own ladder, both same-day expiry. TSLA 11-25 372.5C,
+  **8** contracts at **0.4813** at 09:45:00 against a **0.69** floor (**-30.3%**), **-$465.00**, **85** seconds
+  after the last add; QQQ 11-25 603P, **8** at **1.07** at 09:55:22 against **1.24** (**-13.7%**), **-$450.00**,
+  **45** seconds after the last add. The QQQ ladder was built and gone inside **2 minutes 55 seconds** start to
+  finish. (Verified: raw/2026-11-25.json)
+
+  The **-30.3%** is the deepest discount since this count began on 2026-11-10, against the **-1.0%** to
+  **-28.9%** range the 2026-11-20 block recorded. It is not the deepest in the raw files: a **-47.4%**
+  full-position exit on 2026-10-22 (SPXW 7690C, 7 contracts) predates the counted window.
+  (Verified: computed over raw/2026-10-07…raw/2026-11-25)
+
+  **A third ladder of the same size lost without tripping the test.** NVDA 11-25 148C went **seven** deep,
+  **1.43** down to **0.54**, and left in one fill at **0.73** — above its own floor, so the test correctly does
+  not count it, and it still lost **-$142.00**. The three deepest ladders of the session were its only three
+  losers, which is the question this page has been asking from the other end since 2026-11-23. It now has its own
+  page: [[mistakes/deep-ladder]]. (Verified: raw/2026-11-25.json)
+
+  **The three NVDA legs this page left open are now scored.** The 2026-11-24 block said nothing would be claimed
+  about NVDA 11-25 160C, 162.5C and 165C until this run priced them. There is no bars file for 2026-11-25, but
+  NVDA's own same-day options bound it: the 143C was bought at **1.87** at 09:43:21, and a call cannot trade
+  below intrinsic, so NVDA was at or below **144.91** at that moment. The three strikes needed **160.00** or
+  better, a rise of at least **10.4%** in the remaining session. All three dumps therefore beat holding to
+  expiry, keeping **$2,968.00** of proceeds that would otherwise have settled at zero, and the same is true of
+  the **157.5C** that was not dumped. **Of 24 occurrences, 22 are scored and the two new ones are not**: their
+  expiry is the session this run compiles, and without bars the close cannot be priced. The same premium trick
+  only narrows them. QQQ was at or above **607.47** at 10:16:45, from the 611P sold at **3.53**, so the **603P**
+  needed a fall of more than **4.47** points (**0.74%**) over the rest of the session to be worth anything —
+  possible, so nothing is claimed. TSLA was at or below **372.98** at 09:45:00, from the dumped call's own price,
+  and needed to finish above **372.50**.
+  Likely (basis: raw/2026-11-25.json 143C premium at 09:43:21; raw/2026-11-24.json for the strikes and
+  proceeds; no bars file for 2026-11-25, so the close is not priced and the bound stops at 09:49:01.)
+
 - **2026-11-24: four instances in 19 minutes, 18 contracts, -$735.00 on the legs — and three of them cannot be
   scored yet.** Every one of them is a full-position one-fill exit below the floor of the lots it closed, FIFO:
   NVDA 11-25 165C, **5** contracts at **1.03** at 09:47:04 against a **1.10** floor (**-6.4%**), **-$188.00**;
@@ -116,6 +149,33 @@ premium of the lots it closes.
   the floor of the ladder is what this page measures. See [[days/2026-11-12]]. (Verified: raw/2026-11-12.json)
 
 ## Count so far
+
+**Added 2026-11-25, counting 2026-11-25.** The count goes to **24** occurrences over **158** contracts,
+**-$8,978.00** on the dumped legs, **24 of 24** red. The two new instances add **16** contracts and
+**-$915.00**, and no instance of this shape has yet made money on the leg it closed.
+(Verified: raw/2026-11-25.json; cumulative carried from the 2026-11-24 reading)
+
+By tenor the base tilts back to same-day: both new instances expire the day they were traded, taking the page to
+**12** same-day, **5** at 1 DTE, **6** at 5 DTE and **1** at 56 DTE. The per-session distribution reads **2**,
+**1**, **0**, **7**, **8**, **4**, **2**.
+
+**The speed finding is back, at least for this pair.** The two gaps between last add and dump are **45s** and
+**85s**, the two fastest on the page, against the eighteen-instance median of **472** seconds recorded on
+2026-11-23. The 2026-11-20 block retired "a ladder is completed and then abandoned inside about three minutes"
+because only one of eight landed inside three minutes; both of these do, and two instances do not restore a
+finding that eight broke. What holds across all **24** is the shape itself, not its timing.
+(Verified: raw/2026-11-25.json; prior median from the 2026-11-23 reading)
+
+**The open instances swapped rather than cleared.** The three left open by 2026-11-24 were bounded this session
+from NVDA's own same-day premiums rather than from bars, and all three beat holding to expiry; the two added
+today take their place as unscored, because 2026-11-25 has no bars file and both expire that day. **22 of 24
+scored, 2 open**, and these two will stay open unless a later run prices the 2026-11-25 close. The page's 2026-11-23 split
+therefore stands unchanged: for same-day strikes the dump beats holding and the error is in the adds, while for
+strikes with days left on them the sell is an error too — the 2026-11-20 later-dated dumps gave up at least
+**8.8×** their realized loss in value that existed one session later. Both new instances are same-day, so they
+fall on the first side of that split and neither tests the second.
+(Verified: raw/2026-11-25.json; raw/2026-11-20.json via the 2026-11-24 reading)
+
 
 **Added 2026-11-24, counting 2026-11-24.** The count goes to **22** occurrences over **142** contracts,
 **-$8,063.00** on the dumped legs, **22 of 22** red. The four new instances add **18** contracts and

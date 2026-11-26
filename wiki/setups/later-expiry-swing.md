@@ -6,6 +6,18 @@ for a while, so the result turns on the move rather than on entry timing within 
 
 ## Evidence
 
+- **2026-11-25: five strikes, 21 contracts, five green, +$873.00, the widest clean sweep this measure has
+  recorded.** NVDA 12-04 160C **+$270.00** over seven contracts in two cycles, AAPL 12-04 360C **+$240.00**,
+  AAPL 12-18 370C **+$170.00**, TSLA 12-04 400C **+$105.00** and TSLA 11-30 380C **+$88.00**. No position was
+  carried into the session or out of it, so every one of these is an intraday later-dated round trip and the
+  carry measure contributes nothing. (Verified: raw/2026-11-25.json)
+
+  Against the same session's same-day book at **-$679.00**, the tenor gap is **$1,552.00** inside one session.
+  Depth cuts across it: every one of the five stayed at **four or fewer** contracts open, NVDA 160C included —
+  it traded **seven** contracts but reached four twice rather than seven once. The session's three losers were its three deepest ladders and
+  all three were same-day. See [[mistakes/deep-ladder]] and [[setups/zero-dte-scalp]].
+  (Verified: raw/2026-11-25.json)
+
 - **2026-11-24: the carry empties out at +$40.00, and the busiest intraday later-dated session compiled returns
   +$204.00.** The single contract carried out of 2026-11-23 — AAPL 12-04 360C, basis **1.95** — was sold at
   **09:38:16** at **2.35**, a **+$40.00** carry leg, and nothing was carried out of this session. The book ended
@@ -194,6 +206,35 @@ for a while, so the result turns on the move rather than on entry timing within 
   (Verified: computed over raw/2026-10-07…2026-10-09)
 
 ## Count so far
+
+**Added 2026-11-25, counting 2026-11-25.** The intraday later-dated book goes to **41 strikes, 275 contracts,
+33 green, +$2,900.00** over every compiled raw day, from **36 / 254 / 28 / +$2,027.00** at 2026-11-24. The new
+session adds **5** strikes, **21** contracts, **5** green and **+$873.00**, its best since 2026-11-11
+(**+$1,305.00**) and behind only that and 2026-11-02 (**+$1,345.00**). The green rate goes **77.8% → 80.5%**.
+
+All-green sessions are not rare on this measure — **12** of the **17** sessions that had positions on it had no
+losing strike — but most were one or two strikes wide. At five strikes this session ties 2026-11-12 for the
+widest, and the two losing sessions on the measure remain 2026-11-13 (**-$1,925.00**, one strike) and 2026-11-20
+(**-$588.00**, two).
+(Verified: computed over raw/2026-10-07…raw/2026-11-25)
+
+Carry legs are unchanged at **+$12,987.83** over **113** contracts and **42** legs across **18** closing
+sessions, **7** of them positive. The 2026-11-24 session ended flat and this one opened and closed flat, so no
+carry leg exists to measure and the pause this page noted on 2026-11-24 continues into a second session.
+(Verified: raw/2026-11-25.json; carry legs computed over data/fills/2026-10.json and data/fills/2026-11.json)
+
+**The tenor spread is at a record and widening again.** Later-dated intraday **+$2,900.00** against same-day
+**-$2,229.00** is a spread of **$5,129.00**, past the **$4,162.00** peak of 2026-11-13 and well past the
+**$3,577.00** of 2026-11-24, which this page read as a cut that was "no longer widening". One session of
+**$1,552.00** in opposite directions moved it. (Verified: computed over raw/2026-10-07…raw/2026-11-25)
+
+**What the spread is made of has changed, though.** Split by ladder depth, the later-dated intraday book is
+**+$2,560.00** over **28** shallow strikes and **+$340.00** over **13** deep ones, so depth costs money here
+too — **+$91.43** a strike against **+$26.15** — but it does not turn the book negative, which is what it does
+on expiry day. That asymmetry is the most useful thing on this page: the later-dated book survives a deep
+ladder and the same-day book does not. See [[mistakes/deep-ladder]].
+(Verified: computed over raw/2026-10-07…raw/2026-11-25)
+
 
 **Added 2026-11-24, counting 2026-11-24, and the gap this page flagged is closed for the intraday measure.**
 
