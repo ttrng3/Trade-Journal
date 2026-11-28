@@ -59,11 +59,8 @@ Tuesday to Saturday (cron `0 23 * * 1-5` UTC), and moves the file into
    trash that email and do not delete anything that was created. A file this run
    uploaded but could not verify is renamed with Drive `update_file` to
    `FAILED <its name>.bad`, so neither this run's sync nor any later one reads it
-   (the sync downloads only `.csv` files); name it in the report. **If that rename
-   fails too**, the bad file still carries a `.csv` name: skip the sync's import for
-   this run (write only the heartbeat, as on a quiet night, with `email=FAILED`) and
-   name the file in the report, so nothing reads it until someone looks. Otherwise
-   go on to the sync with the rest of `Raw Records/`, and name the failure in the report.
+   (the sync downloads only `.csv` files); name it in the report. Go on to the
+   sync with the rest of `Raw Records/`, and name the failure in the report.
 
 **The run's `email=` mark** (heartbeat, below): `FAILED` if any step 1–6 failed
 for any message; otherwise `saved` if at least one email was handled; otherwise

@@ -138,5 +138,9 @@ Adds to step 0, beyond the original design:
 3. **Routine config:** the Drive connector must permit `create_file`, `download_file_content` and `update_file`.
 4. **Naming rule made exact:** the bare name counts as 0, `copy.csv` as 1, `copy N.csv` as N; the next file is
    max + 1, where 1 is written `copy.csv`.
+Known residual risk, accepted: if the read-back hash differs **and** Drive also refuses the rename of the file the
+connector itself just created, the bad file keeps its `.csv` name and the sync reads it. The run marks
+`email=FAILED` and names the file, so the brief shows it the next morning. Not designed around: two independent
+failures on one file, and handling it would stop Ty's good CSVs from importing.
 Trade-off: if the read-back hash differed every run for a repeating reason, those fills would wait until Ty or a
 session looks; the daily `email=FAILED` mark (and the brief line built on it) is the alarm.
