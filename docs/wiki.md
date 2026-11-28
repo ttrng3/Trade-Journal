@@ -71,7 +71,7 @@ Do steps 1–2 for every day this run writes, then compile (steps 3–6) each of
 `tools/bars-collect.py` runs on the Mac at 10:30 Hanoi, Tuesday to Saturday (launchd `com.ty.journal-bars`), and
 copies `Raw Records/Bars/<day>.json` to Drive with rclone: one-minute bars for Ty's usual underlyings plus every
 underlying in his fills for that month and the month before. Since the fills sync at 06:00, before this job, an
-underlying traded for the first time on the day itself is covered too. It pulls market bars only, from Alpaca, with its own key file
+underlying traded for the first time on the day itself is covered too, once that morning's sync has pushed its fills. It pulls market bars only, from Alpaca, with its own key file
 (`~/.config/trade-journal/alpaca.env`, mode 600), and opens no other project's files. Log:
 `~/Library/Logs/journal-bars.log`. This is the pipeline's one Mac dependency; the routine itself stays cloud-only.
 Each run uploads every weekday of the last 7 days that has no bars file on Drive yet, so a Mac asleep for days

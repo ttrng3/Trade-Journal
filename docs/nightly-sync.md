@@ -42,9 +42,10 @@ Tuesday to Saturday (cron `0 23 * * 1-5` UTC), and moves the file into
    the next file is the highest + 1, where 1 is written `copy.csv`. An empty folder (after the monthly
    move) starts at the bare name. List the folder again before naming each
    message's file, so two emails in one run never get the same name.
-   **Already saved?** If a file in the folder has the attachment's exact size,
-   download it and compare sha256; if they match, the CSV was saved on an earlier
-   run whose trash step failed: save nothing and go straight to step 6.
+   **Already saved?** For each `.csv` file in the folder (never a
+   `FAILED … .bad` one) with the attachment's exact size, download it and compare
+   sha256; if any matches, the CSV was saved on an earlier run whose trash step
+   failed: save nothing and go straight to step 6.
 4. Drive `create_file` with `parentId` = the Raw Records folder, that title,
    `contentMimeType` `text/csv`, **`disableConversionToGoogleType` true**, and
    `base64Content` set to the file reference `sha256:<hex>:<absolute path>` so
