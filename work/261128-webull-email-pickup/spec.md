@@ -114,3 +114,13 @@ first four checks hold for Monday night's export, and the new fills are on `main
 - The IPO, Records and Bonds attachments.
 - Any change to `tools/sync.js`, the parser, the page, or the monthly backup job.
 - Unread, labelled or archived Webull mail outside the inbox.
+
+## Amendment A (2026-11-28, after review of PR #25)
+Review finding: at 06:00 the wiki step runs before the Mac writes that session's bars (10:30 Hanoi), and raw days
+are written once, so every session would freeze with "bars missing". Ty chose **option B**: the wiki waits one run
+for its bars. `docs/wiki.md` "Which day" defers `<day>` while its bars file is absent; the next run writes it with
+`--final` (the existing path). Each session's wiki page lands one run after its fills (Friday's on Tuesday; the
+Saturday weekly report names Friday as deferred, and Tuesday's run updates it, as today). The Mac job stays at 10:30.
+Files added to this change: `docs/wiki.md`, `docs/backup.md`, `README.md` (schedule wording), the
+`tools/bars-collect.py` docstring (one word). Requirement 5 now reads: sync, dedup, publish and preview unchanged;
+the wiki step changes only in when `<day>` is written.

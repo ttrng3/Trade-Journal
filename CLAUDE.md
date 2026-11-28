@@ -36,4 +36,5 @@ Ty's personal Webull options journal, entity **personal**. Live: https://ttrng3.
 - The repo is `Trade-Journal`, capital T and J; lowercase 404s (2026-09-23).
 - "No artifact link" means the preview URL stays out of sight, never that the preview goes. It was wrongly deleted twice (2026-09-23, 2026-09-26).
 - "The page is not updating": compare the CSV's time on Drive (shown in Hanoi time, UTC+7) with the run's time (logged in UTC) first. A run that fires before Ty files the export finds nothing; the sync itself was right (2026-09-26).
+- The Gmail connector does not see a trashed Webull export, so the email must still be in the inbox when the routine runs; the routine trashes it only after the CSV is saved and checked (runbook, "Email pickup", 2026-11-28).
 - A CSV dropped on the page updates that browser only; the Drive CSV plus the next sync makes it permanent (2026-09-26).

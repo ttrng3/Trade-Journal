@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Mac collector for the trading wiki: one bars file per session, pushed to Drive for the 11:00 routine.
+"""Mac collector for the trading wiki: one bars file per session, pushed to Drive for the morning routine.
 
   python3 tools/bars-collect.py                    # every recent session missing from Drive, uploaded
   python3 tools/bars-collect.py --day 2026-10-07 --out /tmp/b.json --no-upload
