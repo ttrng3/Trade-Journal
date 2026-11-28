@@ -1,6 +1,7 @@
 # Spec: webull-email-pickup
 
-**Intent:** accepted 2026-11-28 · **Status:** draft
+**Approved:** 2026-11-28
+**Intent:** accepted 2026-11-28 · **Status:** approved
 
 ## Requirements
 1. Each run, before the sync, finds every Webull order-records email still in the inbox (intent Outcome 1).
