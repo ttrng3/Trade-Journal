@@ -110,7 +110,7 @@ first four checks hold for Monday night's export, and the new fills are on `main
 
 ## Out of scope
 - The 07:00 iMessage brief line: separate intent in the other repo; it reads the `email=` token defined here.
-- The Webull API route (Option C): tested 28 Nov, 74 of 81 fills, not used.
+- The Webull API route (Option C): tested in chat on 28 Nov against that day's CSV; its order history left out some fills, so it is not used.
 - The IPO, Records and Bonds attachments.
 - Any change to `tools/sync.js`, the parser, the page, or the monthly backup job.
 - Unread, labelled or archived Webull mail outside the inbox.
