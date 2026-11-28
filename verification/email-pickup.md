@@ -12,7 +12,7 @@ Each run of the Trade Journal routine saves the options CSV from every Webull ex
 
 ## Steps
 
-1. **One email.** Ty emails one export from Webull and leaves it unopened. Confirm the search above returns exactly that one message. Fire the routine once (`RemoteTrigger run`) and wait for it to finish (`list_runs`).
+1. **One email.** Fire only after that session's `Raw Records/Bars/<day>.json` is on Drive (after 10:30 Hanoi, Mac awake): a raw wiki day is written once. Ty emails one export from Webull and leaves it unopened. Confirm the search above returns exactly that one message. Fire the routine once (`RemoteTrigger run`) and wait for it to finish (`list_runs`).
    **Expected:**
    - `Raw Records/` has exactly one new file, named the next free `Webull_Orders_Records_Options[ copy[ N]].csv`;
    - its Drive `mimeType` is `text/csv` (not a Google Sheet);
@@ -20,7 +20,7 @@ Each run of the Trade Journal routine saves the options CSV from every Webull ex
    - the same search now returns nothing, and the message is in Gmail trash; no other message changed label;
    - `data/.last-check` on `main` ends with `email=saved`;
    - the run report's line 1 names the file and the trashed email;
-   - the wiki step wrote `raw/<that session's day>.json` with its bars (written by the Mac at 10:30, before this run), and its trades are not marked "bars missing";
+   - the wiki step wrote `raw/<that session's day>.json` with its bars (written by the Mac at 10:30, before this run), and its trades in underlyings already traded that month or the month before are not marked "bars missing";
    - on a fresh clone of `main`, `node tools/sync.js --csv-dir <dir holding every Raw Records CSV> --check` prints `"changedFiles": []`.
 2. **No email.** With the search returning nothing, fire the routine again.
    **Expected:** no new file in `Raw Records/`; nothing moved in Gmail; `data/.last-check` ends with `email=none`; the report's line 1 says "No webull email found".
