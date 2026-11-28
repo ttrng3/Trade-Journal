@@ -20,7 +20,7 @@ Each run of the Trade Journal routine saves the options CSV from every Webull ex
    - the same search now returns nothing, and the message is in Gmail trash; no other message changed label;
    - `data/.last-check` on `main` ends with `email=saved`;
    - the run report's line 1 names the file and the trashed email;
-   - wiki waits for bars (Amendment A): `raw/<that session's day>.json` does not exist yet on `main`, since its bars file is written at 10:30. After the next run, it exists and its trades are not marked "bars missing";
+   - the wiki step wrote `raw/<that session's day>.json` with its bars (written by the Mac at 10:30, before this run), and its trades are not marked "bars missing";
    - on a fresh clone of `main`, `node tools/sync.js --csv-dir <dir holding every Raw Records CSV> --check` prints `"changedFiles": []`.
 2. **No email.** With the search returning nothing, fire the routine again.
    **Expected:** no new file in `Raw Records/`; nothing moved in Gmail; `data/.last-check` ends with `email=none`; the report's line 1 says "No webull email found".
@@ -30,8 +30,8 @@ Each run of the Trade Journal routine saves the options CSV from every Webull ex
    **Expected:** the CSV is saved (or found already saved) as a `.csv`; the email is still in the inbox; `data/.last-check` ends with `email=FAILED`; the report names the trash failure. The next run (after the restore) saves no new file and trashes the email (`email=saved`).
 Not tested live: the `FAILED … .bad` rename after a read-back hash mismatch (it can't be forced on a real upload). If it ever happens, the run report names the file and `data/.last-check` ends `email=FAILED`; check that the renamed file is in `Raw Records/` and no fill from it is in `data/`.
 
-5. **Schedule.** `RemoteTrigger get`. **Expected:** `cron_expression` is `0 23 * * 1-5`; `next_run_at` is a 23:00 UTC time on a Monday–Friday (06:00 Hanoi Tuesday–Saturday).
-6. **First real morning** (the first scheduled fire after step 5). **Expected:** `last_fired_at` is that morning's 23:00 UTC; step 1's checks hold for the export Ty emailed the night before; the new fills are in `data/fills/` on `main`.
+5. **Schedule.** `RemoteTrigger get`. **Expected:** `cron_expression` is still `0 4 * * 2-6` (11:00 Hanoi Tuesday–Saturday; Ty kept 11:00 on 2026-11-28).
+6. **First real morning** (the first scheduled fire after step 5). **Expected:** `last_fired_at` is that morning's 04:00 UTC; step 1's checks hold for the export Ty emailed the night before; the new fills are in `data/fills/` on `main`.
 7. `python3 tools/scan_public.py --all` and `git grep -n -E 'msg-f[:]|thread-f[:]|\b[0-9a-f]{16}\b' -- work docs verification README.md CLAUDE.md`. **Expected:** `scan: 0 hit(s)` and no grep output: no personal address and no Gmail message or thread id (the connector returns 16 hex characters, checked 2026-11-28) in the repo. The grep patterns are written so this line can't match itself.
 
 ## Results

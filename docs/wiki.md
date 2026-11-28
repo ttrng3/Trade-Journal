@@ -13,16 +13,12 @@ evidence lines are never deleted.
 
 ## Which day
 
-The routine fires 06:00 Hanoi, Tuesday to Saturday (since 2026-11-28, `work/261128-webull-email-pickup`). The **previous US session** is the run's Hanoi date minus
+The routine fires 11:00 Hanoi, Tuesday to Saturday. The **previous US session** is the run's Hanoi date minus
 one day (Tuesday's run compiles Monday's session, Saturday's compiles Friday's). Call it `<day>`.
 
 A raw day is written once, so it must not be written before Ty's CSV has arrived. Each run therefore handles:
-- **`<day>`**: **wait for its bars** (Ty, 2026-11-28). The Mac writes `<day>`'s bars file at 10:30 Hanoi, after
-  this 06:00 run, so it is normally absent. If `Raw Records/Bars/<day>.json` is absent, treat `<day>` as deferred:
-  run nothing for it and write nothing; the next run writes it with `--final` and its bars (the bullet below). If
-  the file is already there (a late or re-run), use `postexit.py --day <day> --bars <it>`; if the shard has no
-  fills for it yet, it prints `{"deferred": true}` and writes nothing (CLAUDE.md "Known mistakes", 2026-09-26).
-  So each session's wiki page normally appears one run after its fills: Monday's on Wednesday, Friday's on Tuesday.
+- **`<day>`** with `postexit.py --day <day>`. If the shard has no fills for it yet, it prints `{"deferred": true}`
+  and writes nothing: Ty may file the export after 11:00 (CLAUDE.md "Known mistakes", 2026-09-26).
 - **Every earlier weekday in the last 7 days that has no `raw/<that day>.json`, and is later than the oldest day
   file already in `raw/`** (a deferred day, or a run that failed), with
   `postexit.py --day <that day> --final --bars <its own Bars/<that day>.json>`, which writes it whether or not
@@ -34,9 +30,8 @@ Do steps 1–2 for every day this run writes, then compile (steps 3–6) each of
 ## Steps
 
 1. **Bars.** For each day this run writes, look in `09 Trading/Trade Journal/Raw Records/Bars/` for that day's
-   `<day>.json` with the Drive connector and download it. It is written by the Mac at 10:30 Hanoi. For `<day>`
-   itself an absent file means wait (see "Which day"). For an earlier day written with `--final`, if it is still
-   absent (the Mac was off for days), go on without it: the trades are still compiled, and their price paths read "bars missing".
+   `<day>.json` with the Drive connector and download it. It is written by the Mac at 10:30 Hanoi. If it is
+   absent, go on without it: the trades are still compiled, and their price paths read "bars missing".
 2. **Raw day.** `python3 tools/postexit.py --day <day> --bars <file or omit>`. It writes `raw/<day>.json` and
    refuses to overwrite one that exists (that is correct on a re-run: compile from the existing file).
    If it printed `{"deferred": true}`, `{"holiday": true}` or `{"skipped": true}` (no fills and no bars: nothing
@@ -70,8 +65,8 @@ Do steps 1–2 for every day this run writes, then compile (steps 3–6) each of
 
 `tools/bars-collect.py` runs on the Mac at 10:30 Hanoi, Tuesday to Saturday (launchd `com.ty.journal-bars`), and
 copies `Raw Records/Bars/<day>.json` to Drive with rclone: one-minute bars for Ty's usual underlyings plus every
-underlying in his fills for that month and the month before. Since the fills sync at 06:00, before this job, an
-underlying traded for the first time on the day itself is covered too, once that morning's sync has pushed its fills. It pulls market bars only, from Alpaca, with its own key file
+underlying in his fills for that month and the month before. An underlying traded for the first time on the day
+itself is not covered (its fills sync at 11:00); its exits read "bars missing". It pulls market bars only, from Alpaca, with its own key file
 (`~/.config/trade-journal/alpaca.env`, mode 600), and opens no other project's files. Log:
 `~/Library/Logs/journal-bars.log`. This is the pipeline's one Mac dependency; the routine itself stays cloud-only.
 Each run uploads every weekday of the last 7 days that has no bars file on Drive yet, so a Mac asleep for days
