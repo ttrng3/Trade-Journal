@@ -14,6 +14,20 @@ more than the exit does.
 
 ## Evidence
 
+- **2026-11-27: both tails clean for a second consecutive session, and the deep side is same-day again.** The
+  two same-day strikes that went **ten** and **twelve** deep both lost, **-$1,022.00** (NVDA 11-27 150C **12**
+  contracts **-$612.00**, NVDA 11-27 148C **13** contracts over a **10**-deep ladder **-$410.00**). The two
+  that stayed at **five or fewer** both made money, **+$627.00** (NVDA 11-27 146C **+$374.00** at **five**
+  deep, SPY 11-27 723C **+$253.00** at **two**). Four closed strikes, no exception either way.
+  (Verified: raw/2026-11-27.json)
+
+  **The session also supplies the page's counter-example on tenor.** The deepest ladder of the day was
+  later-dated and it was the only deep one that worked: NVDA 12-04 160C went **fifteen** deep, the joint
+  second-deepest open position compiled, and realized **+$194.00** while being unwound one contract at a time
+  over **4 hours 21 minutes**. The two same-day ladders of **ten** and **twelve** were each ended in a single
+  fill. Depth plus a one-fill exit is the losing combination here, not depth alone.
+  (Verified: raw/2026-11-27.json; see [[mistakes/dump-below-the-ladder]])
+
 - **2026-11-25: the cut is clean in both tails, the first session where it is.** Three strikes went seven or
   eight deep and **all three lost**, **-$1,057.00**: TSLA 11-25 372.5C **8** contracts **-$465.00**, QQQ 11-25
   603P **8** contracts **-$450.00**, NVDA 11-25 148C **7** contracts **-$142.00**. Eight strikes never went
@@ -29,6 +43,31 @@ more than the exit does.
   (Verified: raw/2026-11-25.json)
 
 ## Count so far
+
+**Added 2026-11-27, computed over every compiled raw day.** Across **37** sessions and **121** strikes bought and
+sold in equal size:
+
+- **Five or fewer: 78 strikes, 59 green (75.6%), +$4,196.00**, averaging **+$53.79** a strike.
+- **Six exactly: 15 strikes, 6 green (40.0%), -$343.00**, averaging **-$22.87**.
+- **Seven or more: 28 strikes, 14 green (50.0%), -$3,577.00**, averaging **-$127.75**.
+
+Everything **six or deeper** is **43** strikes and **-$3,920.00**. The two strikes added to the deep band both
+lost and both were same-day, so the green rate at seven or more falls to an even **50.0%** while the average
+result worsens by **$29.48** a strike. The shape still loses large rather than often.
+(Verified: computed over raw/2026-10-07…raw/2026-11-27)
+
+**Crossed with tenor, the losing corner deepened and nothing else moved.** Deep and same-day is **30** strikes,
+**36.7%** green, **-$4,260.00**; deep and later-dated is unchanged at **13** strikes, **69.2%** green,
+**+$340.00**; shallow and same-day is **50** strikes, **70.0%** green, **+$1,636.00**; shallow and later-dated is
+unchanged at **28** strikes, **85.7%** green, **+$2,560.00**. Both later-dated bands are untouched because
+2026-11-27's two later-dated strikes carried contracts out and so are not closed strikes. The whole of the
+session's effect on this page sits inside same-day expiry, where it widened both tails at once.
+(Verified: computed over raw/2026-10-07…raw/2026-11-27)
+
+The deep same-day corner at **-$4,260.00** is now **$1,636.00** worse than the entire compiled same-day book,
+which stands at **-$2,624.00** on [[setups/zero-dte-scalp]]; the decomposition is still exact,
+**-$4,260.00** plus **+$1,636.00**. Depth on expiry day remains the one corner that carries the loss.
+(Verified: computed over raw/2026-10-07…raw/2026-11-27)
 
 **Added 2026-11-25, computed over every compiled raw day.** Across **36** sessions and **117** strikes bought and
 sold in equal size, depth splits the book:

@@ -12,6 +12,32 @@ premium of the lots it closes.
 
 ## Evidence
 
+- **2026-11-27: two instances, 22 contracts, -$980.00, and the first session where the two disagree about
+  whether the dump was the error.** Both are full-position one-fill exits below their own floor, both same-day
+  expiry, both NVDA. The **150C** took **12** contracts at **0.4800** at 09:47:02 against a **0.75** floor
+  (**-36.0%**), **-$612.00**, **61** seconds after the last add; the **148C** took **10** at **0.6400** at
+  10:05:18 against **0.78** (**-17.9%**), **-$368.00** on the dumped leg, **283** seconds after the last add.
+  (Verified: raw/2026-11-27.json)
+
+  **This session has bars, so both were scored at once, and they split.** NVDA closed **150.04**. The 150C
+  settled **$0.04** in the money, so dumping **36.0%** below the floor still beat holding by **+$528.00**; the
+  148C settled **2.04** in the money, so dumping on the better terms gave up **+$1,400.00**. Every same-day
+  instance scored before this session fell on the "dump beats holding" side of the 2026-11-23 split. One no
+  longer does, and it is the one that was dumped less badly. What decides it is where the close lands relative
+  to the strike, which the exit price does not know.
+  (Verified: raw/2026-11-27.json; see [[what-ifs/exit-before-the-close]])
+
+  The **-36.0%** is the deepest discount since this count began on 2026-11-10, past the **-30.3%** of
+  2026-11-25. Two deeper ones sit in the raw files outside the counted window: **-48.3%** on 2026-10-07
+  (TSLA 385C, 9 contracts) and **-47.4%** on 2026-10-22 (SPXW 7690C, 7 contracts).
+  (Verified: computed over raw/2026-10-07…raw/2026-11-27)
+
+  **A third ladder, twice as deep, did not trip the test and did not lose.** NVDA 12-04 160C went **fifteen**
+  deep and was taken off one contract at a time across **4 hours 21 minutes** for **+$194.00** realized. The
+  page's shape is the one-fill exit, not the ladder, and this session is the clearest evidence of that it has:
+  the deepest ladder of the day was the profitable one. See [[mistakes/deep-ladder]].
+  (Verified: raw/2026-11-27.json)
+
 - **2026-11-25: two instances, 16 contracts, -$915.00, and the two fastest gaps the page has recorded.** Both are
   full-position one-fill exits below the floor of their own ladder, both same-day expiry. TSLA 11-25 372.5C,
   **8** contracts at **0.4813** at 09:45:00 against a **0.69** floor (**-30.3%**), **-$465.00**, **85** seconds
@@ -149,6 +175,36 @@ premium of the lots it closes.
   the floor of the ladder is what this page measures. See [[days/2026-11-12]]. (Verified: raw/2026-11-12.json)
 
 ## Count so far
+
+**Added 2026-11-27, counting 2026-11-27.** The count goes to **26** occurrences over **180** contracts,
+**-$9,958.00** on the dumped legs, **26 of 26** red. The two new instances add **22** contracts and
+**-$980.00**, and the streak on the leg itself is still unbroken.
+(Verified: raw/2026-11-27.json; cumulative carried from the 2026-11-25 reading)
+
+**The streak on the leg no longer means the dump was wrong.** Both new instances were scorable the same day
+because the session has bars, and one beat holding by **+$528.00** while the other gave up **+$1,400.00**. The
+2026-11-23 split said same-day dumps beat holding and the error is in the adds; that holds for every same-day
+instance scored before this session and fails for one of the two added here. The page should stop stating it as
+a rule for same-day strikes and state it as a tendency with a measured exception.
+(Verified: raw/2026-11-27.json)
+
+By tenor both new instances expire the day they were traded, taking the page to **14** same-day, **5** at 1 DTE,
+**6** at 5 DTE and **1** at 56 DTE. The per-session distribution reads **2**, **1**, **0**, **7**, **8**, **4**,
+**2**, **2**. The gaps between last add and dump are **61s** and **283s**; the **61s** is the second fastest
+recorded, behind the **45s** of 2026-11-25. (Verified: raw/2026-11-27.json)
+
+**Scored count moves for the first time in three sessions: 24 of 26 scored, 2 open.** The two instances left
+open by 2026-11-25 are still open, because scoring them needs the 2026-11-25 close and that session has no bars
+file; nothing this session produces can price it. The two added here were scored on arrival.
+(Verified: raw/2026-11-27.json, raw/2026-11-25.json sources.bars = missing)
+
+**One discrepancy to settle, recorded rather than silently fixed.** Re-running the mechanical test over
+2026-11-10…2026-11-27 returns **25** instances, **179** contracts and **-$9,222.00**, one instance fewer than
+the carried count, and the gap is on 2026-11-20: the recount finds **7** there where the carried distribution
+records **8**. The cumulative above is the carried figure, as this page's convention has always been. The
+2026-11-20 block predates the "at least half the open position" wording, which is the likely cause. A session
+with the time for it should recount that block from `raw/` and restate the cumulative once.
+(Verified: computed over raw/2026-11-10…raw/2026-11-27 against the carried 2026-11-25 reading)
 
 **Added 2026-11-25, counting 2026-11-25.** The count goes to **24** occurrences over **158** contracts,
 **-$8,978.00** on the dumped legs, **24 of 24** red. The two new instances add **16** contracts and

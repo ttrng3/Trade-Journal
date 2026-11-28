@@ -6,6 +6,19 @@ decided by entry timing and by how many times a losing strike is re-entered.
 
 ## Evidence
 
+- **2026-11-27: four strikes, 37 contracts, two green, -$395.00, and NVDA replaces the usual names.** The two
+  deep ladders lost **-$1,022.00** (150C **-$612.00** at **twelve** deep, 148C **-$410.00** at **ten**) and the
+  two shallow strikes made **+$627.00** (146C **+$374.00** at **five**, SPY 723C **+$253.00** at **two**). The
+  page's definition names SPY, SPXW and TSLA as the underlyings of this book; **three** of the four strikes
+  here are NVDA, which until this month appeared on the later-dated side.
+  See [[mistakes/deep-ladder]]. (Verified: raw/2026-11-27.json)
+
+  **The whole same-day loss was recoverable and the settlement proves it.** Every one of the four strikes
+  settled in the money and holding them all would have returned **+$4,232.00** against the **-$395.00** taken.
+  This is the first compiled session where the same-day book's loss is entirely a timing result rather than a
+  tenor result: the strikes were right, the exits were not.
+  See [[what-ifs/exit-before-the-close]]. (Verified: raw/2026-11-27.json)
+
 - **2026-11-25: six strikes, 32 contracts, three green, -$679.00 — and the loss is all in the deep ladders.**
   The three that went seven or eight contracts deep lost **-$1,057.00** (TSLA 372.5C **-$465.00**, QQQ 603P
   **-$450.00**, NVDA 148C **-$142.00**); the three that stopped at five or fewer made **+$378.00** (QQQ 611P
@@ -246,6 +259,27 @@ decided by entry timing and by how many times a losing strike is re-entered.
   offer no comparison yet. (Verified: raw/2026-10-07.json)
 
 ## Count so far
+
+**Added 2026-11-27, counting 2026-11-27.** Same-day strikes bought and sold in equal size stand at **80 strikes,
+568 contracts, 46 green, -$2,624.00**, seen on **21** of **37** compiled days. The new session returned
+**-$395.00** (4 strikes, 37 contracts, 2 green) and the green rate goes **57.9% → 57.5%**, its eleventh reading:
+52.0%, 58.3%, 60.5%, 63.4%, 66.7%, 58.5%, 55.7%, 58.2%, 58.6%, 57.9%, **57.5%**. Eleven readings sit inside
+**14.7** points and the last six inside **2.9**, so this is the steadiest series the wiki keeps.
+(Verified: computed over raw/2026-10-07…raw/2026-11-27)
+
+**The depth decomposition still accounts for the headline exactly, and both halves grew.** Same-day strikes that
+went six or deeper are **30** strikes, **36.7%** green, **-$4,260.00**; those at five or fewer are **50**
+strikes, **70.0%** green, **+$1,636.00**. The shallow same-day book has now been profitable across **37**
+sessions and improved by **$627.00** on a session the book lost money, which is the cleanest statement of this
+page's finding yet: the loss is not expiry day, it is depth on expiry day.
+See [[mistakes/deep-ladder]]. (Verified: computed over raw/2026-10-07…raw/2026-11-27)
+
+**What is new is that this session's loss was not a tenor cost at all.** All four strikes settled in the money
+and holding the book would have returned **+$4,232.00**. Across the compiled set this page's **-$2,624.00** is
+smaller than that one session's foregone gain, so the same-day book's whole recorded loss is now less than what
+a single session left on the table by exiting early. Expiry day removes the room to be wrong; it did not remove
+the move here. See [[what-ifs/exit-before-the-close]].
+(Verified: raw/2026-11-27.json; computed over raw/2026-10-07…raw/2026-11-27)
 
 **Added 2026-11-25, counting 2026-11-25.** Same-day strikes bought and sold in equal size stand at **76 strikes,
 531 contracts, 44 green, -$2,229.00**, seen on **20** of **36** compiled days. The new session returned

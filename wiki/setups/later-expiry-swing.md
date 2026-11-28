@@ -207,6 +207,34 @@ for a while, so the result turns on the move rather than on entry timing within 
 
 ## Count so far
 
+**Added 2026-11-27, counting 2026-11-27.** The intraday later-dated book is **unchanged at 41 strikes, 275
+contracts, 33 green, +$2,900.00**, and the reason is the point. Both later-dated strikes traded this session
+carried contracts out, so neither closed inside the session and neither enters this measure: NVDA 12-04 160C
+sold **12** of **15** and NVDA 01-15 190C sold **3** of **5**. The realized part of both was positive,
+**+$194.00** and **+$80.00** matched FIFO, and they are the only positive realized P&L on a session that took
+**-$121.00** realized in total. (Verified: raw/2026-11-27.json)
+
+**Carry legs are unchanged at +$12,987.83 over 113 contracts and 42 legs across 18 closing sessions, 7 of them
+positive, but the pause ends here.** The session opened flat, so it produced no carry leg; it closes with **5**
+contracts and **$1,223.00** of basis open (**3** of the 160C at **$767.00**, **2** of the 190C at **$456.00**).
+That is the first book carried out since 2026-11-23, so the pause this page opened on 2026-11-24 ran two
+sessions, 2026-11-25 and this one, and the next session supplies the first carry leg since 2026-11-24.
+(Verified: raw/2026-11-27.json; position computed over data/fills/2026-11.json)
+
+**The tenor spread is at a new record, and this time the later-dated side did not move.** Later-dated intraday
+**+$2,900.00** against same-day **-$2,624.00** is a spread of **$5,524.00**, past the **$5,129.00** of
+2026-11-25. Every dollar of the widening came from the same-day book losing, which is a weaker reading than the
+2026-11-25 one, where both sides moved. A spread that widens only because the other side falls is not evidence
+for this setup. (Verified: computed over raw/2026-10-07…raw/2026-11-27)
+
+**The depth asymmetry gained its sharpest single case.** NVDA 12-04 160C went **fifteen** deep, the joint
+second-deepest open position compiled, and realized **+$194.00** while being unwound one contract at a time
+across **4 hours 21 minutes**. On the same session two same-day ladders of **ten** and **twelve** were each
+ended in one fill for **-$1,022.00**. The later-dated book survives a deep ladder and the same-day book does
+not, and the mechanism visible here is the exit, not the tenor.
+See [[mistakes/deep-ladder]] and [[mistakes/dump-below-the-ladder]].
+(Verified: raw/2026-11-27.json)
+
 **Added 2026-11-25, counting 2026-11-25.** The intraday later-dated book goes to **41 strikes, 275 contracts,
 33 green, +$2,900.00** over every compiled raw day, from **36 / 254 / 28 / +$2,027.00** at 2026-11-24. The new
 session adds **5** strikes, **21** contracts, **5** green and **+$873.00**, its best since 2026-11-11

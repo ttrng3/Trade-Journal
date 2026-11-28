@@ -7,6 +7,34 @@ normally carries. Only the settlement price shows the cost.
 
 ## Evidence
 
+- **2026-11-27: four same-day strikes, all four settled in the money, three wrong, -$4,232.00.** NVDA closed
+  **150.04** and SPY **731.00**. NVDA 11-27 146C took **$1,895.00** and settled **4.04** in the money, giving
+  up **+$2,145.00**; NVDA 11-27 148C took **$1,054.00** and settled **2.04** in, giving up **+$1,598.00**;
+  SPY 11-27 723C took **$583.00** on two contracts and settled **8.00** in, giving up **+$1,017.00**. Only
+  NVDA 11-27 150C was right, settling **$0.04** in the money against **$576.00** taken, saving **$528.00**.
+  See [[days/2026-11-27]]. (Verified: raw/2026-11-27.json)
+
+  **This is the widest all-in-the-money session compiled, and the margin cut explains the whole result.** Four
+  other sessions settled every same-day strike in the money and none was wider than **two** strikes. The one
+  correct exit is the strike whose close landed **$0.04** past it; the three wrong ones landed **2.04**,
+  **4.04** and **8.00** past theirs. The cut this page has stated since 2026-10-26, that what separates right
+  from wrong is how far past the strike the close lands relative to the premium taken, holds on all four.
+  (Verified: raw/2026-11-27.json; computed over raw/2026-10-07…raw/2026-11-27)
+
+  **Only one of the four is this page's classic shape; the other three were wrong immediately.** The page
+  exists for exits the post-exit candles endorse and the settlement contradicts, and on this session the
+  candles mostly contradicted the exit too: of the **52** contracts exited, the next thirty minutes went
+  against the exit on **41** and with it on **11**. The single strike that fits the definition exactly is
+  SPY 11-27 723C, where SPY slipped from **724.97** to **724.55** over the next thirty minutes and then closed
+  **731.00**, **6.45** above that window's end. The three NVDA strikes needed no settlement price to be judged: NVDA was already rising
+  within three minutes of each of them. (Verified: raw/2026-11-27.json, bars present)
+
+  **The exits were early by hours, not by minutes.** Both underlyings bottomed in the first thirty-five
+  minutes, NVDA at **145.39** at 09:48 and SPY at **719.61** at 10:05, and closed at or near the day's high.
+  The last fill of the session was at 12:59:55 against bars running to 15:59, so the book was flat for the
+  larger part of the recovery it had been positioned for.
+  (Verified: raw/2026-11-27.json, bars present)
+
 - **2026-11-24: three same-day strikes, all three right, +$1,237.00 — the first clean sweep since 2026-11-17.**
   SPY closed **718.79** and QQQ **638.12**. SPY 11-24 715P took **$743.00** over five contracts and settled
   worthless; QQQ 11-24 635P took **$267.00** and settled worthless; SPY 11-24 718C took **$306.00** and was worth
@@ -227,6 +255,29 @@ normally carries. Only the settlement price shows the cost.
   **$378.00**. One rule, two opposite outcomes, one day. (Verified: raw/2026-10-16.json)
 
 ## Count so far
+
+**Added 2026-11-27, counting 2026-11-27.** The ledger goes to **81 same-day strikes** with a settlement price,
+seen on **20** compiled days. Exiting beat holding on **62** and cost money on **19**, so the count series falls
+for the first time in three readings: 57.1%, 66.7%, 71.8%, 73.2%, 75.0%, 72.0%, 75.9%, 77.6%, 78.9%, 78.4%,
+79.2%, **76.5%**, twelve readings inside **22.1** points. The net is **+$19,917.00**, moved **-$4,232.00** by
+four strikes. That is the fifth-largest single-session move by size and the second-largest loss, behind the
+**-$9,597.00** of 2026-10-30. The count remains the stable series and the net remains noise.
+(Verified: raw/2026-11-27.json; computed over raw/2026-10-07…raw/2026-11-27)
+
+**Nineteen misses, and three of them arrived at once — the heaviest single-session addition to the miss column
+this page has taken.** Of the 81 strikes, **30** settled in the money and **51** worthless: right on **51 of
+51** worthless by construction and **11 of 30**, **36.7%**, on the rest, down from **10 of 26** and 38.5%. All
+four new strikes settled in the money, which is the first time a session added nothing to the worthless column
+while adding four to the ledger. The in-the-money tail is **37.0%** of the ledger and still carries **all 19**
+misses, a property that has held on every reading this page has made.
+(Verified: raw/2026-11-27.json; computed over raw/2026-10-07…raw/2026-11-27)
+
+Split by side, calls go to **+$23,613.00** over **68** strikes and puts are unchanged at **-$3,696.00** over
+**13**. All four new strikes are calls, so the call book takes the whole of the loss and the call miss count
+rises from **10** to **13**. Puts are now **16.0%** of the strikes and **31.6%** of the misses, the first
+reading to break the **37.5%** ratio the page has recorded since 2026-10-30, and it broke because the calls
+missed rather than because the puts improved.
+(Verified: raw/2026-11-27.json; computed over raw/2026-10-07…raw/2026-11-27)
 
 **Added 2026-11-24, counting 2026-11-24.** The ledger goes to **77 same-day strikes** with a settlement price,
 seen on **19** compiled days. Exiting beat holding on **61** and cost money on **16** — unchanged in absolute

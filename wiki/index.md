@@ -4,6 +4,7 @@ Compiled every trading day from the Webull fills, by concept. `raw/<day>.json` i
 is written once; these pages are the compiled output. Numbers carry their source.
 
 ## Latest weekly report
+- [[weekly/2026-W48]]: +$15,623.00 realized over 301 fills, 97.1% of it Monday, and Friday left +$4,232.00 on the table
 - [[weekly/2026-W47]]: -$5,042.00 over 243 fills once Friday landed, and 182 of them are frozen out of the wiki
 - [[weekly/2026-W46]]: -$1,402.00 realized over 265 fills, the worst session compiled, and ten one-fill dumps
 - [[weekly/2026-W45]]: -$522.00 realized, one of five sessions traded
@@ -13,6 +14,7 @@ is written once; these pages are the compiled output. Numbers carry their source
 - [[weekly/2026-W41]]: the week realized -$195.00, and all of the loss is in same-day expiry
 
 ## Days
+- [[days/2026-11-27]]
 - [[days/2026-11-25]]
 - [[days/2026-11-24]]
 - [[days/2026-11-23]]
@@ -22,7 +24,6 @@ is written once; these pages are the compiled output. Numbers carry their source
 - [[days/2026-11-17]]
 - [[days/2026-11-16]]
 - [[days/2026-11-13]]
-- [[days/2026-11-12]]
 
 ## Mistakes
 - [[mistakes/deep-ladder]]
