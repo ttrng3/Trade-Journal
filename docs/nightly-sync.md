@@ -21,8 +21,8 @@ out of it entirely.
 
 **Runs first, before the sync reads `Raw Records/`.** (Ty, 2026-11-28,
 `work/261128-webull-email-pickup`.) After trading, Ty asks Webull to email the
-day's order records, by about 04:00 Hanoi; the routine fires at 06:00 Hanoi,
-Tuesday to Saturday (cron `0 23 * * 1-5` UTC), and moves the file into
+day's order records, by about 04:00 Hanoi; the routine fires at 11:00 Hanoi,
+Tuesday to Saturday (cron `0 4 * * 2-6` UTC, unchanged), and moves the file into
 `Raw Records/` itself. Ty no longer downloads, drags or deletes anything.
 
 1. Gmail `search_threads` with

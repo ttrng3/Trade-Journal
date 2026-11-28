@@ -29,6 +29,8 @@ Checked by: first automatic morning after the switch, the CSV is in `Raw Records
 the email is in trash, the new fills are in `data/` and on Pages; a morning with no
 email saves nothing and trashes nothing; its data commit carries only `data/.last-check`.
 
+*Superseded 2026-11-28 by spec Amendment C: the routine stays at 11:00 Hanoi and there is no 07:00 brief line.*
+
 **Who and what is affected.** The Trade Journal routine (prompt,
 schedule, Gmail connector added); `docs/nightly-sync.md` (runbook); Pipeline Wiring
 page (Trade Journal row + section 7 entry); Ty's Gmail inbox (export emails trashed

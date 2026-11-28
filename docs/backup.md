@@ -2,7 +2,7 @@
 
 ## What runs
 
-On the 1st of every month at 06:17 UTC (13:17 Vietnam), after that day's 06:00 Hanoi sync (23:00 UTC the evening before) when the 1st is a sync day (Tue–Sat Hanoi; the routine's cron is `0 23 * * 1-5`),
+On the 1st of every month at 06:17 UTC (13:17 Vietnam), after that day's 04:00 UTC sync when the 1st is a sync day (Tue–Sat; the routine's cron is `0 4 * * 2-6`),
 `.github/workflows/monthly-backup.yml` packs everything under `data/` into one
 file, `trade-journal-backup-YYYY-MM-DD.json.gz` (~0.7 MB), proves it restores
 byte-identical, and attaches it to a release tagged `backup-YYYY-MM-DD`:

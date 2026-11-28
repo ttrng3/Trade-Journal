@@ -144,3 +144,10 @@ connector itself just created, the bad file keeps its `.csv` name and the sync r
 failures on one file, and handling it would stop Ty's good CSVs from importing.
 Trade-off: if the read-back hash differed every run for a repeating reason, those fills would wait until Ty or a
 session looks; the daily `email=FAILED` mark (and the brief line built on it) is the alarm.
+
+## Amendment C (2026-11-28, after merge) · **Status:** approved
+**Approved:** 2026-11-28 (Ty, in chat: "Keep 11:00. No need for 07:00 alert.").
+The routine stays at 11:00 Hanoi (`0 4 * * 2-6`); the move to 06:00 (Requirement 6) is dropped, and so is the
+07:00 brief line it was for (Requirement 7 now: the run report says "No webull email found"; Ty checks the page
+himself). At 11:00 the Mac's 10:30 bars are already on Drive, so Amendment A is reverted: `docs/wiki.md`,
+`docs/backup.md` and `tools/bars-collect.py` go back to their text before PR #25. Amendment B stands. Promise B's first real morning is therefore the 11:00 Hanoi (04:00 UTC) fire.
