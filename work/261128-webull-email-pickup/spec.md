@@ -126,7 +126,8 @@ Files added to this change: `docs/wiki.md`, `docs/backup.md`, `README.md` (sched
 the wiki step changes only in when `<day>` is written.
 **Approved:** 2026-11-28 (Ty, in chat: "Go with option B").
 
-## Amendment B (2026-11-28, after the second review) · **Status:** draft, needs Ty's approval
+## Amendment B (2026-11-28, after the second review) · **Status:** approved
+**Approved:** 2026-11-28 (Ty, in chat: "approve amendment B").
 Adds to step 0, beyond the original design:
 1. **Already saved?** Before uploading, if a file in `Raw Records/` has the attachment's exact size, compare sha256;
    on a match save nothing and go to the trash step. Stops a failed trash from creating a new `copy N` every morning.
