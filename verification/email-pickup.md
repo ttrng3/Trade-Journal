@@ -6,7 +6,7 @@ Each run of the Trade Journal routine saves the options CSV from every Webull ex
 
 ## Clean state
 
-- The routine's live config (`RemoteTrigger get`) has the Gmail connector with exactly four permitted tools: `search_threads`, `get_message`, `download_gmail_attachment`, `trash_message`.
+- The routine's live config (`RemoteTrigger get`) has the Gmail connector with exactly four permitted tools: `search_threads`, `get_message`, `download_gmail_attachment`, `trash_message`; and its Drive connector permits `create_file`, `download_file_content` and `update_file` (an empty permitted list means all).
 - `main` holds this runbook's "Email pickup (step 0)" section.
 - Write down the names in `Raw Records/` and the Gmail search `from:noreply@webull.com subject:Webull_Orders_Records in:inbox` result before each step.
 

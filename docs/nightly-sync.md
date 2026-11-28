@@ -41,6 +41,9 @@ Tuesday to Saturday (cron `0 23 * * 1-5` UTC), and moves the file into
    and so on: the highest number there + 1. An empty folder (after the monthly
    move) starts at the bare name. List the folder again before naming each
    message's file, so two emails in one run never get the same name.
+   **Already saved?** If a file in the folder has the attachment's exact size,
+   download it and compare sha256; if they match, the CSV was saved on an earlier
+   run whose trash step failed: save nothing and go straight to step 6.
 4. Drive `create_file` with `parentId` = the Raw Records folder, that title,
    `contentMimeType` `text/csv`, **`disableConversionToGoogleType` true**, and
    `base64Content` set to the file reference `sha256:<hex>:<absolute path>` so
@@ -49,15 +52,20 @@ Tuesday to Saturday (cron `0 23 * * 1-5` UTC), and moves the file into
 5. `download_file_content` on the new file id. Its sha256 must equal step 2's.
 6. Only then `trash_message` on that message. Trash, never a permanent delete,
    and never any other email.
-7. **On any failure in 2–5** (no Options attachment, upload refused, hash
-   differs): do not trash that email, do not delete anything that was created,
-   and leave a file this run uploaded but could not verify out of the
-   `--csv-dir` given to `sync.js` (it stays on Drive, unread, named in the
-   report). Go on to the sync with the rest of `Raw Records/`, and mark the run
-   `email=FAILED` (below), naming the failure in the report.
+7. **On any failure in 1–6** (search errors or the Gmail connector is missing,
+   no Options attachment, upload refused, hash differs, trash refused): do not
+   trash that email and do not delete anything that was created. A file this run
+   uploaded but could not verify is renamed with Drive `update_file` to
+   `FAILED <its name>.bad`, so neither this run's sync nor any later one reads it
+   (the sync downloads only `.csv` files); name it in the report. Go on to the
+   sync with the rest of `Raw Records/`, and name the failure in the report.
+
+**The run's `email=` mark** (heartbeat, below): `FAILED` if any step 1–6 failed
+for any message; otherwise `saved` if at least one email was handled; otherwise
+`none`. `none` therefore always means the search ran and found nothing.
 
 The run's report line 1 names each file saved and each email trashed, or says
-**"No webull email found"** when the search returns nothing. A trashed export is
+**"No webull email found"** when the search ran and returned nothing. A trashed export is
 invisible to the Gmail connector, which is why the email must still be in the
 inbox when the routine runs. Ty may still drag a CSV in by hand; content dedup
 makes a duplicate harmless.

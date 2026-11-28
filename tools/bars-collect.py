@@ -57,7 +57,8 @@ def load_keys(path=KEYS):
 
 def traded_underlyings(day, fetch=None):
     """Underlyings Ty traded in the day's month and the month before, from the repo's own public fills files. The
-    day's own fills are not synced yet at 10:30, so an underlying traded for the first time that day is not covered."""
+    day's own fills are synced at 06:00, before this 10:30 job, so an underlying traded for the first time that day is
+    covered once that sync has pushed."""
     first = dt.date.fromisoformat(day[:8] + "01")
     months = {day[:7], (first - dt.timedelta(days=1)).isoformat()[:7]}
     out = set()
