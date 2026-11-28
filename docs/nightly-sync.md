@@ -17,6 +17,61 @@ what gets used internally and that the same information must not sit in two
 places. The artifact was deleted, the flow was inverted, and the Mac dropped
 out of it entirely.
 
+## Email pickup (step 0)
+
+**Runs first, before the sync reads `Raw Records/`.** (Ty, 2026-11-28,
+`work/261128-webull-email-pickup`.) After trading, Ty asks Webull to email the
+day's order records, by about 04:00 Hanoi; the routine fires at 06:00 Hanoi,
+Tuesday to Saturday (cron `0 23 * * 1-5` UTC), and moves the file into
+`Raw Records/` itself. Ty no longer downloads, drags or deletes anything.
+
+1. Gmail `search_threads` with
+   `from:noreply@webull.com subject:Webull_Orders_Records in:inbox`. No date
+   window: anything still in the inbox has not been picked up, because a
+   picked-up email is trashed. Gmail may group several exports into one thread,
+   and a thread can also hold messages already in Trash: from each thread take
+   only the messages labelled `INBOX`, and handle them one at a time, oldest first.
+2. Per message, `get_message` and find the attachment named exactly
+   `Webull_Orders_Records_Options.csv`. The email carries four (Records, IPO,
+   Options, Bonds); only Options is used. `download_gmail_attachment` saves it
+   into the sandbox. Take its sha256 and size.
+3. List `Raw Records/` with the Drive connector and pick the next free name in
+   Finder's scheme: `Webull_Orders_Records_Options.csv`, then
+   `Webull_Orders_Records_Options copy.csv`, then `… copy 2.csv`, `… copy 3.csv`,
+   and so on. Count the bare name as 0, `copy.csv` as 1 and `copy N.csv` as N;
+   the next file is the highest + 1, where 1 is written `copy.csv`. An empty folder (after the monthly
+   move) starts at the bare name. List the folder again before naming each
+   message's file, so two emails in one run never get the same name.
+   **Already saved?** For each `.csv` file in the folder (never a
+   `FAILED … .bad` one) with the attachment's exact size, download it and compare
+   sha256; if any matches, the CSV was saved on an earlier run whose trash step
+   failed: save nothing and go straight to step 6.
+4. Drive `create_file` with `parentId` = the Raw Records folder, that title,
+   `contentMimeType` `text/csv`, **`disableConversionToGoogleType` true**, and
+   `base64Content` set to the file reference `sha256:<hex>:<absolute path>` so
+   the bytes never pass through the model. Without the conversion flag Drive
+   turns the CSV into a Google Sheet and the sync cannot read it.
+5. `download_file_content` on the new file id. Its sha256 must equal step 2's.
+6. Only then `trash_message` on that message. Trash, never a permanent delete,
+   and never any other email.
+7. **On any failure in 1–6** (search errors or the Gmail connector is missing,
+   no Options attachment, upload refused, hash differs, trash refused): do not
+   trash that email and do not delete anything that was created. A file this run
+   uploaded but could not verify is renamed with Drive `update_file` to
+   `FAILED <its name>.bad`, so neither this run's sync nor any later one reads it
+   (the sync downloads only `.csv` files); name it in the report. Go on to the
+   sync with the rest of `Raw Records/`, and name the failure in the report.
+
+**The run's `email=` mark** (heartbeat, below): `FAILED` if any step 1–6 failed
+for any message; otherwise `saved` if at least one email was handled; otherwise
+`none`. `none` therefore always means the search ran and found nothing.
+
+The run's report line 1 names each file saved and each email trashed, or says
+**"No webull email found"** when the search ran and returned nothing. A trashed export is
+invisible to the Gmail connector, which is why the email must still be in the
+inbox when the routine runs. Ty may still drag a CSV in by hand; content dedup
+makes a duplicate harmless.
+
 ## The wiki step
 
 After the data push and **before** the preview step, every run compiles the trading wiki by following
@@ -112,8 +167,9 @@ indistinguishable from a broken sync unless the run leaves its own mark.
 The line is status only, because the repo is public: `<UTC stamp>
 newest-source=<YYYY-MM-DD of the newest fill this run added> new fills`, or `<UTC stamp>
 newest-source=no new fills` (a refused push writes the BLOCKED form under
-"Pushing"). No CSV names and no fill counts; those belong in
-the run's report. Readers (`freshness.py`, the wiring page's collector) use
+"Pushing"), then one more status token from the email pickup:
+` email=saved`, ` email=none` or ` email=FAILED`. No CSV names, no fill counts
+and no email counts; those belong in the run's report. Readers (`freshness.py`, the wiring page's collector) use
 only the first token, the stamp. This keeps names and counts out of the
 heartbeat only: `data/index.json`, which Pages serves, still records each
 import's CSV name and counts in `meta.imports`.
@@ -163,7 +219,7 @@ treat it as a second refusal. If it finishes, re-run `node tools/sync.js
 **If the push is refused again, or for any other reason** (auth, proxy), do
 not re-send the shard through the file tools. Still write the heartbeat,
 alone, with the file tools, and make its source field say so: `<UTC stamp>
-newest-source=BLOCKED: push refused`. The preview step runs as on every run
+newest-source=BLOCKED: push refused email=<saved|none|FAILED>`. The preview step runs as on every run
 (it will find nothing new). Report the run as **BLOCKED** with the refusal,
 and name the CSV files the run read: Ty must not overwrite them until a run
 succeeds. The watchdog's run-age check reads the `.last-check` stamp, so it
