@@ -27,7 +27,7 @@ The routine fires at **06:00 Hanoi, Tue–Sat** (was 11:00), so the 07:00 iMessa
 brief can report on it. Ty's only step left is sending the export to email.
 Checked by: first automatic morning after the switch, the CSV is in `Raw Records/`,
 the email is in trash, the new fills are in `data/` and on Pages; a morning with no
-email saves nothing, trashes nothing and commits only `data/.last-check`.
+email saves nothing and trashes nothing; its data commit carries only `data/.last-check`.
 
 **Who and what is affected.** The Trade Journal routine (prompt,
 schedule, Gmail connector added); `docs/nightly-sync.md` (runbook); Pipeline Wiring

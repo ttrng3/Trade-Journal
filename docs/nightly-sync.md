@@ -38,7 +38,8 @@ Tuesday to Saturday (cron `0 23 * * 1-5` UTC), and moves the file into
 3. List `Raw Records/` with the Drive connector and pick the next free name in
    Finder's scheme: `Webull_Orders_Records_Options.csv`, then
    `Webull_Orders_Records_Options copy.csv`, then `… copy 2.csv`, `… copy 3.csv`,
-   and so on: the highest number there + 1. An empty folder (after the monthly
+   and so on. Count the bare name as 0, `copy.csv` as 1 and `copy N.csv` as N;
+   the next file is the highest + 1, where 1 is written `copy.csv`. An empty folder (after the monthly
    move) starts at the bare name. List the folder again before naming each
    message's file, so two emails in one run never get the same name.
    **Already saved?** If a file in the folder has the attachment's exact size,

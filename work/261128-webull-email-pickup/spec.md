@@ -62,7 +62,7 @@ found".
 **Files changed in this repo:** `docs/nightly-sync.md` (new section + heartbeat
 format line + schedule line), `CLAUDE.md` one Known-mistakes line (a trashed
 export is invisible to the connector), `verification/email-pickup.md` (new).
-No code: `tools/` untouched.
+No code: `tools/` untouched except one docstring in `tools/bars-collect.py` (Amendment A).
 
 **Outside this repo:** Pipeline Wiring (Trade Journal row time, section 7 dated
 entry, the collector's cron table, mirror republished).
@@ -124,3 +124,18 @@ Saturday weekly report names Friday as deferred, and Tuesday's run updates it, a
 Files added to this change: `docs/wiki.md`, `docs/backup.md`, `README.md` (schedule wording), the
 `tools/bars-collect.py` docstring (one word). Requirement 5 now reads: sync, dedup, publish and preview unchanged;
 the wiki step changes only in when `<day>` is written.
+**Approved:** 2026-11-28 (Ty, in chat: "Go with option B").
+
+## Amendment B (2026-11-28, after the second review) · **Status:** draft, needs Ty's approval
+Adds to step 0, beyond the original design:
+1. **Already saved?** Before uploading, if a file in `Raw Records/` has the attachment's exact size, compare sha256;
+   on a match save nothing and go to the trash step. Stops a failed trash from creating a new `copy N` every morning.
+2. **Rename, never read, a bad upload.** A file this run uploaded whose read-back hash differs is renamed with Drive
+   `update_file` to `FAILED <name>.bad`, so no sync ever reads it (a truncated last row would otherwise become a
+   permanent wrong fill). Nothing is deleted; the email stays in the inbox; the run marks `email=FAILED`. This
+   replaces "a bad upload is left in place" in the Conflicts table and Design step 7.
+3. **Routine config:** the Drive connector must permit `create_file`, `download_file_content` and `update_file`.
+4. **Naming rule made exact:** the bare name counts as 0, `copy.csv` as 1, `copy N.csv` as N; the next file is
+   max + 1, where 1 is written `copy.csv`.
+Trade-off: if the read-back hash differed every run for a repeating reason, those fills would wait until Ty or a
+session looks; the daily `email=FAILED` mark (and the brief line built on it) is the alarm.
